@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-public abstract class Role {
+public class Role {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
