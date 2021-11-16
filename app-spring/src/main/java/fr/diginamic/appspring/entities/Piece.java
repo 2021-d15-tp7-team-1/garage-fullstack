@@ -17,20 +17,26 @@ public class Piece extends ElemStock {
     private enum typePiece {
         PIECE, ARTICLE
     }
-//    @ManyToMany
-//    @JoinTable(name="COMPO",
-//            joinColumns= @JoinColumn(name="ID_PIECE", referencedColumnName="ID"),
-//            inverseJoinColumns= @JoinColumn(name="ID_TACHE", referencedColumnName="ID")
-//    )
-//    private Set<Tache> tachePiece;
+
+    @ManyToMany(mappedBy="piecesDemandees")
+    private Set<DemandePiece> demandes;
+
+    @ManyToMany
+    @JoinTable(name="COMPO_PIECE_TACHE",
+            joinColumns= @JoinColumn(name="ID_PIECE", referencedColumnName="ID"),
+            inverseJoinColumns= @JoinColumn(name="ID_TACHE", referencedColumnName="ID")
+    )
+    private Set<Tache> tachesPiece;
 
     public Piece() {
         super();
-        //tachePiece = new HashSet<Tache>();
+        tachesPiece = new HashSet<Tache>();
+        demandes = new HashSet<DemandePiece>();
     }
     public Piece(String nomPiece) {
         super();
         this.nomPiece = nomPiece;
+        demandes = new HashSet<DemandePiece>();
     }
 
     public String getNomPiece() {
@@ -48,4 +54,19 @@ public class Piece extends ElemStock {
         this.id = id;
     }
 
+    public Set<DemandePiece> getDemandes() {
+        return demandes;
+    }
+
+    public void setDemandes(Set<DemandePiece> demandes) {
+        this.demandes = demandes;
+    }
+
+    public Set<Tache> getTachesPiece() {
+        return tachesPiece;
+    }
+
+    public void setTachesPiece(Set<Tache> tachesPiece) {
+        this.tachesPiece = tachesPiece;
+    }
 }

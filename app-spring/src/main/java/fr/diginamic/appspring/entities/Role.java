@@ -1,6 +1,7 @@
 package fr.diginamic.appspring.entities;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -19,10 +20,12 @@ public class Role {
     private Set<User> users;
 
     public Role() {
+        users = new HashSet<User>();
     }
 
     public Role(String nomRole) {
         this.nomRole = nomRole;
+        users = new HashSet<User>();
     }
 
     public long getId() {

@@ -4,6 +4,8 @@ import fr.diginamic.appspring.enums.PrioriteTache;
 import fr.diginamic.appspring.enums.TypeTache;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Tache {
@@ -20,12 +22,30 @@ public class Tache {
     @JoinColumn(name="FICHE_ID")
     private FicheEntretien fiche;
 
+    @ManyToOne
+    @JoinColumn(name="USER_ID")
+    private User mecanicienAttribue;
+
+    @ManyToMany(mappedBy="tachesPiece")
+    private Set<Piece> piecesNecessaires;
+
     public Tache() {
+        piecesNecessaires = new HashSet<Piece>();
     }
 
     public Tache(String intitule, TypeTache type) {
         this.intitule = intitule;
         this.type = type;
+    }
+
+    public void addPiece(Piece p){
+        if(p != null){
+            piecesNecessaires.add(p);
+            System.out.println("Piece added");
+        }
+        else {
+            System.err.println("Can't add a null piece");
+        }
     }
 
     public long getId() {

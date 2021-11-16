@@ -1,6 +1,7 @@
 package fr.diginamic.appspring.entities;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -23,9 +24,8 @@ public abstract class ElemStock {
         EN_STOCK, EPUISE
     }
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "date_debut")
-    private Date creationDate;
+    @Column(name = "date_creation")
+    private LocalDate creationDate;
 
     public ElemStock() {
     }
@@ -62,11 +62,11 @@ public abstract class ElemStock {
         this.prixFacture = prixFacture;
     }
 
-    public Date getCreationDate() {
+    public LocalDate getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
 }
