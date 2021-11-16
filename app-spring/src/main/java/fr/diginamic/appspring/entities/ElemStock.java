@@ -20,15 +20,18 @@ public abstract class ElemStock {
     private int quantiteStock;
     private float prix;
     private float prixFacture;
-    enum etatStock {
-        EN_STOCK, EPUISE
-    }
+
+    private enum EtatStock { EN_STOCK, EPUISE }
+
+    private EtatStock etat;
 
     @Column(name = "date_creation")
     private LocalDate creationDate;
 
     public ElemStock() {
     }
+
+
 
     public long getId() {
         return id;
@@ -68,5 +71,13 @@ public abstract class ElemStock {
 
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public EtatStock getEtat() {
+        return etat;
+    }
+
+    public void setEtat(EtatStock etat) {
+        this.etat = etat;
     }
 }

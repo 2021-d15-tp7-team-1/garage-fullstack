@@ -14,9 +14,12 @@ public class Piece extends ElemStock {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private long id;
     private String nomPiece;
-    private enum typePiece {
+
+    private enum TypePiece {
         PIECE, ARTICLE
     }
+
+    private TypePiece type;
 
     @ManyToMany(mappedBy="piecesDemandees")
     private Set<DemandePiece> demandes;
@@ -33,10 +36,12 @@ public class Piece extends ElemStock {
         tachesPiece = new HashSet<Tache>();
         demandes = new HashSet<DemandePiece>();
     }
-    public Piece(String nomPiece) {
+
+    public Piece(String nomPiece, TypePiece type) {
         super();
         this.nomPiece = nomPiece;
-        demandes = new HashSet<DemandePiece>();
+        this.type = type;
+        tachesPiece = new HashSet<Tache>();
     }
 
     public String getNomPiece() {
@@ -68,5 +73,13 @@ public class Piece extends ElemStock {
 
     public void setTachesPiece(Set<Tache> tachesPiece) {
         this.tachesPiece = tachesPiece;
+    }
+
+    public TypePiece getType() {
+        return type;
+    }
+
+    public void setType(TypePiece type) {
+        this.type = type;
     }
 }

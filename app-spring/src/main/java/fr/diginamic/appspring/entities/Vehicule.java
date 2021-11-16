@@ -20,18 +20,21 @@ public class Vehicule extends ElemStock {
     @JoinColumn(name = "devis_v_ID")
     private DevisVehicule devisV;
 
-    private enum etatVehicule {
+    private enum EtatVehicule {
         NEUF,OCCASION
     };
+
+    private EtatVehicule etatVehicule;
 
     public Vehicule() {
         super();
     }
 
-    public Vehicule(String modele, String marque, String couleur) {
+    public Vehicule(String modele, String marque, String couleur, EtatVehicule etatVehicule) {
         this.modele = modele;
         this.marque = marque;
         this.couleur = couleur;
+        this.etatVehicule = etatVehicule;
     }
 
     @Override
@@ -74,5 +77,13 @@ public class Vehicule extends ElemStock {
 
     public void setDevisV(DevisVehicule devisV) {
         this.devisV = devisV;
+    }
+
+    public EtatVehicule getEtatVehicule() {
+        return etatVehicule;
+    }
+
+    public void setEtatVehicule(EtatVehicule etatVehicule) {
+        this.etatVehicule = etatVehicule;
     }
 }
