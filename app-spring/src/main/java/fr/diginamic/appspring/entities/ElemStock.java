@@ -1,5 +1,7 @@
 package fr.diginamic.appspring.entities;
 
+import fr.diginamic.appspring.enums.EtatStock;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
@@ -19,9 +21,7 @@ public abstract class ElemStock {
     private int quantiteStock;
     private float prix;
     private float prixFacture;
-    enum etatStock {
-        EN_STOCK, EPUISE
-    }
+    private EtatStock etatStock;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "date_debut")
@@ -68,5 +68,13 @@ public abstract class ElemStock {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public EtatStock getEtatStock() {
+        return etatStock;
+    }
+
+    public void setEtatStock(EtatStock etatStock) {
+        this.etatStock = etatStock;
     }
 }

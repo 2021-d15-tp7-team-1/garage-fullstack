@@ -1,6 +1,7 @@
 package fr.diginamic.appspring.entities;
 
 import com.sun.istack.NotNull;
+import fr.diginamic.appspring.enums.EtatVehicule;
 
 import javax.persistence.*;
 
@@ -19,9 +20,7 @@ public class Vehicule extends ElemStock {
     @JoinColumn(name = "devis_v_ID")
     @NotNull
     private DevisVehicule devisV;
-    private enum etatVehicule {
-        BON,MAUVAIS
-    };
+    private EtatVehicule etatV;
 
     public Vehicule() {
         super();
@@ -59,5 +58,13 @@ public class Vehicule extends ElemStock {
 
     public void setDevisV(DevisVehicule devisV) {
         this.devisV = devisV;
+    }
+
+    public EtatVehicule getEtatV() {
+        return etatV;
+    }
+
+    public void setEtatV(EtatVehicule etatV) {
+        this.etatV = etatV;
     }
 }
