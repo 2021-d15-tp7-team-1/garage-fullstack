@@ -1,6 +1,7 @@
 package fr.diginamic.appspring.entities;
 
 import com.sun.istack.NotNull;
+import fr.diginamic.appspring.enums.TypePiece;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -14,10 +15,6 @@ public class Piece extends ElemStock {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private long id;
     private String nomPiece;
-
-    private enum TypePiece {
-        PIECE, ARTICLE
-    }
 
     private TypePiece type;
 
@@ -37,11 +34,12 @@ public class Piece extends ElemStock {
         demandes = new HashSet<DemandePiece>();
     }
 
-    public Piece(String nomPiece, TypePiece type) {
-        super();
+    public Piece(int quantiteStock, float prix, float prixFacture, String nomPiece, TypePiece type) {
+        super(quantiteStock, prix, prixFacture);
         this.nomPiece = nomPiece;
         this.type = type;
         tachesPiece = new HashSet<Tache>();
+        demandes = new HashSet<DemandePiece>();
     }
 
     public String getNomPiece() {

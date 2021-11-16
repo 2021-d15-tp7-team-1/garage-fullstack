@@ -21,17 +21,24 @@ public abstract class ElemStock {
     private float prix;
     private float prixFacture;
 
-    private enum EtatStock { EN_STOCK, EPUISE }
-
-    private EtatStock etat;
+    private boolean isInStock=false;
 
     @Column(name = "date_creation")
     private LocalDate creationDate;
 
     public ElemStock() {
+        creationDate = LocalDate.now();
     }
 
+    public ElemStock(int quantiteStock, float prix, float prixFacture) {
+        this.quantiteStock = quantiteStock;
+        this.prix = prix;
+        this.prixFacture = prixFacture;
+        creationDate = LocalDate.now();
 
+        if(quantiteStock>0)
+            this.isInStock = true;
+    }
 
     public long getId() {
         return id;
@@ -73,11 +80,11 @@ public abstract class ElemStock {
         this.creationDate = creationDate;
     }
 
-    public EtatStock getEtat() {
-        return etat;
+    public boolean getEtat() {
+        return isInStock;
     }
 
-    public void setEtat(EtatStock etat) {
-        this.etat = etat;
+    public void setEtat(boolean etat) {
+        this.isInStock = etat;
     }
 }
