@@ -1,15 +1,18 @@
 package fr.diginamic.appspring;
 
 import fr.diginamic.appspring.dao.ICrud;
-import fr.diginamic.appspring.entities.Piece;
-import fr.diginamic.appspring.entities.Role;
-import fr.diginamic.appspring.entities.User;
-import fr.diginamic.appspring.entities.Vehicule;
+import fr.diginamic.appspring.entities.*;
 import fr.diginamic.appspring.enums.EtatVehicule;
 import fr.diginamic.appspring.enums.TypePiece;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
+import javax.transaction.Transactional;
 
 @SpringBootTest
 public class DataBaseTests {
@@ -26,12 +29,15 @@ public class DataBaseTests {
     @Autowired
     ICrud<Piece> daoPiece;
 
+    @PersistenceContext(type = PersistenceContextType.TRANSACTION)
+    EntityManager em;
+
+    //@Before
     @Test
-    void remplirBase(){
-        roleInsertion();
-        userInsertion();
-        vehiculeInsertion();
-        pieceInsertion();
+    @Transactional
+    void clearDatabase(){
+        em.createQuery("DELETE FROM Role").executeUpdate();
+        em.createQuery("DELETE FROM User").executeUpdate();
     }
 
     @Test
