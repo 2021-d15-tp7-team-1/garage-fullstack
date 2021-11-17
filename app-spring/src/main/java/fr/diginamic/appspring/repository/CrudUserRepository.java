@@ -1,6 +1,5 @@
 package fr.diginamic.appspring.repository;
 
-import fr.diginamic.appspring.entities.Role;
 import fr.diginamic.appspring.entities.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
