@@ -3,6 +3,7 @@ package fr.diginamic.appspring.entities;
 import fr.diginamic.appspring.enums.EtatStock;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -21,13 +22,24 @@ public abstract class ElemStock {
     private int quantiteStock;
     private float prix;
     private float prixFacture;
-    private EtatStock etatStock;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "date_debut")
-    private Date creationDate;
+    private boolean isInStock=false;
+
+    @Column(name = "date_creation")
+    private LocalDate creationDate;
 
     public ElemStock() {
+        creationDate = LocalDate.now();
+    }
+
+    public ElemStock(int quantiteStock, float prix, float prixFacture) {
+        this.quantiteStock = quantiteStock;
+        this.prix = prix;
+        this.prixFacture = prixFacture;
+        creationDate = LocalDate.now();
+
+        if(quantiteStock>0)
+            this.isInStock = true;
     }
 
     public long getId() {
@@ -62,19 +74,19 @@ public abstract class ElemStock {
         this.prixFacture = prixFacture;
     }
 
-    public Date getCreationDate() {
+    public LocalDate getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
 
-    public EtatStock getEtatStock() {
-        return etatStock;
+    public boolean getEtat() {
+        return isInStock;
     }
 
-    public void setEtatStock(EtatStock etatStock) {
-        this.etatStock = etatStock;
+    public void setEtat(boolean etat) {
+        this.isInStock = etat;
     }
 }

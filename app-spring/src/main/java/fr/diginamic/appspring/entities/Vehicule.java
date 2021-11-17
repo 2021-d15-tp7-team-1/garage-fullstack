@@ -15,15 +15,24 @@ public class Vehicule extends ElemStock {
 
     private String modele;
     private String marque;
+    private String couleur;
 
     @ManyToOne
     @JoinColumn(name = "devis_v_ID")
-    @NotNull
     private DevisVehicule devisV;
-    private EtatVehicule etatV;
+
+    private EtatVehicule etatVehicule;
 
     public Vehicule() {
         super();
+    }
+
+    public Vehicule(int quantiteStock, float prix, float prixFacture, String modele, String marque, String couleur, EtatVehicule etatVehicule) {
+        super(quantiteStock, prix, prixFacture);
+        this.modele = modele;
+        this.marque = marque;
+        this.couleur = couleur;
+        this.etatVehicule = etatVehicule;
     }
 
     @Override
@@ -52,6 +61,14 @@ public class Vehicule extends ElemStock {
         this.marque = marque;
     }
 
+    public String getCouleur() {
+        return couleur;
+    }
+
+    public void setCouleur(String couleur) {
+        this.couleur = couleur;
+    }
+
     public DevisVehicule getDevisV() {
         return devisV;
     }
@@ -60,11 +77,11 @@ public class Vehicule extends ElemStock {
         this.devisV = devisV;
     }
 
-    public EtatVehicule getEtatV() {
-        return etatV;
+    public EtatVehicule getEtatVehicule() {
+        return etatVehicule;
     }
 
-    public void setEtatV(EtatVehicule etatV) {
-        this.etatV = etatV;
+    public void setEtatVehicule(EtatVehicule etatVehicule) {
+        this.etatVehicule = etatVehicule;
     }
 }

@@ -13,10 +13,8 @@ public class FicheEntretien {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
 
-
-
-    private boolean validation = false;
-    private boolean cloture = false;
+    private boolean isValid = false;
+    private boolean isCloture = false;
 
     private LocalDate dateCreation;
     private LocalDate dateCloture;
@@ -24,19 +22,23 @@ public class FicheEntretien {
     @OneToMany(mappedBy = "fiche")
     private Set<Tache> taches;
 
+    @ManyToOne
+    @JoinColumn(name="CLIENT_ID")
+    private Client client;
+
     public FicheEntretien() {
         taches = new HashSet<Tache>();
     }
 
     public FicheEntretien(TypeTache type) {
-        validation = false;
-        cloture = false;
+        isValid = false;
+        isCloture = false;
         dateCreation = LocalDate.now();
         taches = new HashSet<Tache>();
     }
 
     public void cloturerFiche(){
-        cloture = true;
+        isCloture = true;
         dateCloture = LocalDate.now();
     }
 
@@ -54,20 +56,20 @@ public class FicheEntretien {
         this.id = id;
     }
 
-    public boolean isValidation() {
-        return validation;
+    public boolean isIsValid() {
+        return isValid;
     }
 
-    public void setValidation(boolean validation) {
-        this.validation = validation;
+    public void setIsValid(boolean validation) {
+        this.isValid = validation;
     }
 
-    public boolean isCloture() {
-        return cloture;
+    public boolean isIsCloture() {
+        return isCloture;
     }
 
-    public void setCloture(boolean cloture) {
-        this.cloture = cloture;
+    public void setIsCloture(boolean cloture) {
+        this.isCloture = cloture;
     }
 
     public LocalDate getDateCreation() {

@@ -1,31 +1,50 @@
 package fr.diginamic.appspring.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
-@Table(name = "devis_vehicule")
 @Entity
 public class DevisVehicule {
     @Id
-    @Column(name = "id", nullable = false)
-    private Long id;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private long id;
     private String libelle;
+    private int quantite;
     private double prixTTC;
-    private Date dateCreation;
-    private Date dateValidation;
+    private boolean isValide = false;
+    private LocalDate dateCreation;
+    private LocalDate dateValidation;
 
-    public DevisVehicule(Long id) {
-        this.id = id;
+    @ManyToOne
+    @JoinColumn(name="CLIENT_ID")
+    private Client client;
+
+    @OneToOne(mappedBy = "devis")
+    private Commande commande;
+
+    @ManyToOne
+    @JoinColumn(name="VEHICULE_ID")
+    private Vehicule vehicule;
+
+    @ManyToOne
+    @JoinColumn(name="COMMERCIAL_ID")
+    private User commercial;
+
+    public DevisVehicule() {
     }
 
-    public Long getId() {
+    public DevisVehicule(String libelle, int quantite, double prixTTC) {
+        this.libelle = libelle;
+        this.quantite = quantite;
+        this.prixTTC = prixTTC;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -37,6 +56,14 @@ public class DevisVehicule {
         this.libelle = libelle;
     }
 
+    public int getQuantite() {
+        return quantite;
+    }
+
+    public void setQuantite(int quantite) {
+        this.quantite = quantite;
+    }
+
     public double getPrixTTC() {
         return prixTTC;
     }
@@ -45,19 +72,59 @@ public class DevisVehicule {
         this.prixTTC = prixTTC;
     }
 
-    public Date getDateCreation() {
+    public boolean isValide() {
+        return isValide;
+    }
+
+    public void setValide(boolean valide) {
+        isValide = valide;
+    }
+
+    public LocalDate getDateCreation() {
         return dateCreation;
     }
 
-    public void setDateCreation(Date dateCreation) {
+    public void setDateCreation(LocalDate dateCreation) {
         this.dateCreation = dateCreation;
     }
 
-    public Date getDateValidation() {
+    public LocalDate getDateValidation() {
         return dateValidation;
     }
 
-    public void setDateValidation(Date dateValidation) {
+    public void setDateValidation(LocalDate dateValidation) {
         this.dateValidation = dateValidation;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public Vehicule getVehicule() {
+        return vehicule;
+    }
+
+    public void setVehicule(Vehicule vehicule) {
+        this.vehicule = vehicule;
+    }
+
+    public Commande getCommande() {
+        return commande;
+    }
+
+    public void setCommande(Commande commande) {
+        this.commande = commande;
+    }
+
+    public User getCommercial() {
+        return commercial;
+    }
+
+    public void setCommercial(User commercial) {
+        this.commercial = commercial;
     }
 }
