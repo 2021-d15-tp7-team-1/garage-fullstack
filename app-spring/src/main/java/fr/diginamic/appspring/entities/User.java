@@ -19,7 +19,7 @@ public class User {
 
     private boolean isSpaActive;
 
-    @ManyToMany(mappedBy="users")
+    @ManyToMany(mappedBy="users", fetch = FetchType.EAGER)
     private Set<Role> userRoles;
 
     @OneToMany(mappedBy = "demandeur")
