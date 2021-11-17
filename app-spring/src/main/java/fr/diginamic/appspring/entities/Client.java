@@ -1,12 +1,14 @@
 package fr.diginamic.appspring.entities;
 
+import fr.diginamic.appspring.enums.TypeClient;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 public class Client {
-    private enum TypeClient { ATELIER, VENTE }
+
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
