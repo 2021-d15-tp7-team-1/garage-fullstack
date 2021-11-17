@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import fr.diginamic.appspring.entities.User;
 
 public class ApplicationUser implements UserDetails {
-
+//flo
 	private static final long serialVersionUID = 1L;
 	
 	private User user;
