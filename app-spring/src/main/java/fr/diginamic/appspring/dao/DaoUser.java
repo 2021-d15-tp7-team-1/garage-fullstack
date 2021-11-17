@@ -1,13 +1,11 @@
 package fr.diginamic.appspring.dao;
 
-import fr.diginamic.appspring.entities.Role;
 import fr.diginamic.appspring.entities.User;
+import fr.diginamic.appspring.repository.CrudUserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -15,36 +13,40 @@ import java.util.List;
 @Repository
 @Transactional
 public class DaoUser implements ICrud<User>{
-    @PersistenceContext(type = PersistenceContextType.TRANSACTION )
-    EntityManager em;
+    @Autowired
+    CrudUserRepository crud;
 
     @Override
     public void add(User o) {
-        em.persist(o);
+        crud.save(o);
         System.out.println("Ajout user avec l\'id=" + o.getId());
     }
 
     @Override
     public void delete(User o) {
-        User userToDelete = em.find(User.class, o.getId());
-        if(userToDelete != null){
-            em.remove(userToDelete);
+        if(o != null){
+            crud.deleteById(o.getId());
         }
     }
 
     @Override
     public void update(User o) {
-        em.merge(o);
+        crud.save(o);
     }
 
     @Override
     public User selectOne(long id) {
-        return em.find(User.class, id);
+        return crud.findById(id).get();
     }
 
     @Override
     public List<User> selectAll() {
-        List<User> users = em.createQuery("SELECT u FROM User u", User.class).getResultList();
+        List<User> users = (List<User>) crud.findAll();
         return users;
+    }
+
+    @Override
+    public void deleteAll() {
+        crud.deleteAll();
     }
 }

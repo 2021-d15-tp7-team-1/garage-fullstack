@@ -1,12 +1,11 @@
 package fr.diginamic.appspring.dao;
 
 import fr.diginamic.appspring.entities.FicheEntretien;
-import fr.diginamic.appspring.entities.Tache;
+import fr.diginamic.appspring.repository.CrudFicheRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -15,36 +14,40 @@ import java.util.List;
 @Repository
 @Transactional
 public class DaoFicheEntretien implements ICrud<FicheEntretien>{
-    @PersistenceContext
-    EntityManager em;
+    @Autowired
+    CrudFicheRepository crud;
 
     @Override
     public void add(FicheEntretien o) {
-        em.persist(o);
+        crud.save(o);
         System.out.println("Ajout fiche avec l\'id=" + o.getId());
     }
 
     @Override
     public void delete(FicheEntretien o) {
-        FicheEntretien ficheToDelete = em.find(FicheEntretien.class, o.getId());
-        if(ficheToDelete != null){
-            em.remove(ficheToDelete);
+        if(o != null){
+            crud.deleteById(o.getId());
         }
     }
 
     @Override
     public void update(FicheEntretien o) {
-        em.merge(o);
+        crud.save(o);
     }
 
     @Override
     public FicheEntretien selectOne(long id) {
-        return em.find(FicheEntretien.class, id);
+        return crud.findById(id).get();
     }
 
     @Override
     public List<FicheEntretien> selectAll() {
-        List<FicheEntretien> taches = em.createQuery("SELECT o FROM FicheEntretien o", FicheEntretien.class).getResultList();
+        List<FicheEntretien> taches = (List<FicheEntretien>) crud.findAll();
         return taches;
+    }
+
+    @Override
+    public void deleteAll() {
+        crud.deleteAll();
     }
 }
