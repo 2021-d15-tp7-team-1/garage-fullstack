@@ -1,12 +1,11 @@
 package fr.diginamic.appspring.dao;
 
-import fr.diginamic.appspring.entities.Piece;
 import fr.diginamic.appspring.entities.Vehicule;
+import fr.diginamic.appspring.repository.CrudVehiculeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -14,36 +13,40 @@ import java.util.List;
 @Repository
 @Transactional
 public class DaoVehicule implements ICrud<Vehicule>{
-    @PersistenceContext
-    EntityManager em;
+    @Autowired
+    CrudVehiculeRepository crud;
 
     @Override
     public void add(Vehicule o) {
-        em.persist(o);
+        crud.save(o);
         System.out.println("Ajout Vehicule avec l\'id=" + o.getId());
     }
 
     @Override
     public void delete(Vehicule o) {
-        Vehicule vehiculeToDelete = em.find(Vehicule.class, o.getId());
-        if(vehiculeToDelete != null){
-            em.remove(vehiculeToDelete);
+        if(o != null){
+            crud.deleteById(o.getId());
         }
     }
 
     @Override
     public void update(Vehicule o) {
-        em.merge(o);
+        crud.save(o);
     }
 
     @Override
     public Vehicule selectOne(long id) {
-        return em.find(Vehicule.class, id);
+        return crud.findById(id).get();
     }
 
     @Override
     public List<Vehicule> selectAll() {
-        List<Vehicule> vehicules = em.createQuery("SELECT o FROM Vehicule o", Vehicule.class).getResultList();
+        List<Vehicule> vehicules = (List<Vehicule>) crud.findAll();
         return vehicules;
+    }
+
+    @Override
+    public void deleteAll() {
+        crud.deleteAll();
     }
 }

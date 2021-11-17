@@ -1,12 +1,11 @@
 package fr.diginamic.appspring.dao;
 
 import fr.diginamic.appspring.entities.Piece;
-import fr.diginamic.appspring.entities.User;
+import fr.diginamic.appspring.repository.CrudPieceRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -14,36 +13,40 @@ import java.util.List;
 @Repository
 @Transactional
 public class DaoPiece implements ICrud<Piece>{
-    @PersistenceContext
-    EntityManager em;
+    @Autowired
+    CrudPieceRepository crud;
 
     @Override
     public void add(Piece o) {
-        em.persist(o);
+        crud.save(o);
         System.out.println("Ajout piece avec l\'id=" + o.getId());
     }
 
     @Override
     public void delete(Piece o) {
-        Piece pieceToDelete = em.find(Piece.class, o.getId());
-        if(pieceToDelete != null){
-            em.remove(pieceToDelete);
+        if(o != null){
+            crud.deleteById(o.getId());
         }
     }
 
     @Override
     public void update(Piece o) {
-        em.merge(o);
+        crud.save(o);
     }
 
     @Override
     public Piece selectOne(long id) {
-        return em.find(Piece.class, id);
+        return crud.findById(id).get();
     }
 
     @Override
     public List<Piece> selectAll() {
-        List<Piece> pieces = em.createQuery("SELECT o FROM Piece o", Piece.class).getResultList();
+        List<Piece> pieces = (List<Piece>) crud.findAll();
         return pieces;
+    }
+
+    @Override
+    public void deleteAll() {
+        crud.deleteAll();
     }
 }

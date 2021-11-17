@@ -34,10 +34,8 @@ public class DataBaseTests {
 
     //@Before
     @Test
-    @Transactional
     void clearDatabase(){
-        em.createQuery("DELETE FROM Role").executeUpdate();
-        em.createQuery("DELETE FROM User").executeUpdate();
+        daoRole.deleteAll();
     }
 
     @Test

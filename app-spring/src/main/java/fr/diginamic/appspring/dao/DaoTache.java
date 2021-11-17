@@ -1,12 +1,11 @@
 package fr.diginamic.appspring.dao;
 
 import fr.diginamic.appspring.entities.Tache;
-import fr.diginamic.appspring.entities.Vehicule;
+import fr.diginamic.appspring.repository.CrudTacheRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -14,36 +13,40 @@ import java.util.List;
 @Repository
 @Transactional
 public class DaoTache implements ICrud<Tache>{
-    @PersistenceContext
-    EntityManager em;
+    @Autowired
+    CrudTacheRepository crud;
 
     @Override
     public void add(Tache o) {
-        em.persist(o);
+        crud.save(o);
         System.out.println("Ajout Tache avec l\'id=" + o.getId());
     }
 
     @Override
     public void delete(Tache o) {
-        Tache tacheToDelete = em.find(Tache.class, o.getId());
-        if(tacheToDelete != null){
-            em.remove(tacheToDelete);
+        if(o != null){
+            crud.deleteById(o.getId());
         }
     }
 
     @Override
     public void update(Tache o) {
-        em.merge(o);
+        crud.save(o);
     }
 
     @Override
     public Tache selectOne(long id) {
-        return em.find(Tache.class, id);
+        return crud.findById(id).get();
     }
 
     @Override
     public List<Tache> selectAll() {
-        List<Tache> taches = em.createQuery("SELECT o FROM Tache o", Tache.class).getResultList();
+        List<Tache> taches = (List<Tache>) crud.findAll();
         return taches;
+    }
+
+    @Override
+    public void deleteAll() {
+        crud.deleteAll();
     }
 }
