@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>ADDVEHICULE</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="container">
+    <h1><a th:href="@{/pieces/list}">Pièces & Articles</a> / Véhicules</h1>
+    <a href="add">Ajouter un véhicule</a>
+    <br/><br/>
+    <div>
+        <table border="1">
+            <tr>
+                <th>Marque</th>
+                <th>Modele</th>
+            </tr>
+            <tr th:each ="vehicule : ${vehicules}">
+                <td th:utext="${vehicule.marque}">...</td>
+                <td th:utext="${vehicule.modele}">...</td>
+                <td th:utext="${vehicule.quantiteStock}">...</td>
+                <td th:utext="${vehicule.etatVehicule}">...</td>
+                <td th:utext="${vehicule.prix}">...</td>
+                <td th:utext="${vehicule.prixFacture}">...</td>
+                <td><a th:href="@{/vehicules/showUpdateForm(id=${vehicule.id})}">Modifier</a></td>
+                <td><a href="#">Commander</a></td>
+
+
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>
