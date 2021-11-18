@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8" />
-<title>HOME</title>
-</head>
-<body>
-<h1>HOME</h1>
+    <head 
+  th:replace="fragments/header :: taghead">
+  </head>
+  <body id=home>
+    <div 
+    th:replace="fragments/menu :: tagmenu">  
+</div>  
+<div>
+  <h1 align = center><strong>BIENVENUE !</strong></h1>
+</div>
+  </body>
 
 <form action="/logout" method="post">
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>

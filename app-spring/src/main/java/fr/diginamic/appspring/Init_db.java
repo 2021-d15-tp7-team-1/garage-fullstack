@@ -26,12 +26,25 @@ public class Init_db {
     @Autowired
     private PasswordEncoder pwdEncoder;
 
-    @PostConstruct
+
+    @PostConstruct 
     public void init() {
 
         Role admin = new Role(ApplicationUserRole.ADMIN.name());
 //        rr.save(admin);
         daoRole.add(admin);
+
+        Role magasinier = new Role(ApplicationUserRole.MAGASINIER.name());
+//        rr.save(admin);
+        daoRole.add(magasinier);
+
+        Role commercial = new Role(ApplicationUserRole.COMMERCIAL.name());
+//        rr.save(admin);
+        daoRole.add(commercial);
+
+        Role mecanicien = new Role(ApplicationUserRole.MECANICIEN.name());
+//        rr.save(admin);
+        daoRole.add(mecanicien);
 
         Role chef = new Role(ApplicationUserRole.CHEF.name());
 //        rr.save(chef);

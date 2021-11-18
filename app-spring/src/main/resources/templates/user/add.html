@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+                      "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: taghead"></head>
+
+<body>
+	<div th:replace="fragments/menu :: tagmenu">  </div>
+      <form th:action="@{/admin/user/add}"     th:object="${collabForm}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <h2 class="form-signin-heading" >Ajouter un compte</h2>
+            <p>
+                <label for="nom">Nom : </label>
+                <input type="text" name = "nom" id="nom" th:field="*{nom}">
+                <br>
+                <label for="username">UserName : </label>
+                <input type="text" th:field="*{userName}">
+                <br>
+                Mot de passe : <input type="password" th:field="*{password}">
+                <br> Prénom : <input type="text" th:field="*{prenom}">
+                <br> E-mail : <input type="text" th:field="*{email}">
+                <br> Rôle(s) : <select th:field="*{userRoles}" multiple>
+            
+                    <option th:each="role : ${ roles }" th:value="${role.id}" th:text="${role.nomRole}">Magasinier</option>
+                    
+                    </select>
+                <br> Accès : <select th:field="*{isSpaActive}">
+                    <option value="true">Actif</option>
+                    <option value="false">Bloqué</option>
+                </select>
+                <br><button type="submit">Créer le compte</button>
+            </p>
+    
+    </form>
+
+
+      <a th:href="@{/admin/user}">Retour</a>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+                      "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: taghead"></head>
+
+<body>
+	<div th:replace="fragments/menu :: tagmenu">  </div>  
+
+	<a th:href="@{user/add}">Ajouter un collaborateurs</a>
+	<hr/>
+	<table>
+		<thead>
+			<tr>
+			<th>ID</th>
+			<th>Nom</th>
+			<th>Prénom</th>
+            <th>Email</th>
+            <th>Rôle(s)</th>
+            <th>Accès</th>
+			<th colspan="2"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="user : ${ users }">
+			<td th:text="${ user.id}"></td>
+			<td th:text="${ user.nom }"></td>
+            <td th:text="${ user.prenom }"></td>
+            <td th:text="${ user.email }"></td>
+            <td th:text="${ user.userRoles }"></td>
+			<td th:text="${ user.isSpaActive }"></td>
+			
+			<td><a th:href="@{/user/delete/{id}(id=${user.id})}">Supprimer</a></td>
+			<td><a href="#">Modifier</a></td>
+			</tr>
+		</tbody>
+	</table>
+
+</body>
+</html>
