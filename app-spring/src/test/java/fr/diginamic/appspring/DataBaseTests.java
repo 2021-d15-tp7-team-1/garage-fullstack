@@ -33,7 +33,7 @@ public class DataBaseTests {
     EntityManager em;
 
     //@Before
-    @Test
+    //@Test
     void clearDatabase(){
         daoRole.deleteAll();
     }

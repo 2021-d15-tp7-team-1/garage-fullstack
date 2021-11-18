@@ -7,7 +7,7 @@ import java.util.Set;
 @Entity
 public class User {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String userName;
@@ -19,7 +19,7 @@ public class User {
 
     private boolean isSpaActive;
 
-    @ManyToMany(mappedBy="users", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
     private Set<Role> userRoles;
 
     @OneToMany(mappedBy = "demandeur")
@@ -47,22 +47,20 @@ public class User {
         isSpaActive = true;
     }
 
-    public void addRole(Role role){
-        if(role != null){
+    public void addRole(Role role) {
+        if (role != null) {
             userRoles.add(role);
             System.out.println("Role added");
-        }
-        else {
+        } else {
             System.err.println("Can't add a null role");
         }
     }
 
-    public void addDevis(DevisVehicule d){
-        if(d != null){
+    public void addDevis(DevisVehicule d) {
+        if (d != null) {
             devisCrees.add(d);
             System.out.println("Devis added");
-        }
-        else {
+        } else {
             System.err.println("Can't add a null devis");
         }
     }
@@ -116,6 +114,11 @@ public class User {
     }
 
     public boolean isSpaActive() {
+        return isSpaActive;
+    }
+
+    // bug thymeleaf au niveau de l'utilisation
+    public boolean getisSpaActive() {
         return isSpaActive;
     }
 
