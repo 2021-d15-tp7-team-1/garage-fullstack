@@ -145,8 +145,19 @@ public class DataBaseTests {
     @Test
     void testCascade(){
         User u = new User("test", "azerty", "test@mygarage.com", "TEST", "Test");
-        u.addRole(new Role("Test"));
+        Role r = new Role("Test");
+        daoRole.add(r);
         daoUser.add(u);
+
+        u.addRole(r);
+        daoUser.update(u);
+
+/*
+        Role r = new Role("TEST2");
+        r.getUsers().add(u);
+        daoRole.add(r);
+
+ */
     }
 
 

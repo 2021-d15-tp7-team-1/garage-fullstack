@@ -19,7 +19,11 @@ public class User {
 
     private boolean isSpaActive;
 
-    @ManyToMany(mappedBy="users", fetch = FetchType.EAGER)
+    @ManyToMany
+    @JoinTable(name="COMPO_USER_ROLE",
+            joinColumns= @JoinColumn(name="ID_USER", referencedColumnName="ID"),
+            inverseJoinColumns= @JoinColumn(name="ID_ROLE", referencedColumnName="ID")
+    )
     private Set<Role> userRoles;
 
     @OneToMany(mappedBy = "demandeur")

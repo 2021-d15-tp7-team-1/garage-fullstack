@@ -12,11 +12,7 @@ public class Role {
 
     private String nomRole;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name="COMPO_USER_ROLE",
-            joinColumns= @JoinColumn(name="ID_ROLE", referencedColumnName="ID"),
-            inverseJoinColumns= @JoinColumn(name="ID_USER", referencedColumnName="ID")
-    )
+    @ManyToMany(mappedBy = "userRoles")
     private Set<User> users;
 
     public Role() {
