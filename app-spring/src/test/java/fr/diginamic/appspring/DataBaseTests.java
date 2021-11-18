@@ -142,5 +142,12 @@ public class DataBaseTests {
         f.ajouterTache(t);
     }
 
+    @Test
+    void testCascade(){
+        User u = new User("test", "azerty", "test@mygarage.com", "TEST", "Test");
+        u.addRole(new Role("Test"));
+        daoUser.add(u);
+    }
+
 
 }

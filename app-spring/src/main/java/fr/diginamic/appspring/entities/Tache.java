@@ -96,4 +96,20 @@ public class Tache {
     public void setType(TypeTache type) {
         this.type = type;
     }
+
+    public User getMecanicienAttribue() {
+        return mecanicienAttribue;
+    }
+
+    public void setMecanicienAttribue(User mecanicienAttribue) {
+        this.mecanicienAttribue = mecanicienAttribue;
+    }
+
+    public Set<Piece> getPiecesNecessaires() {
+        return piecesNecessaires;
+    }
+
+    public void setPiecesNecessaires(Set<Piece> piecesNecessaires) {
+        this.piecesNecessaires = piecesNecessaires;
+    }
 }

@@ -1,0 +1,65 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Fiches</title>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css} "/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<body>
+    <h1>Fiche d'entretien</h1>
+    <a class="btn btn-danger mb-2 float-right">Annuler la fiche</a>
+    <a class="btn btn-primary mb-2 float-right">Modifier la fiche</a>
+    <a class="btn btn-success mb-2 float-right">Cloturer</a>
+    <div class="container">
+        <fieldset class="form-group border p-3">
+            <legend class="w-auto px-2"><h1>Fiche d'entretien<h1/></legend>
+            <div class="form-group">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Référence : </td>
+                            <td th:text="${fiche.id}"></td>
+                        </tr>
+                        <tr>
+                            <td>Client : </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Date de création : </td>
+                            <td th:text="${fiche.dateCreation}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <hr/>
+            <div class="form-group">
+                <h2>Liste des taches</h2>
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>N°</th>
+                        <th>Type</th>
+                        <th>Pièces nécessaires</th>
+                        <th>Assignation</th>
+                        <th>Priorité</th>
+                        <th>Etat</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="tache: ${fiche.taches}">
+                        <td th:text="${tache.id}"></td>
+                        <td th:text="${tache.type}"></td>
+                        <td th:text="${tache}"></td>
+                        <td th:text=""></td> // TODO
+                        <td th:text="${tache.priorite}"></td>
+                        <td th:text="${tache.terminee}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+    </div>
+</body>
+</html>
