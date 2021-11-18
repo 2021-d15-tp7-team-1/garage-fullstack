@@ -1,5 +1,8 @@
 package fr.diginamic.appspring;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,19 +40,56 @@ public class Init_db {
 	@Autowired
 	private CrudPieceRepository pr;
 	
-	@PostConstruct
+//	@PostConstruct
 	public void init() {
 		
 		Role admin = new Role(ApplicationUserRole.ADMIN.name());
+		Role chef = new Role(ApplicationUserRole.CHEF.name());
+		Role magasinier = new Role(ApplicationUserRole.MAGASINIER.name());
+		Role mecanicien = new Role(ApplicationUserRole.MECANICIEN.name());
+		Role commercial = new Role(ApplicationUserRole.COMMERCIAL.name());
 		rr.save(admin);
-
-		User u1 = new User("a", pwdEncoder.encode("123"), "email", "nom", "prenom");
-		ur.save(u1);
+		rr.save(chef);
+		rr.save(magasinier);
+		rr.save(mecanicien);
+		rr.save(commercial);
 		
-		u1.getUserRoles().add(admin);
-		admin.getUsers().add(u1);
+		List<User> users = new ArrayList<User>();
+		users.add(new User("a", pwdEncoder.encode("123"), "email", "admin", "admin"));
+		users.add(new User("c", pwdEncoder.encode("123"), "email", "chef", "chef"));
+		users.add(new User("maga", pwdEncoder.encode("123"), "email", "magasinier", "magasinier"));
+		users.add(new User("m1", pwdEncoder.encode("123"), "email", "mecanicien1", "mecanicien1"));
+		users.add(new User("m2", pwdEncoder.encode("123"), "email", "mecanicien2", "mecanicien2"));
+		users.add(new User("m3", pwdEncoder.encode("123"), "email", "mecanicien3", "mecanicien3"));
+		users.add(new User("m4", pwdEncoder.encode("123"), "email", "mecanicien4", "mecanicien4"));
+		users.add(new User("com", pwdEncoder.encode("123"), "email", "commercial", "commercial"));
+		ur.saveAll(users);
+		
+		users.get(0).getUserRoles().add(admin);
+		users.get(1).getUserRoles().add(chef);
+		users.get(2).getUserRoles().add(magasinier);
+		users.get(3).getUserRoles().add(mecanicien);
+		users.get(4).getUserRoles().add(mecanicien);
+		users.get(5).getUserRoles().add(mecanicien);
+		users.get(6).getUserRoles().add(mecanicien);
+		users.get(7).getUserRoles().add(commercial);
+		ur.saveAll(users);
+		
+		admin.getUsers().add(users.get(0));
+		chef.getUsers().add(users.get(1));
+		magasinier.getUsers().add(users.get(2));
+		mecanicien.getUsers().add(users.get(3));
+		mecanicien.getUsers().add(users.get(4));
+		mecanicien.getUsers().add(users.get(5));
+		mecanicien.getUsers().add(users.get(6));
+		commercial.getUsers().add(users.get(7));
 		rr.save(admin);
-		ur.save(u1);
+		rr.save(chef);
+		rr.save(magasinier);
+		rr.save(mecanicien);
+		rr.save(commercial);
+		
+		
 		
 		Client c1 = new Client(TypeClient.ATELIER, "Proust", "Marcel", "02", "06");
 		Client c2 = new Client(TypeClient.ATELIER, "Simenon", "Georges", "02", "06");

@@ -3,12 +3,8 @@ package fr.diginamic.appspring.dao;
 import fr.diginamic.appspring.entities.Role;
 import fr.diginamic.appspring.repository.CrudRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
