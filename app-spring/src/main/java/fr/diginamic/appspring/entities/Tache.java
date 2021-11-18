@@ -36,6 +36,7 @@ public class Tache {
     public Tache(String intitule, TypeTache type) {
         this.intitule = intitule;
         this.type = type;
+        piecesNecessaires = new HashSet<Piece>();
     }
 
     public void addPiece(Piece p){

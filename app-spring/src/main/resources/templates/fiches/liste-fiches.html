@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Fiches</title>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css} "/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<body>
+    <div class="container">
+        <h1 th:text="${titre}"></h1>
+        <hr/>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th>Référence</th>
+                <th>Date création fiche</th>
+                <th>Date de validation</th>
+                <th>Nb de taches</th>
+                <th>Proportion effectuée</th>
+                <th>Etat entretien</th>
+                <th>Etat fiche</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="fiche: ${fiches}">
+                <td th:text="${fiche.id}"></td>
+                <td th:text="${fiche.dateCreation}"></td>
+                <td th:text="${fiche.dateCloture}"></td>
+                <td th:text="${fiche.taches.size()}"></td>
+                <td>calcul proportion</td>
+                <td th:text="${fiche.isValid}"></td>
+                <td th:text="${fiche.isCloture}"></td>
+                <td>
+                    <a class="btn btn-primary mb-2">Accéder</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

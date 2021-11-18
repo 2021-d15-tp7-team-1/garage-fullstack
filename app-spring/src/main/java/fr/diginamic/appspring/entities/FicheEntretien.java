@@ -28,13 +28,9 @@ public class FicheEntretien {
 
     public FicheEntretien() {
         taches = new HashSet<Tache>();
-    }
-
-    public FicheEntretien(TypeTache type) {
         isValid = false;
         isCloture = false;
         dateCreation = LocalDate.now();
-        taches = new HashSet<Tache>();
     }
 
     public void cloturerFiche(){

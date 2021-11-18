@@ -26,7 +26,7 @@ public class Init_db {
     @Autowired
     private PasswordEncoder pwdEncoder;
 
-    @PostConstruct
+    //@PostConstruct
     public void init() {
 
         Role admin = new Role(ApplicationUserRole.ADMIN.name());

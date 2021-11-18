@@ -36,6 +36,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/admin/**").hasAuthority(ApplicationUserRole.ADMIN.name()) //TODO définir URI (ici exemples)
 			.antMatchers("/chef/**").hasAuthority(ApplicationUserRole.CHEF.name()) //TODO définir URI (ici exemples)
 			.antMatchers("/magasinier/**").hasAuthority(ApplicationUserRole.MAGASINIER.name()) //TODO définir URI (ici exemples)
+			.antMatchers("/fiches/**").hasAuthority(ApplicationUserRole.ADMIN.name()) //TODO définir URI (ici exemples)
 			//TODO compléter éventuellement les URI
 			.anyRequest()
 			.authenticated()
