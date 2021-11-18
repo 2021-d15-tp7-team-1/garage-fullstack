@@ -78,7 +78,7 @@ public class FicheEntretienController {
 		model.addAttribute("taches", tempTaches);
 		model.addAttribute("nouvelleFicheEntretien", tempFiche);
 		
-		return "fiche_entretien/creation_fiche_entretien2";
+		return "fiche_entretien/creation_fiche_entretien";
 	}
 	
 	@PostMapping("/create")
@@ -95,7 +95,7 @@ public class FicheEntretienController {
 		
 		for (Tache t : tempTaches) {
 			t.setFiche(fiche);
-			tr.save(t);
+			t = tr.save(t);
 			for(Piece p : t.getPiecesNecessaires()) {
 				p.getTachesPiece().add(t);
 				pr.save(p);
@@ -129,7 +129,7 @@ public class FicheEntretienController {
 		model.addAttribute("pieces", pr.findAll());
 		model.addAttribute("nouvelleTache", new Tache());
 		
-		return "fiche_entretien/ajout_tache2";
+		return "fiche_entretien/ajout_tache";
 	}
 	
 	@PostMapping("/create/ajout-tache")
@@ -137,7 +137,7 @@ public class FicheEntretienController {
 			@ModelAttribute("nouvelleTache") @Valid Tache t,
 			BindingResult result,
 			@ModelAttribute("tempTaches") Set<Tache> tempTaches) {
-		
+
 		tempTaches.add(t);
 		
 		return "redirect:/entretien/create/";

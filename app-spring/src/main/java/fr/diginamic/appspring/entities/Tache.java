@@ -26,7 +26,7 @@ public class Tache {
     @JoinColumn(name="USER_ID")
     private User mecanicienAttribue;
 
-    @ManyToMany(mappedBy="tachesPiece", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy="tachesPiece")
     private Set<Piece> piecesNecessaires;
 
     public Tache() {
