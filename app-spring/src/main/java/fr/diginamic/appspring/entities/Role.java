@@ -27,6 +27,16 @@ public class Role {
         this.nomRole = nomRole;
         users = new HashSet<User>();
     }
+/*
+    public void addUser(User u){
+        if (u != null) {
+            users.add(u);
+        } else {
+            System.err.println("Can't add a null user");
+        }
+    }
+
+ */
 
     public long getId() {
         return id;

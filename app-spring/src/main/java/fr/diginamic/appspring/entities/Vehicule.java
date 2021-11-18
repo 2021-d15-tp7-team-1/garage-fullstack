@@ -35,11 +35,6 @@ public class Vehicule extends ElemStock {
         this.etatVehicule = etatVehicule;
     }
 
-    public Vehicule(String marque, String modele) {
-        this.modele = modele;
-        this.marque = marque;
-    }
-
     @Override
     public long getId() {
         return id;

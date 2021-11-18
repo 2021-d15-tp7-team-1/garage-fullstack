@@ -38,7 +38,7 @@ public class DataBaseTests {
         daoRole.deleteAll();
     }
 
-    @Test
+    //@Test
     void roleInsertion() {
         Role admin = new Role("admin");
         daoRole.add(admin);
@@ -52,29 +52,42 @@ public class DataBaseTests {
         daoRole.add(commercial);
     }
 
-    @Test
+    //@Test
     void userInsertion() {
         User user1 = new User("jdoe", "azerty", "jdoe@mygarage.com", "Doe", "John");
         daoUser.add(user1);
-        user1.addRole(daoRole.selectOne(1)); //donne le role admin
+        Role adminRole = daoRole.selectOne(1);
+        adminRole.getUsers().add(user1); //donne le role admin
+        daoRole.update(adminRole);
 
+        daoUser.update(user1);
         User user2 = new User("mdurand", "zqsd", "mdurand@mygarage.com", "Durand", "Marie");
         daoUser.add(user2);
-        user2.addRole(daoRole.selectOne(2)); //donne le role magasinier
+        Role magRole = daoRole.selectOne(2);
+        magRole.getUsers().add(user2); //donne le role magasinier
+        daoRole.update(magRole);
 
         User chefMeca = new User("pmartin", "123", "pmartin@mygarage.com", "Martin", "Pierre");
         daoUser.add(chefMeca);
-        chefMeca.addRole(daoRole.selectOne(3)); //donne le role chef_atelier
-        chefMeca.addRole(daoRole.selectOne(4)); //donne le role mecanicien
+        Role chefRole = daoRole.selectOne(3);
+        chefRole.getUsers().add(chefMeca); //donne le role chef_atelier
+        Role mecafRole = daoRole.selectOne(4);
+        chefRole.getUsers().add(chefMeca); //donne le role mecanicien
+        daoRole.update(chefRole);
+        daoRole.update(mecafRole);
 
         User commercial = new User("glopez", "abcd", "glopez@mygarage.com", "Lopez", "Gabriela");
         daoUser.add(commercial);
-        commercial.addRole(daoRole.selectOne(5)); //donne le role commercial
+        Role comRole = daoRole.selectOne(5);
+        comRole.getUsers().add(commercial); //donne le role mecanicien
+        daoRole.update(comRole);
 
         User superUser = new User("emusk", "spacex", "emusk@mygarage.com", "Musk", "Elon");
         daoUser.add(superUser);
         for(int i=1; i<=5; i++){ //donne tous les roles
-            superUser.addRole(daoRole.selectOne(i));
+            Role r = daoRole.selectOne(i);
+            r.getUsers().add(superUser);
+            daoRole.update(r);
         }
 
 
