@@ -95,4 +95,14 @@ public class FicheEntretien {
     public void setTaches(Set<Tache> taches) {
         this.taches = taches;
     }
+
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
+    
+    
 }

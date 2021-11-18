@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>CRÉATION FICHE ENTRETIEN</title>
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
+		<link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet">
+	</head>
+	
+	<body>
+		<div class="container">
+			<form class="" th:action="@{/home}" th:object="${nouvelleFicheEntretien}" method="post">
+				<h2 class="">Création d'une fiche d'entretien</h2>
+				
+					<div>
+						<label for="reference" class="">Référence : </label>
+						<span id="reference" th:text="${fiche.id}"></span>
+					</div>
+					<div>
+						<label for="vehicule" class="">Véhicule concerné : </label>
+						<input type="text" id="vehicule" name="vehicule" />
+					</div>
+				  
+				<p>
+					<label for="client" class="">Client : </label>
+					<select id="client" name="client" th:field="*{client}">
+						<option th:each="c : ${clients}" th:text="${c.nom + ' ' + c.prenom}" th:value="c.id"></option>
+					</select>
+					<a th:ref="@{}">Accéder à la liste des clients</a>
+				</p>
+				
+				<p>
+					<label for="date" class="">Date de création : </label>
+					<!--  <input type="date" id="date" name="date" th:placeholder="${dateDuJour}" th:field="*{dateCreation}"/>-->
+					<input type="text" id="date" name="date" size="20" th:placeholder="${dateDuJour}" th:field="*{dateCreation}" onfocus="(this.type='date')" />
+				</p>
+				
+				<hr/>
+				<!--
+				<h3>Liste des tâches</h3>
+				
+				<a th:ref="@{}">Ajouter une tâche</a>
+				
+				<table>
+					<tr>
+						<th>N°</th><th>Type</th><th>Pièces nécessaires</th><th>Assignation</th><th>Priorité</th><th></th>
+					</tr>
+					<tr th:each="">
+						<td th:text="N°"></td>
+						<td th:text="type"></td>
+						<td th:text="pièce"></td>
+						<td th:text="assignation"></td>
+						<td th:text="priorité"></td>
+						<td>
+							<a th:href="@{/livres/{id}/update(id=${l.id})}">Modifier</a>
+							<a th:href="@{/livres/{id}/update(id=${l.id})}">Supprimer</a>
+						</td>
+					</tr>
+				</table>
+				
+				<p>
+					<label for="description" class="">Description : </label><br/>
+					<textarea id="description" name="description" th:field=*{description} cols="30" rows="10"></textarea>
+				</p>
+				
+				-->
+				
+				<button class="btn btn-primary" type="submit">Enregistrer la fiche</button>
+			</form>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>AJOUT TACHE</title>
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
+		<link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet">
+	</head>
+	
+	<body>
+		<div class="container">
+			<form class="form-signin" th:action="@{}" th:object="${nouvelleTache}" method="post">
+				<h2 class="form-signin-heading">Ajout d'une tâche</h2>
+				<p>
+					<label for="reference" class="">Référence : </label>
+					<span id="reference">Ici l'id de la fiche d'entretien</span>
+				</p>
+				
+				<p>
+					<label for="identite_client" class="">Client : </label>
+					<span id="identite_client">Ici le NOM et le prénom du client relatif à la fiche</span>
+				</p>
+				
+				<p>
+					<label for="intitule" class="">Intitulé : </label>
+					<textarea id="intitule" name="intitule" th:field=*{intitule} cols="30" rows="10"></textarea>
+				</p>
+				
+				<p>
+					<label for="type" class="">Type : </label>
+					<select id="type" name="type" th:field="*{type}"> 
+						<option th:each="" th:text="" th:value=""></option>
+					</select>
+				</p>
+				
+				<p>
+					<label for="" class="">Assignation employé : </label>
+					<select id="" name="" th:field="mecanicienAttribue"> 
+						<option th:each="" th:text="" th:value=""></option>
+					</select>
+					<a th:ref="@{}">Liste des mécaniciens</a>
+				</p>
+				
+				<p>
+					<label for="priorite" class="">Type : </label>
+					<select id="priorite" name="priorite" th:field="*{priorite}"> 
+						<option th:each="" th:text="" th:value=""></option>
+					</select>
+				</p>
+				
+				<p>
+					<label for="pieces_necessaires" class="">Type : </label>
+					<select id="pieces_necessaires" name="pieces_necessaires" th:field="piecesNecessaires"> 
+						<option th:each="" th:text="" th:value=""></option>
+					</select>
+				</p>
+				<button class="btn btn-lg btn-primary btn-block" type="submit">Ajouter la tâche</button>
+			</form>
+		</div>
+	</body>
+</html>

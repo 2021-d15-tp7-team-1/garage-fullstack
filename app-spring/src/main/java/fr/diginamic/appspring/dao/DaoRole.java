@@ -1,7 +1,7 @@
 package fr.diginamic.appspring.dao;
 
 import fr.diginamic.appspring.entities.Role;
-import fr.diginamic.appspring.repository.RoleRepository;
+import fr.diginamic.appspring.repository.CrudRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.List;
 public class DaoRole implements ICrud<Role>{
 
     @Autowired
-    RoleRepository em;
+    CrudRoleRepository em;
 
     @Override
     public void add(Role r) {
