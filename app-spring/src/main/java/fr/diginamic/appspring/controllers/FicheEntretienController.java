@@ -12,9 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import fr.diginamic.appspring.entities.FicheEntretien;
 import fr.diginamic.appspring.entities.Piece;
@@ -31,6 +31,7 @@ import fr.diginamic.appspring.repository.CrudUserRepository;
 
 
 @Controller
+@SessionAttributes({"tempFiche", "tempTaches"})
 @RequestMapping("/entretien")
 public class FicheEntretienController {
 	
@@ -52,50 +53,65 @@ public class FicheEntretienController {
 	@Autowired
 	CrudRoleRepository rr;
 	
+	@ModelAttribute("tempFiche")
+	public FicheEntretien getTempFiche() {
+		FicheEntretien tempFiche = new FicheEntretien();
+		tempFiche.setDateCreation(LocalDate.now());
+		return tempFiche;
+	}
+	
+	@ModelAttribute("tempTaches")
+	public Set<Tache> getTempTaches() {
+		return new HashSet<Tache>();
+	}
 	
 	@GetMapping("/create")
-	public String addFiche(Model model) {
+	public String createFiche(
+			@ModelAttribute("tempsFiche") FicheEntretien tempFiche,
+			@ModelAttribute("tempTaches") Set<Tache> tempTaches,
+			Model model) {
 		
-		FicheEntretien fiche = new FicheEntretien();
-		fiche.setDateCreation(LocalDate.now());
-		fiche.setIsValid(true);
-		fiche.setIsCloture(false);
-		fiche = fr.save(fiche);
+		tempFiche = getTempFiche();
 		
-		return "redirect:/entretien/create/"+fiche.getId();
-	}
-	
-	@GetMapping("/create/{id}")
-	public String createFiche(@PathVariable("id") Long id, Model model) {
-		
-		FicheEntretien fiche = fr.findById(id).get();
-		
-		model.addAttribute("fiche", fiche);
+		model.addAttribute("fiche", tempFiche);
 		model.addAttribute("clients", cr.findAll());
-		model.addAttribute("taches", tr.findByFicheEntretien(fiche));
-		model.addAttribute("nouvelleFicheEntretien", fiche);
+		model.addAttribute("taches", tempTaches);
+		model.addAttribute("nouvelleFicheEntretien", tempFiche);
 		
-		return "fiche_entretien/creation_fiche_entretien";
+		return "fiche_entretien/creation_fiche_entretien2";
 	}
 	
-	@PostMapping("/create/{id}")
+	@PostMapping("/create")
 	public String createFiche( 
 			@ModelAttribute("nouvelleFicheEntretien") @Valid FicheEntretien f,
 			BindingResult result,
-			@PathVariable("id") Long id) {
+			@ModelAttribute("tempsFiche") FicheEntretien tempFiche,
+			@ModelAttribute("tempTaches") Set<Tache> tempTaches) {
 		
-		FicheEntretien fiche = fr.findById(id).get();
-		fiche.setClient(f.getClient());
-		fiche.setDateCreation(f.getDateCreation());
-		fr.save(fiche);
+		tempFiche.setClient(f.getClient());
+		tempFiche.setTaches(tempTaches);
+		
+		FicheEntretien fiche = fr.save(tempFiche);
+		
+		for (Tache t : tempTaches) {
+			t.setFiche(fiche);
+			tr.save(t);
+			for(Piece p : t.getPiecesNecessaires()) {
+				p.getTachesPiece().add(t);
+				pr.save(p);
+			}
+		}
+		
+		tempTaches.clear();
 		
 		return "redirect:/home";
 	}
 	
-	@GetMapping("/create/{id}/ajout-tache")
-	public String addTache(@PathVariable("id") Long id, Model model) {
-		
-		FicheEntretien fiche = fr.findById(id).get();
+	@GetMapping("/create/ajout-tache")
+	public String addTache(
+			@ModelAttribute("nouvelleFicheEntretien") @Valid FicheEntretien f,
+			BindingResult result,
+			Model model) {
 		
 		Set<String> types = new HashSet<String>();
 		for(TypeTache v : TypeTache.values()) {
@@ -107,40 +123,24 @@ public class FicheEntretienController {
 			priorites.add(p.name());
 		}
 		
-		model.addAttribute("fiche", fiche);
 		model.addAttribute("types", types);
+		model.addAttribute("mecanos", ur.findByRoleName(ApplicationUserRole.MECANICIEN.name()));
 		model.addAttribute("priorites", priorites);
 		model.addAttribute("pieces", pr.findAll());
-		model.addAttribute("mecanos", ur.findByRoleName(ApplicationUserRole.MECANICIEN.name()));
 		model.addAttribute("nouvelleTache", new Tache());
 		
-		return "fiche_entretien/ajout_tache";
+		return "fiche_entretien/ajout_tache2";
 	}
 	
-	@PostMapping("/create/{id}/ajout-tache")
+	@PostMapping("/create/ajout-tache")
 	public String addTache(
 			@ModelAttribute("nouvelleTache") @Valid Tache t,
 			BindingResult result,
-			@PathVariable("id") Long id,
-			Model model) {
+			@ModelAttribute("tempTaches") Set<Tache> tempTaches) {
 		
-		FicheEntretien fiche = fr.findById(id).get();
-		Tache nt = new Tache();
-		nt.setFiche(fiche);
-		nt.setType(t.getType());
-		nt.setIntitule(t.getIntitule());
-		nt.setPiecesNecessaires(t.getPiecesNecessaires());
-		nt.setPriorite(t.getPriorite());
-		nt.setMecanicienAttribue(t.getMecanicienAttribue());
-		nt.setTerminee(t.isTerminee());
-		tr.save(nt);
+		tempTaches.add(t);
 		
-		for(Piece p : nt.getPiecesNecessaires()) {
-			p.getTachesPiece().add(nt);
-			pr.save(p);
-		}
-		
-		return "redirect:/entretien/create/"+fiche.getId();
+		return "redirect:/entretien/create/";
 	}
 
 }

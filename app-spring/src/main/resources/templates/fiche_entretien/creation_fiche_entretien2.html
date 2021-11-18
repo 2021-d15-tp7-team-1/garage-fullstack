@@ -10,28 +10,15 @@
 	
 	<body>
 		<div class="container">
-			<form class="" th:action="@{/entretien/create/{id}(id=${fiche.id})}" th:object="${nouvelleFicheEntretien}" method="post">
+			<form class="" th:action="@{/entretien/create}" th:object="${nouvelleFicheEntretien}" method="post">
 			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 				<h2 class="">Création d'une fiche d'entretien</h2>
-				
-					<div>
-						<label for="reference" class="">Référence : </label>
-						<span id="reference" th:text="${fiche.id}"></span>
-					</div>
-					
-					<!--
-					<div>
-						<label for="vehicule" class="">Véhicule concerné : </label>
-						<input type="text" id="vehicule" name="vehicule" />
-					</div>
-				  	-->
-				  	
+								  	
 				<p>
 					<label for="client" class="">Client : </label>
 					<select id="client" name="client" th:field="*{client}">
 						<option th:each="c : ${clients}" th:text="${c.nom + ' ' + c.prenom}" th:value="${c.id}"></option>
 					</select>
-					<a th:ref="@{}">Accéder à la liste des clients</a>
 				</p>
 				
 				<p>
@@ -41,7 +28,7 @@
 				
 				<hr/>
 				
-				<h3>Liste des tâches</h3>
+				<h3 th:if="${taches.size()} > 0">Liste des tâches</h3>
 				
 				<table>
 					<tr th:if="${taches.size()} > 0">
@@ -61,15 +48,8 @@
 					</tr>
 				</table>
 				
-				<!--  
-				<p>
-					<label for="description" class="">Description : </label><br/>
-					<textarea id="description" name="description" th:field=*{description} cols="30" rows="10"></textarea>
-				</p>
-				-->
-				
-				<a  class="btn btn-success" th:href="@{/entretien/create/{id}/ajout-tache(id=${fiche.id})}">Ajouter une tâche</a>
-				<button class="btn btn-primary" type="submit">Enregistrer la fiche</button>
+				<a  class="btn btn-warning" th:href="@{/entretien/create/ajout-tache}">Ajouter une tâche</a>
+				<button class="btn btn-success" type="submit">Enregistrer la fiche</button>
 				<a class="btn btn-primary" th:href="@{/home}">Retour à la maison</a>
 			</form>
 		</div>
