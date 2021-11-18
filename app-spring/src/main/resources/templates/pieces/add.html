@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${titre}">Titre</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<h1 th:text="${titre}"></h1>
+<form th:action="@{/pieces/add}" th:object="${pieceForm}" method="post">
+    Nom:
+    <input type="text" th:field="*{nomPiece}"/>
+    <br/>
+    Type:
+    <label for="type">Type</label>
+    <select class="form-control" id="type" th:field="*{type}">
+        <option th:each="type : ${T(fr.diginamic.appspring.enums.TypePiece).values()}"
+                th:value="${type}" th:text="${type}"></option>
+    </select>
+
+    Prix:
+    <input type="text" th:field="*{prix}"/>
+    <br/>
+    Prix facturé:
+    <input type="text" th:field="*{prixFacture}"/>
+    <br/>
+    Quantité:
+    <input type="text" th:field="*{quantiteStock}"/>
+    <br/>
+
+
+<!--    <input type="text" th:field="*{etatPiece}"/>-->
+    <br/>
+    <input type="submit" value="Create"/>
+</form>
+<a th:href="@{/pieces/list}">Retour</a>
+</body>
+</html>
