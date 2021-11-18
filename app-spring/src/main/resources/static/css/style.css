@@ -1,7 +1,16 @@
 body#home {
     color:black;
     background-color:rgba(235,237,238,255);
-    background-image:url('../css/img/voiture2.gif');
+    background-image:url('../img/voiture2.gif');
     background-repeat:no-repeat;
     background-position:50% 0%;
 }
+
+div#formAjoutUser {
+    background-color:rgba(235,237,238,255);
+    border:1px solid black;
+    padding: auto;
+    margin : auto;
+    position : center;
+}
+
