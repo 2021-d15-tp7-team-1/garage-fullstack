@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>ADDVEHICULE</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="container">
+
+    <a href="add">Ajouter une demande</a>
+    <a th:href="@{/pieces/list}">Retour</a>
+
+    <br/><br/>
+    <div>
+        <table border="1">
+            <tr>
+                <th>Nom</th>
+                <th>Type</th>
+                <th>Quantite</th>
+                <th>Prix</th>
+                <th>Prix facturé</th>
+                <th>Modifier</th>
+            </tr>
+            <tr th:each ="piece : ${pieces}">
+                <td th:utext="${piece.nomPiece}">...</td>
+                <td th:utext="${piece.type}">...</td>
+                <td th:utext="${piece.quantiteStock}">...</td>
+                <td th:utext="${piece.prix}">...</td>
+                <td th:utext="${piece.prixFacture}">...</td>
+                <td><a href="#">Commander</a></td>
+
+
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

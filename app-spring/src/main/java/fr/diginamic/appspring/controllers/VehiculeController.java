@@ -1,6 +1,5 @@
 package fr.diginamic.appspring.controllers;
 
-
 import fr.diginamic.appspring.entities.Vehicule;
 import fr.diginamic.appspring.repository.CrudVehiculeRepository;
 import org.springframework.beans.factory.annotation.Autowired;

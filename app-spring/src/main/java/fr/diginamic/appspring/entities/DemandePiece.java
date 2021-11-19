@@ -1,5 +1,7 @@
 package fr.diginamic.appspring.entities;
 
+import fr.diginamic.appspring.enums.EtatDemande;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -7,8 +9,6 @@ import java.util.Set;
 
 @Entity
 public class DemandePiece {
-
-    private enum EtatDemande { EN_ATTENTE, VALIDEE, REFUSEE }
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
