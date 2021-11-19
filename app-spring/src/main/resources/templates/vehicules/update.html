@@ -1,14 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title th:text="${titre}">Titre</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
-</head>
-<body>
-<h1 th:text="${titre}"></h1>
-<form th:action="@{/vehicules/add}" th:object="${vehiculeForm}" method="post">
+<form th:action="@{/vehicules/update/{id}(id=${vehicule.id})}" th:object="${vehicule}" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
     Marque:
     <input type="text" th:field="*{marque}"/>
     <br/>
@@ -36,8 +27,6 @@
 
     <!--    <input type="text" th:field="*{etatVehicule}"/>-->
     <br/>
-    <input type="submit" value="Create"/>
+    <input type="submit" value="Update véhicule">
+
 </form>
-<a th:href="@{/vehicules/list}">Retour</a>
-</body>
-</html>

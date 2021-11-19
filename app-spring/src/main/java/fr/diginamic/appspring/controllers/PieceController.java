@@ -5,10 +5,8 @@ import fr.diginamic.appspring.repository.CrudPieceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -57,4 +55,24 @@ public class PieceController {
         return "redirect:/pieces/list";
     }
 
+    @GetMapping("/edit/{id}")
+    public String showUpdateForm(@PathVariable("id") long id, Model model) {
+        Piece p = cp.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+
+        model.addAttribute("piece", p);
+        return "pieces/update";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateUser(@PathVariable("id") long id, @Valid Piece piece,
+                             BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            piece.setId(id);
+            return "pieces/update";
+        }
+
+        cp.save(piece);
+        return "redirect:/pieces/list";
+    }
 }

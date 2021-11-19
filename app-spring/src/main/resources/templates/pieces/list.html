@@ -25,6 +25,7 @@
                     <th>Prix</th>
                     <th>Prix facturé</th>
                     <th>Modifier</th>
+                    <th>Modifier</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,6 +35,7 @@
                     <td th:utext="${piece.quantiteStock}">...</td>
                     <td th:utext="${piece.prix}">...</td>
                     <td th:utext="${piece.prixFacture}">...</td>
+                    <td><a class="btn btn-primary mb-2" th:href="@{/pieces/edit/{id}(id=${piece.id})}">Modifier</a></td>
                     <td><a class="btn btn-primary mb-2" href="#">Commander</a></td>
                 </tr>
             </tbody>
