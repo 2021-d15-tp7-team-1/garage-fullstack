@@ -1,6 +1,5 @@
 package fr.diginamic.appspring.entities;
 
-import com.sun.istack.NotNull;
 import fr.diginamic.appspring.enums.EtatVehicule;
 
 import javax.persistence.*;

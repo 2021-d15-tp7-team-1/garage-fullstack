@@ -3,6 +3,9 @@ package fr.diginamic.appspring.entities;
 import fr.diginamic.appspring.enums.TypeTache;
 
 import javax.persistence.*;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +18,8 @@ public class FicheEntretien {
 
     private boolean isValid = false;
     private boolean isCloture = false;
-
+    
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateCreation;
     private LocalDate dateCloture;
 
