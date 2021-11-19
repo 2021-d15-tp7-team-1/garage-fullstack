@@ -6,11 +6,7 @@
 	</head>
 	<body>
 		<h1>HOME</h1>
-		<p><a th:href="@{/admin/test}">Vers ADMIN/TEST</a></p>
-		<p><a th:href="@{/chef/test}">Vers CHEF/TEST</a></p>
-		<p><a th:href="@{/magasinier/test}">Vers MAGASINIER/TEST</a></p>
-		<hr/>
-		<p><a th:href="@{/entretien/create}">/entretien/create</a></p>
+		<p><a th:href="@{/entretien/create}">Créer une fiche d'entretien</a></p>
 		
 		<form action="/logout" method="post">
 			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import fr.diginamic.appspring.entities.FicheEntretien;
@@ -25,14 +26,13 @@ import fr.diginamic.appspring.enums.TypeTache;
 import fr.diginamic.appspring.repository.CrudClientRepository;
 import fr.diginamic.appspring.repository.CrudFicheRepository;
 import fr.diginamic.appspring.repository.CrudPieceRepository;
-import fr.diginamic.appspring.repository.CrudRoleRepository;
 import fr.diginamic.appspring.repository.CrudTacheRepository;
 import fr.diginamic.appspring.repository.CrudUserRepository;
 
 
 @Controller
 @SessionAttributes({"tempFiche", "tempTaches"})
-@RequestMapping("/entretien")
+@RequestMapping(value = "/entretien")
 public class FicheEntretienController {
 	
 	@Autowired
@@ -49,9 +49,6 @@ public class FicheEntretienController {
 	
 	@Autowired
 	CrudUserRepository ur;
-	
-	@Autowired
-	CrudRoleRepository rr;
 	
 	@ModelAttribute("tempFiche")
 	public FicheEntretien getTempFiche() {
@@ -81,7 +78,7 @@ public class FicheEntretienController {
 		return "fiche_entretien/creation_fiche_entretien";
 	}
 	
-	@PostMapping("/create")
+	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "enregistrer")
 	public String createFiche( 
 			@ModelAttribute("nouvelleFicheEntretien") @Valid FicheEntretien f,
 			BindingResult result,
@@ -90,6 +87,33 @@ public class FicheEntretienController {
 		
 		tempFiche.setClient(f.getClient());
 		tempFiche.setTaches(tempTaches);
+		
+		FicheEntretien fiche = fr.save(tempFiche);
+		
+		for (Tache t : tempTaches) {
+			t.setFiche(fiche);
+			t = tr.save(t);
+			for(Piece p : t.getPiecesNecessaires()) {
+				p.getTachesPiece().add(t);
+				pr.save(p);
+			}
+		}
+		
+		tempTaches.clear();
+		
+		return "redirect:/home";
+	}
+	
+	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "valider")
+	public String validateFiche( 
+			@ModelAttribute("nouvelleFicheEntretien") @Valid FicheEntretien f,
+			BindingResult result,
+			@ModelAttribute("tempsFiche") FicheEntretien tempFiche,
+			@ModelAttribute("tempTaches") Set<Tache> tempTaches) {
+		
+		tempFiche.setClient(f.getClient());
+		tempFiche.setTaches(tempTaches);
+		tempFiche.setIsValid(true);
 		
 		FicheEntretien fiche = fr.save(tempFiche);
 		
@@ -141,6 +165,15 @@ public class FicheEntretienController {
 		tempTaches.add(t);
 		
 		return "redirect:/entretien/create/";
+	}
+	
+	@GetMapping("create/abort")
+	public String abortCreation(
+			@ModelAttribute("tempTaches") Set<Tache> tempTaches) {
+		
+		tempTaches.clear();
+		
+		return "redirect:/home";
 	}
 
 }

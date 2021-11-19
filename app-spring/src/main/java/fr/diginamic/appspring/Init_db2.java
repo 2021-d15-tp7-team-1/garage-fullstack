@@ -23,7 +23,7 @@ import fr.diginamic.appspring.repository.CrudRoleRepository;
 import fr.diginamic.appspring.repository.CrudUserRepository;
 
 @Component
-public class Init_db {
+public class Init_db2 {
 	
 	@Autowired
 	private PasswordEncoder pwdEncoder;
@@ -88,8 +88,6 @@ public class Init_db {
 		rr.save(magasinier);
 		rr.save(mecanicien);
 		rr.save(commercial);
-		
-		
 		
 		Client c1 = new Client(TypeClient.ATELIER, "Proust", "Marcel", "02", "06");
 		Client c2 = new Client(TypeClient.ATELIER, "Simenon", "Georges", "02", "06");
