@@ -12,7 +12,8 @@
 	<head th:replace="fragments/header :: taghead"></head>
 	<body>
 		<div th:replace="fragments/menu :: tagmenu">  </div>
-		<div class="container">
+		<br/>
+		<div class="container" id ="formAjoutUser">
 			<form class="" th:action="@{/entretien/create}" th:object="${nouvelleFicheEntretien}" method="post">
 			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 				<h2 class="">Création d'une fiche d'entretien</h2>

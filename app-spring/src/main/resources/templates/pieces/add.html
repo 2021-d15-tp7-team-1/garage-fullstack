@@ -4,7 +4,8 @@
       xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: taghead"></head>
 <body>
-
+<div th:replace="fragments/menu :: tagmenu">  </div>
+<br/>
 <div class="container" id ="formAjoutUser">
     <h1>Ajout d'une pièce</h1>
     <form class="form-group" th:action="@{/pieces/add}" th:object="${pieceForm}" method="post">
