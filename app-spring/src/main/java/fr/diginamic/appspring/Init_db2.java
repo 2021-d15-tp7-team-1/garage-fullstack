@@ -40,7 +40,7 @@ public class Init_db2 {
 	@Autowired
 	private CrudPieceRepository pr;
 	
-	@PostConstruct
+//	@PostConstruct
 	public void init() {
 		
 		Role admin = new Role(ApplicationUserRole.ADMIN.name());

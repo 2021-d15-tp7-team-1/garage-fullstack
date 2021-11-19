@@ -1,6 +1,9 @@
 package fr.diginamic.appspring.controllers;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -8,6 +11,7 @@ import java.util.Set;
 import javax.validation.Valid;
 
 import fr.diginamic.appspring.dao.DaoFicheEntretien;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,14 +21,10 @@ import org.springframework.web.bind.annotation.*;
 import fr.diginamic.appspring.entities.FicheEntretien;
 import fr.diginamic.appspring.entities.Piece;
 import fr.diginamic.appspring.entities.Tache;
-import fr.diginamic.appspring.enums.ApplicationUserRole;
-import fr.diginamic.appspring.enums.PrioriteTache;
-import fr.diginamic.appspring.enums.TypeTache;
 import fr.diginamic.appspring.repository.CrudClientRepository;
 import fr.diginamic.appspring.repository.CrudFicheRepository;
 import fr.diginamic.appspring.repository.CrudPieceRepository;
 import fr.diginamic.appspring.repository.CrudTacheRepository;
-import fr.diginamic.appspring.repository.CrudUserRepository;
 
 
 @Controller
@@ -43,9 +43,6 @@ public class FicheEntretienController {
 	
 	@Autowired
 	CrudPieceRepository pr;
-	
-	@Autowired
-	CrudUserRepository ur;
 
 	@Autowired
 	DaoFicheEntretien daoFiche;
@@ -75,6 +72,15 @@ public class FicheEntretienController {
 		return new HashSet<Tache>();
 	}
 	
+	@GetMapping("/create-init")
+	public String createFicheWithoutTache(
+			@ModelAttribute("tempTaches") Set<Tache> tempTaches) {
+		
+		tempTaches.clear();
+		
+		return "redirect:/entretien/create";
+	}
+	
 	@GetMapping("/create")
 	public String createFiche(
 			@ModelAttribute("tempsFiche") FicheEntretien tempFiche,
@@ -83,16 +89,18 @@ public class FicheEntretienController {
 		
 		tempFiche = getTempFiche();
 		
+		List<Tache> lstTaches = sortTacheCollectionById(tempTaches);
+		
 		model.addAttribute("fiche", tempFiche);
 		model.addAttribute("clients", cr.findAll());
-		model.addAttribute("taches", tempTaches);
+		model.addAttribute("taches", lstTaches);
 		model.addAttribute("nouvelleFicheEntretien", tempFiche);
 		model.addAttribute("titre", "CRÉATION DE FICHE");
 		
 		return "fiche_entretien/creation_fiche_entretien";
 	}
 	
-	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "enregistrer")
+	@PostMapping("/create")
 	public String createFiche( 
 			@ModelAttribute("nouvelleFicheEntretien") @Valid FicheEntretien f,
 			BindingResult result,
@@ -115,34 +123,7 @@ public class FicheEntretienController {
 		
 		tempTaches.clear();
 		
-		return "redirect:/home";
-	}
-	
-	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "valider")
-	public String validateFiche( 
-			@ModelAttribute("nouvelleFicheEntretien") @Valid FicheEntretien f,
-			BindingResult result,
-			@ModelAttribute("tempsFiche") FicheEntretien tempFiche,
-			@ModelAttribute("tempTaches") Set<Tache> tempTaches) {
-		
-		tempFiche.setClient(f.getClient());
-		tempFiche.setTaches(tempTaches);
-		tempFiche.setValid(true);
-		
-		FicheEntretien fiche = fr.save(tempFiche);
-		
-		for (Tache t : tempTaches) {
-			t.setFiche(fiche);
-			t = tr.save(t);
-			for(Piece p : t.getPiecesNecessaires()) {
-				p.getTachesPiece().add(t);
-				pr.save(p);
-			}
-		}
-		
-		tempTaches.clear();
-		
-		return "redirect:/home";
+		return "redirect:/entretien/list";
 	}
 	
 	@GetMapping("create/abort")
@@ -151,7 +132,22 @@ public class FicheEntretienController {
 		
 		tempTaches.clear();
 		
-		return "redirect:/home";
+		return "redirect:/entretien/list";
+	}
+	
+	private List<Tache> sortTacheCollectionById(Set<Tache> collection) {
+		List<Tache> lstTaches = new ArrayList<Tache>();
+		for(Tache t : collection) {
+			lstTaches.add(t);
+		}
+		
+		Collections.sort(lstTaches, new Comparator<Tache>() {
+			public int compare(Tache t1, Tache t2) {
+				return ((Long) t1.getId()).compareTo((Long) t2.getId());
+			}	
+		});
+		
+		return lstTaches;
 	}
 
 }

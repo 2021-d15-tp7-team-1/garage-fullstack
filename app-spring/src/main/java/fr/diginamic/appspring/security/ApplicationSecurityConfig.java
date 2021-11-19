@@ -21,7 +21,6 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 	private ApplicationUserService applicationUserService;
 
 	public ApplicationSecurityConfig(PasswordEncoder passwordEncoder, ApplicationUserService applicationUserService) {
-		super();
 		this.passwordEncoder = passwordEncoder;
 		this.applicationUserService = applicationUserService;
 	}
@@ -33,7 +32,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/entretien/create/**").hasAuthority(ApplicationUserRole.CHEF.name())
 				.antMatchers("/magasinier/**").hasAuthority(ApplicationUserRole.MAGASINIER.name())
 				.anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll()
-				.defaultSuccessUrl("/home", true) // TODO définir URI page accueil
+				.defaultSuccessUrl("/home", true)
 				.and().logout().clearAuthentication(true).invalidateHttpSession(true)
 				.deleteCookies("JSESSIONID", "XSRF-TOKEN").logoutSuccessUrl("/login").and().exceptionHandling()
 				.accessDeniedPage("/access_denied");

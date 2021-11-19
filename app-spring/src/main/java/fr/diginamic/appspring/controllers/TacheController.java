@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import fr.diginamic.appspring.entities.FicheEntretien;
 import fr.diginamic.appspring.entities.Tache;
 import fr.diginamic.appspring.enums.ApplicationUserRole;
 import fr.diginamic.appspring.enums.PrioriteTache;
@@ -39,11 +38,11 @@ public class TacheController {
 	@Autowired
 	CrudTacheRepository tr;
 	
-	private Long tempId = -1l;
+	private Long tempId = 0l;
 	
 	@ModelAttribute("tempTacheId")
 	public Long getTempTacheId() {
-		return ++tempId;
+		return tempId++;
 	}
 	
 	@GetMapping("/create/ajout-tache")
@@ -64,6 +63,7 @@ public class TacheController {
 			@ModelAttribute("tempTaches") Set<Tache> tempTaches,
 			@ModelAttribute("tempTacheId") Long id) {
 		
+		tempId = tempTaches.size() == 0 ? 1 : tempId;
 		id = getTempTacheId();
 		t.setId(id);
 		tempTaches.add(t);
@@ -116,7 +116,7 @@ public class TacheController {
 	}
 	
 	
-	public void setTacheFormData(Model model) {
+	private void setTacheFormData(Model model) {
 		Set<String> types = new HashSet<String>();
 		for(TypeTache v : TypeTache.values()) {
 			types.add(v.name());
@@ -133,7 +133,7 @@ public class TacheController {
 		model.addAttribute("pieces", pr.findAll());
 	}
 	
-	public Tache getTacheInCollectionById(Set<Tache> collection, Long id) {
+	private Tache getTacheInCollectionById(Set<Tache> collection, Long id) {
 		return collection
 				.stream()
 				.filter(t -> t.getId() == id)
