@@ -26,7 +26,6 @@ public class Init_db {
     @Autowired
     private PasswordEncoder pwdEncoder;
 
-
     //@PostConstruct
     public void init() {
 

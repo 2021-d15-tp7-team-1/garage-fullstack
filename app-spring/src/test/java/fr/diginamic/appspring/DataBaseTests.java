@@ -4,6 +4,7 @@ import fr.diginamic.appspring.dao.ICrud;
 import fr.diginamic.appspring.entities.*;
 import fr.diginamic.appspring.enums.EtatVehicule;
 import fr.diginamic.appspring.enums.TypePiece;
+import fr.diginamic.appspring.enums.TypeTache;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,12 @@ public class DataBaseTests {
 
     @Autowired
     ICrud<Piece> daoPiece;
+
+    @Autowired
+    ICrud<Tache> daoTache;
+
+    @Autowired
+    ICrud<FicheEntretien> daoFiche;
 
     @PersistenceContext(type = PersistenceContextType.TRANSACTION)
     EntityManager em;
@@ -125,6 +132,45 @@ public class DataBaseTests {
 
         p = new Piece(25, 15, 20, "Huile moteur 1L", TypePiece.ARTICLE);
         daoPiece.add(p);
+    }
+
+    @Test
+    void ficheInsertion(){
+        FicheEntretien f = new FicheEntretien();
+        daoFiche.add(f);
+
+        Tache t = new Tache("vidange", TypeTache.Vidange);
+        daoTache.add(t);
+
+        t.addPiece(daoPiece.selectOne(8)); //ajout piece Huile moteur 1L
+        f.ajouterTache(t);
+
+        f = new FicheEntretien();
+        daoFiche.add(f);
+
+        t = new Tache("Changer carbu", TypeTache.Pannes);
+        daoTache.add(t);
+
+        t.addPiece(daoPiece.selectOne(5)); //ajout piece Carburateur
+        f.ajouterTache(t);
+    }
+
+    @Test
+    void testCascade(){
+        User u = new User("test", "azerty", "test@mygarage.com", "TEST", "Test");
+        Role r = new Role("Test");
+        daoRole.add(r);
+        daoUser.add(u);
+
+        u.addRole(r);
+        daoUser.update(u);
+
+/*
+        Role r = new Role("TEST2");
+        r.getUsers().add(u);
+        daoRole.add(r);
+
+ */
     }
 
 
