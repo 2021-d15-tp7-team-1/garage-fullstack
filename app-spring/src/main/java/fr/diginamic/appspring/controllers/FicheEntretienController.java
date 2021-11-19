@@ -131,42 +131,6 @@ public class FicheEntretienController {
 		return "redirect:/home";
 	}
 	
-	@GetMapping("/create/ajout-tache")
-	public String addTache(
-			@ModelAttribute("nouvelleFicheEntretien") @Valid FicheEntretien f,
-			BindingResult result,
-			Model model) {
-		
-		Set<String> types = new HashSet<String>();
-		for(TypeTache v : TypeTache.values()) {
-			types.add(v.name());
-		}
-		
-		Set<String> priorites = new HashSet<String>();
-		for(PrioriteTache p : PrioriteTache.values()) {
-			priorites.add(p.name());
-		}
-		
-		model.addAttribute("types", types);
-		model.addAttribute("mecanos", ur.findByRoleName(ApplicationUserRole.MECANICIEN.name()));
-		model.addAttribute("priorites", priorites);
-		model.addAttribute("pieces", pr.findAll());
-		model.addAttribute("nouvelleTache", new Tache());
-		
-		return "fiche_entretien/ajout_tache";
-	}
-	
-	@PostMapping("/create/ajout-tache")
-	public String addTache(
-			@ModelAttribute("nouvelleTache") @Valid Tache t,
-			BindingResult result,
-			@ModelAttribute("tempTaches") Set<Tache> tempTaches) {
-
-		tempTaches.add(t);
-		
-		return "redirect:/entretien/create/";
-	}
-	
 	@GetMapping("create/abort")
 	public String abortCreation(
 			@ModelAttribute("tempTaches") Set<Tache> tempTaches) {
