@@ -15,7 +15,7 @@
                 <th>Date création fiche</th>
                 <th>Date de validation</th>
                 <th>Nb de taches</th>
-                <th>Proportion effectuée</th>
+                <!-- <th>Proportion effectuée</th> -->
                 <th>Etat entretien</th>
                 <th>Etat fiche</th>
                 <th></th>
@@ -27,9 +27,15 @@
                 <td th:text="${fiche.dateCreation}"></td>
                 <td th:text="${fiche.dateCloture}"></td>
                 <td th:text="${fiche.taches.size()}"></td>
-                <td>calcul proportion</td>
-                <td th:text="${fiche.isValid}"></td>
-                <td th:text="${fiche.isCloture}"></td>
+                <!-- <td>calcul proportion</td> -->
+                <td>
+                    <span th:if="${fiche.isValid}">Validée</span>
+                    <span th:unless="${fiche.isValid}">En cours</span>
+                </td>
+                <td>
+                    <span th:if="${fiche.isCloture}">Cloturée</span>
+                    <span th:unless="${fiche.isCloture}">Ouverte</span>
+                </td>
                 <td>
                     <a class="btn btn-primary mb-2" href="#">Accéder</a>
                 </td>
