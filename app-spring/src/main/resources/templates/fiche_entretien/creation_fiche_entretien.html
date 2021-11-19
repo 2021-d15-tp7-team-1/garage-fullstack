@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="fr">
-<!--
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -45,7 +44,7 @@
 						<td th:text="${t.mecanicienAttribue.nom + ' ' + t.mecanicienAttribue.prenom}"></td>
 						<td th:text="${t.getPriorite().name()}"></td>
 						<td>
-							<a>Modifier</a>
+							<a th:href="@{/entretien/create/modification-tache/{id}(id=${t.id})}">Modifier</a>
 							<a>Supprimer</a>
 						</td>
 					</tr>
