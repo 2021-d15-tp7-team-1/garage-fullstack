@@ -19,7 +19,7 @@ public class FicheController {
     @Autowired
     DaoFicheEntretien daoFiche;
 
-    @GetMapping("/all")
+    @GetMapping("/list")
     public String findAll(Model model){
         model.addAttribute("fiches", (List<FicheEntretien>) daoFiche.selectAll());
         model.addAttribute("titre", "Fiches d'entretien");

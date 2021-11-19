@@ -12,7 +12,11 @@ public class Role {
 
     private String nomRole;
 
-    @ManyToMany(mappedBy = "userRoles")
+    @ManyToMany
+    @JoinTable(name="COMPO_USER_ROLE",
+            joinColumns= @JoinColumn(name="ID_ROLE", referencedColumnName="ID"),
+            inverseJoinColumns= @JoinColumn(name="ID_USER", referencedColumnName="ID")
+    )
     private Set<User> users;
 
     public Role() {
