@@ -47,12 +47,10 @@ public class TacheController {
 	}
 	
 	@GetMapping("/create/ajout-tache")
-	public String addTache(
-			@ModelAttribute("nouvelleFicheEntretien") @Valid FicheEntretien f,
-			BindingResult result,
-			Model model) {
+	public String addTache(Model model) {
 		
 		model.addAttribute("nouvelleTache", new Tache());
+		model.addAttribute("titre", "CRÉATION DE TACHE");
 
 		setTacheFormData(model);
 		
@@ -67,7 +65,6 @@ public class TacheController {
 			@ModelAttribute("tempTacheId") Long id) {
 		
 		id = getTempTacheId();
-		
 		t.setId(id);
 		tempTaches.add(t);
 		
@@ -83,6 +80,7 @@ public class TacheController {
 		Tache tacheToUpdate = getTacheInCollectionById(tempTaches, id);
 		
 		model.addAttribute("tacheToUpdate", tacheToUpdate);
+		model.addAttribute("titre", "MODIFICATION DE TACHE");
 
 		setTacheFormData(model);
 		
@@ -98,12 +96,21 @@ public class TacheController {
 		
 		Tache tacheObsolete = getTacheInCollectionById(tempTaches, id);
 		
-		System.err.println("OBSO : " + tacheObsolete.getIntitule());
-		System.err.println("NELLE : " + tacheModifiee.getIntitule());
-		
 		tempTaches.remove(tacheObsolete);
 		tacheModifiee.setId(id);
 		tempTaches.add(tacheModifiee);
+		
+		return "redirect:/entretien/create/";
+	}
+	
+	@GetMapping("/create/suppression-tache/{id}")
+	public String deleteTache(
+			@PathVariable Long id,
+			@ModelAttribute("tempTaches") Set<Tache> tempTaches) {
+		
+		Tache tacheObsolete = getTacheInCollectionById(tempTaches, id);
+		
+		tempTaches.remove(tacheObsolete);
 		
 		return "redirect:/entretien/create/";
 	}

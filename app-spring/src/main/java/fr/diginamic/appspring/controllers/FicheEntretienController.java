@@ -87,6 +87,7 @@ public class FicheEntretienController {
 		model.addAttribute("clients", cr.findAll());
 		model.addAttribute("taches", tempTaches);
 		model.addAttribute("nouvelleFicheEntretien", tempFiche);
+		model.addAttribute("titre", "CRÉATION DE FICHE");
 		
 		return "fiche_entretien/creation_fiche_entretien";
 	}
