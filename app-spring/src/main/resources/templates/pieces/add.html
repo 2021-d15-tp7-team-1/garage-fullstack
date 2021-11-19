@@ -9,6 +9,8 @@
 <body>
 <h1 th:text="${titre}"></h1>
 <form th:action="@{/pieces/add}" th:object="${pieceForm}" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
     Nom:
     <input type="text" th:field="*{nomPiece}"/>
     <br/>

@@ -1,19 +1,12 @@
 package fr.diginamic.appspring.controllers;
 
-import fr.diginamic.appspring.dao.DaoClient;
-import fr.diginamic.appspring.dao.DaoVehicule;
-import fr.diginamic.appspring.entities.ElemStock;
 import fr.diginamic.appspring.entities.Vehicule;
-import fr.diginamic.appspring.enums.EtatVehicule;
-import fr.diginamic.appspring.form.VehiculeForm;
-import fr.diginamic.appspring.repository.CrudStockRepo;
 import fr.diginamic.appspring.repository.CrudVehiculeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 

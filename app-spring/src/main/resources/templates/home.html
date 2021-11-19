@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>HOME</h1>
-
+<h2><a th:href="@{/pieces/list}">Pièces & Articles</a> / <a th:href="@{/vehicules/list}">Véhicules</a></h2>
 <form action="/logout" method="post">
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
     <button type="submit">Logout</button>

@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${titre}">Titre</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<h1 th:text="${titre}"></h1>
+<form th:action="@{/pieces/demandes/add}" th:object="${dpForm}" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+    Etat:
+    <label for="etat">Etat</label>
+    <select class="form-control" id="etat" th:field="*{etat}">
+        <option th:each="etat : ${T(fr.diginamic.appspring.enums.EtatDemande).values()}"
+                th:value="${etat}" th:text="${etat}"></option>
+    </select>
+    DateDemande :
+    <input type="text" th:field="*{dateDemande}"/>
+    <br/>
+
+    Piècees :
+    <select th:field="*{pieces}">
+        <option th:each="*{piece} : ${ : ${pieces} }" th:value="${piece.getId()}" th:text="${piece.getNomPiece()}"></option>
+    </select>
+    <br/>
+
+    Piècees :
+    <select th:each="*{piece}: ${ pieces }">
+        <option th:value="${piece.getId()}" th:text="${piece.getName()}"></option>
+    </select>
+    <br/>
+
+    <input type="submit" value="Create"/>
+</form>
+<a th:href="@{/pieces/list}">Retour</a>
+</body>
+</html>
