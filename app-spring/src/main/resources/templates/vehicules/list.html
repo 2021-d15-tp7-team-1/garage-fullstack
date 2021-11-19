@@ -26,7 +26,6 @@
                     <th>Prix</th>
                     <th>Prix facturé</th>
                     <th></th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -38,7 +37,6 @@
                     <td th:utext="${vehicule.prix}">...</td>
                     <td th:utext="${vehicule.prixFacture}">...</td>
                     <td><a class="btn btn-primary mb-2" th:href="@{/vehicules/showUpdateForm(id=${vehicule.id})}">Modifier</a></td>
-                    <td><a class="btn btn-primary mb-2" href="#">Commander</a></td>
                 </tr>
             </tbody>
         </table>
