@@ -2,20 +2,17 @@ package fr.diginamic.appspring.controllers;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.Valid;
 
+import fr.diginamic.appspring.dao.DaoFicheEntretien;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 
 import fr.diginamic.appspring.entities.FicheEntretien;
 import fr.diginamic.appspring.entities.Piece;
@@ -49,6 +46,22 @@ public class FicheEntretienController {
 	
 	@Autowired
 	CrudUserRepository ur;
+
+	@Autowired
+	DaoFicheEntretien daoFiche;
+
+	@GetMapping("/list")
+	public String findAll(Model model){
+		model.addAttribute("fiches", (List<FicheEntretien>) daoFiche.selectAll());
+		model.addAttribute("titre", "Fiches d'entretien");
+		return "fiche_entretien/liste-fiches";
+	}
+
+	@GetMapping("/{id}")
+	public String afficherFiche(@PathVariable("id") Long id, Model model){
+		model.addAttribute("fiche", daoFiche.selectOne(id));
+		return "fiches/detail-fiche";
+	}
 	
 	@ModelAttribute("tempFiche")
 	public FicheEntretien getTempFiche() {
@@ -113,7 +126,7 @@ public class FicheEntretienController {
 		
 		tempFiche.setClient(f.getClient());
 		tempFiche.setTaches(tempTaches);
-		tempFiche.setIsValid(true);
+		tempFiche.setValid(true);
 		
 		FicheEntretien fiche = fr.save(tempFiche);
 		

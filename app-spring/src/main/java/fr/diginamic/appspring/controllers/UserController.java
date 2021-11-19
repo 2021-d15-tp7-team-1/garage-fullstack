@@ -7,7 +7,7 @@ import javax.validation.Valid;
 
 import fr.diginamic.appspring.entities.User;
 import fr.diginamic.appspring.repository.CrudUserRepository;
-import fr.diginamic.appspring.repository.RoleRepository;
+import fr.diginamic.appspring.repository.CrudRoleRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +27,7 @@ public class UserController {
     CrudUserRepository col;
 
     @Autowired
-    RoleRepository roles;
+    CrudRoleRepository roles;
 
     public UserController() {
 
