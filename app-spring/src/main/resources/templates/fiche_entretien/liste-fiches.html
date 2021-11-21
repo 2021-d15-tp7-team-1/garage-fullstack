@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: taghead"></head>
+<body>
+    <div th:replace="fragments/menu :: tagmenu">  </div>
+    <div class="container">
+        <h1 th:text="${titre}"></h1>
+        <hr/>
+        <a class="btn btn-success mb-2 float-right" th:href="@{/entretien/create}">Créer une fiche d'entretien</a>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th>Référence</th>
+                <th>Date création fiche</th>
+                <th>Date de validation</th>
+                <th>Nb de taches</th>
+                <!-- <th>Proportion effectuée</th> -->
+                <th>Etat entretien</th>
+                <th>Etat fiche</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="fiche: ${fiches}">
+                <td th:text="${fiche.id}"></td>
+                <td th:text="${fiche.dateCreation}"></td>
+                <td th:text="${fiche.dateCloture}"></td>
+                <td th:text="${fiche.taches.size()}"></td>
+                <!-- <td>calcul proportion</td> -->
+                <td>
+                    <span th:if="${fiche.isValid}">Validée</span>
+                    <span th:unless="${fiche.isValid}">En cours</span>
+                </td>
+                <td>
+                    <span th:if="${fiche.isCloture}">Cloturée</span>
+                    <span th:unless="${fiche.isCloture}">Ouverte</span>
+                </td>
+                <td>
+                    <a class="btn btn-primary mb-2" href="#">Accéder</a>
+                </td>
+                <td>
+                    <a class="btn btn-warning mb-2" href="#">Annuler fiche</a>
+                </td>
+                <td>
+                    <a class="btn btn-danger mb-2" href="#">Cloturer fiche</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

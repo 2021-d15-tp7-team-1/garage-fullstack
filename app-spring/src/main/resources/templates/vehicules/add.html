@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: taghead"></head>
+<body>
+<div th:replace="fragments/menu :: tagmenu">  </div>
+<br/>
+<div class="container" id ="formAjoutUser">
+    <h1>Ajout d'un véhicule</h1>
+    <form th:action="@{/vehicules/add}" th:object="${vehiculeForm}" method="post">
+        Marque:
+        <input type="text" th:field="*{marque}"/>
+        <br/>
+        Modele:
+        <input type="text" th:field="*{modele}"/>
+        <br/>
+        Quantité:
+        <input type="text" th:field="*{quantiteStock}"/>
+        <br/>
+        Prix:
+        <input type="text" th:field="*{prix}"/>
+        <br/>
+        Prix facturé:
+        <input type="text" th:field="*{prixFacture}"/>
+        <br/>
+        Couleur:
+        <input type="text" th:field="*{couleur}"/>
+        <br/>
+        Etat:
+        <label for="etatVehicule"></label>
+        <select class="form-control" id="etatVehicule" th:field="*{etatVehicule}">
+            <option th:each="etatVehicule : ${T(fr.diginamic.appspring.enums.EtatVehicule).values()}"
+                    th:value="${etatVehicule}" th:text="${etatVehicule}"></option>
+        </select>
+
+    <!--    <input type="text" th:field="*{etatVehicule}"/>-->
+        <br/>
+        <input class="btn btn-success" type="submit" value="Create"/>
+        <a class="btn btn-danger" th:href="@{/vehicules/list}">Retour</a>
+    </form>
+
+</div>
+</body>
+</html>

@@ -1,6 +1,5 @@
 package fr.diginamic.appspring.entities;
 
-import com.sun.istack.NotNull;
 import fr.diginamic.appspring.enums.TypePiece;
 
 import javax.persistence.*;
@@ -21,7 +20,7 @@ public class Piece extends ElemStock {
     @ManyToMany(mappedBy="piecesDemandees")
     private Set<DemandePiece> demandes;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="COMPO_PIECE_TACHE",
             joinColumns= @JoinColumn(name="ID_PIECE", referencedColumnName="ID"),
             inverseJoinColumns= @JoinColumn(name="ID_TACHE", referencedColumnName="ID")

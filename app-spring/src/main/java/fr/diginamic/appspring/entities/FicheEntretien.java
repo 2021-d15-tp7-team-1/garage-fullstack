@@ -3,6 +3,9 @@ package fr.diginamic.appspring.entities;
 import fr.diginamic.appspring.enums.TypeTache;
 
 import javax.persistence.*;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +18,8 @@ public class FicheEntretien {
 
     private boolean isValid = false;
     private boolean isCloture = false;
-
+    
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateCreation;
     private LocalDate dateCloture;
 
@@ -28,13 +32,9 @@ public class FicheEntretien {
 
     public FicheEntretien() {
         taches = new HashSet<Tache>();
-    }
-
-    public FicheEntretien(TypeTache type) {
         isValid = false;
         isCloture = false;
         dateCreation = LocalDate.now();
-        taches = new HashSet<Tache>();
     }
 
     public void cloturerFiche(){
@@ -54,18 +54,6 @@ public class FicheEntretien {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public boolean isIsValid() {
-        return isValid;
-    }
-
-    public void setIsValid(boolean validation) {
-        this.isValid = validation;
-    }
-
-    public boolean isIsCloture() {
-        return isCloture;
     }
 
     public void setIsCloture(boolean cloture) {
@@ -94,5 +82,29 @@ public class FicheEntretien {
 
     public void setTaches(Set<Tache> taches) {
         this.taches = taches;
+    }
+
+    public boolean isValid() {
+        return isValid;
+    }
+
+    public void setValid(boolean valid) {
+        isValid = valid;
+    }
+
+    public boolean isCloture() {
+        return isCloture;
+    }
+
+    public void setCloture(boolean cloture) {
+        isCloture = cloture;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 }

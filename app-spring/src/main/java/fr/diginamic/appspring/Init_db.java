@@ -27,6 +27,7 @@ public class Init_db {
     private PasswordEncoder pwdEncoder;
 
 
+
     @PostConstruct 
     public void init() {
 

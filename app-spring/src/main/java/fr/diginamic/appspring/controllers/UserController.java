@@ -7,7 +7,9 @@ import javax.validation.Valid;
 
 import fr.diginamic.appspring.entities.User;
 import fr.diginamic.appspring.repository.CrudUserRepository;
-import fr.diginamic.appspring.repository.RoleRepository;
+
+import fr.diginamic.appspring.repository.CrudRoleRepository;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +29,9 @@ public class UserController {
     CrudUserRepository col;
 
     @Autowired
-    RoleRepository roles;
+
+    CrudRoleRepository roles;
+
 
     public UserController() {
 
@@ -51,6 +55,7 @@ public class UserController {
         return "user/add";
     }
 
+
     @PostMapping("/add")
     public String add(Model model, @Valid @ModelAttribute("collabForm") User collabForm) {
         // récupérer la selection des rôles et ajouter dans une boucles les rôles
@@ -65,6 +70,18 @@ public class UserController {
         col.save(collabForm);
         return "redirect:/admin/user";
     }
+
+    @PostMapping("/add")
+    public String add(Model model, @Valid @ModelAttribute("collabForm") User collabForm) {
+        col.save(collabForm); //ajout du nouvel user à la base
+        collabForm.getUserRoles().forEach(role -> {
+            role.getUsers().add(collabForm);
+            roles.save(role); //update de la liste de users de ce role
+            System.out.println(role.getNomRole());
+        });
+        return "redirect:/admin/user";
+    }
+
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long pid) throws Exception {

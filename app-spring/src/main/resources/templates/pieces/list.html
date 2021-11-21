@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<!-- <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>ADDVEHICULE</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet">
+</head>
+-->
+<head th:replace="fragments/header :: taghead"></head>
+<body>
+<div th:replace="fragments/menu :: tagmenu">  </div>
+<div class="container">
+    <h1>Pièces & Articles / <a th:href="@{/vehicules/list}">Véhicules</a></h1>
+    <a class="btn btn-success mb-2 float-right" href="add">Ajouter une pièce</a>
+    <br/><br/>
+    <div>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nom</th>
+                    <th>Type</th>
+                    <th>Quantite</th>
+                    <th>Prix</th>
+                    <th>Prix facturé</th>
+                    <th>Modifier</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each ="piece : ${pieces}">
+                    <td th:utext="${piece.nomPiece}">...</td>
+                    <td th:utext="${piece.type}">...</td>
+                    <td th:utext="${piece.quantiteStock}">...</td>
+                    <td th:utext="${piece.prix}">...</td>
+                    <td th:utext="${piece.prixFacture}">...</td>
+                    <td><a class="btn btn-primary mb-2" href="#">Mettre à jour stock</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
