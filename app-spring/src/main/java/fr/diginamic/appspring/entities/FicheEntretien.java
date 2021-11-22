@@ -1,6 +1,8 @@
 package fr.diginamic.appspring.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -26,6 +28,7 @@ public class FicheEntretien {
 
     @ManyToOne
     @JoinColumn(name="CLIENT_ID")
+    @NotNull(message = "Vous devez indiquer un client existant.")
     private Client client;
 
     public FicheEntretien() {
