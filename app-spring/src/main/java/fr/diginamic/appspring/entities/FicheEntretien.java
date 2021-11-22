@@ -1,7 +1,5 @@
 package fr.diginamic.appspring.entities;
 
-import fr.diginamic.appspring.enums.TypeTache;
-
 import javax.persistence.*;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,8 +14,8 @@ public class FicheEntretien {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
 
-    private boolean isValid = false;
-    private boolean isCloture = false;
+    private boolean isValid;
+    private boolean isCloture;
     
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateCreation;
@@ -32,7 +30,7 @@ public class FicheEntretien {
 
     public FicheEntretien() {
         taches = new HashSet<Tache>();
-        isValid = false;
+        isValid = true;
         isCloture = false;
         dateCreation = LocalDate.now();
     }
