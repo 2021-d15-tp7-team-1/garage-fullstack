@@ -39,7 +39,7 @@
                     <span th:unless="${fiche.isCloture}">Ouverte</span>
                 </td>
                 <td>
-                    <a class="btn btn-primary mb-2" href="#">Accéder</a>
+                    <a class="btn btn-primary mb-2" th:href="@{/entretien/{id}(id=${fiche.id})}">Accéder</a>
                 </td>
                 <td>
                     <a class="btn btn-warning mb-2" href="#">Annuler fiche</a>

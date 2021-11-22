@@ -1,20 +1,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Fiches</title>
-    <link th:rel="stylesheet" type="text/css" th:href="@{/static/css/bootstrap.min.css} "/>
-    <link rel="stylesheet" type="text/css" th:href="@{/static/css/style.css}"/>
-</head>
-<script th:src="@{/static/js/bootstrap.min.js}"></script>
+<head th:replace="fragments/header :: taghead"></head>
 <body>
-    <h1>Fiche d'entretien</h1>
-    <a class="btn btn-danger mb-2 float-right">Annuler la fiche</a>
+    <div th:replace="fragments/menu :: tagmenu">  </div>
+    <br/>
+    <a class="btn btn-danger mb-2 float-right" th:onclick="${fiche.setValid(false)}" th:href="@{/entretien/list}">Annuler la fiche</a>
     <a class="btn btn-primary mb-2 float-right">Modifier la fiche</a>
-    <a class="btn btn-success mb-2 float-right">Cloturer</a>
+    <a class="btn btn-success mb-2 float-right" th:unless="${fiche.isCloture()}" th:onclick="${fiche.setCloture(true)}">Cloturer</a>
     <div class="container">
         <fieldset class="form-group border p-3">
-            <legend class="w-auto px-2"><h1>Fiche d'entretien<h1/></legend>
+            <legend class="w-auto px-2"><h1>Fiche d'entretien</h1></legend>
             <div class="form-group">
                 <table class="table">
                     <tbody>
@@ -24,7 +19,7 @@
                         </tr>
                         <tr>
                             <td>Client : </td>
-                            <td></td>
+                            <td th:text="${fiche.client.prenom} + ' ' + ${fiche.client.nom}"></td>
                         </tr>
                         <tr>
                             <td>Date de création : </td>
@@ -52,13 +47,17 @@
                         <td th:text="${tache.id}"></td>
                         <td th:text="${tache.type}"></td>
                         <td th:text="${tache}"></td>
-                        <td th:text=""></td> // TODO
+                        <td th:text="${tache.mecanicienAttribue.prenom} + ' ' + ${tache.mecanicienAttribue.nom}"></td>
                         <td th:text="${tache.priorite}"></td>
-                        <td th:text="${tache.terminee}"></td>
+                        <td>
+                            <span th:if="${tache.terminee}">Terminée</span>
+                            <span th:unless="${tache.terminee}">A faire</span>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
+            <a class="btn btn-danger float-right" th:href="@{/entretien/list}">Retour</a>
         </fieldset>
     </div>
 </body>

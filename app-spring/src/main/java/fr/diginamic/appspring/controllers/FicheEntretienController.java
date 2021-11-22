@@ -57,7 +57,7 @@ public class FicheEntretienController {
 	@GetMapping("/{id}")
 	public String afficherFiche(@PathVariable("id") Long id, Model model){
 		model.addAttribute("fiche", daoFiche.selectOne(id));
-		return "fiches/detail-fiche";
+		return "fiche_entretien/detail-fiche";
 	}
 	
 	@ModelAttribute("tempFiche")
