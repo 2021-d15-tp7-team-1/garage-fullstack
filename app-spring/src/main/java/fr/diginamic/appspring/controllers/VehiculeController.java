@@ -18,7 +18,7 @@ public class VehiculeController {
     @Autowired
     CrudVehiculeRepository cs;
 //    @Autowired
-//    private static DaoVehicule daoVehicule;
+//    private DaoVehicule daoVehicule;
 
     public VehiculeController() {
     }
@@ -29,19 +29,7 @@ public class VehiculeController {
         return "vehicules/list";
 
     }
-//    @GetMapping("/all")
-//    public Iterable<ElemStock> stockAll() {
-//        return cs.findAll();
-//    }
 
-    //    @PostMapping("/addV")
-//    public String vechiculeCreate(@Valid @RequestBody Vehicule v) {
-//        /**
-//         * Transactionnel avec commit ou rollback
-//         */
-//        daoVehicule.add(v);//save insert ou update selon l'id !
-//        return "Create Ok : " + v.getId();
-//    }
     @GetMapping("/add")
     public String addT(Model model) {
         model.addAttribute("vehiculeForm", new Vehicule() );

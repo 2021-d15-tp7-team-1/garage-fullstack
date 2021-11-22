@@ -7,35 +7,39 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<h1 th:text="${titre}"></h1>
-<form th:action="@{/pieces/add}" th:object="${pieceForm}" method="post">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <head th:replace="fragments/header :: taghead"></head>
+    <body>
+    <div th:replace="fragments/menu :: tagmenu">  </div>
 
-    Nom:
-    <input type="text" th:field="*{nomPiece}"/>
-    <br/>
-    Type:
-    <label for="type">Type</label>
-    <select class="form-control" id="type" th:field="*{type}">
-        <option th:each="type : ${T(fr.diginamic.appspring.enums.TypePiece).values()}"
-                th:value="${type}" th:text="${type}"></option>
-    </select>
+    <h1 th:text="${titre}"></h1>
+    <form th:action="@{/pieces/add}" th:object="${pieceForm}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-    Prix:
-    <input type="text" th:field="*{prix}"/>
-    <br/>
-    Prix facturé:
-    <input type="text" th:field="*{prixFacture}"/>
-    <br/>
-    Quantité:
-    <input type="text" th:field="*{quantiteStock}"/>
-    <br/>
+        Nom:
+        <input type="text" th:field="*{nomPiece}"/>
+        <br/>
+        Type:
+        <label for="type">Type</label>
+        <select class="form-control" id="type" th:field="*{type}">
+            <option th:each="type : ${T(fr.diginamic.appspring.enums.TypePiece).values()}"
+                    th:value="${type}" th:text="${type}"></option>
+        </select>
+
+        Prix:
+        <input type="text" th:field="*{prix}"/>
+        <br/>
+        Prix facturé:
+        <input type="text" th:field="*{prixFacture}"/>
+        <br/>
+        Quantité:
+        <input type="text" th:field="*{quantiteStock}"/>
+        <br/>
 
 
-    <!--    <input type="text" th:field="*{etatPiece}"/>-->
-    <br/>
-    <input type="submit" value="Create"/>
-</form>
-<a th:href="@{/pieces/list}">Retour</a>
+        <!--    <input type="text" th:field="*{etatPiece}"/>-->
+        <br/>
+        <input type="submit" value="Create"/>
+    </form>
+    <a th:href="@{/pieces/list}">Retour</a>
 </body>
 </html>

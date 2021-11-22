@@ -7,39 +7,43 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<h1 th:text="${titre}"></h1>
-<form th:action="@{/vehicules/add}" th:object="${vehiculeForm}" method="post">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+<head th:replace="fragments/header :: taghead"></head>
+<body>
+    <div th:replace="fragments/menu :: tagmenu">  </div>
 
-    Marque:
-    <input type="text" th:field="*{marque}"/>
-    <br/>
-    Modele:
-    <input type="text" th:field="*{modele}"/>
-    <br/>
-    Quantité:
-    <input type="text" th:field="*{quantiteStock}"/>
-    <br/>
-    Prix:
-    <input type="text" th:field="*{prix}"/>
-    <br/>
-    Prix facturé:
-    <input type="text" th:field="*{prixFacture}"/>
-    <br/>
-    Couleur:
-    <input type="text" th:field="*{couleur}"/>
-    <br/>
-    Etat:
-    <label for="etatVehicule">Etat</label>
-    <select class="form-control" id="etatVehicule" th:field="*{etatVehicule}">
-        <option th:each="etatVehicule : ${T(fr.diginamic.appspring.enums.EtatVehicule).values()}"
-                th:value="${etatVehicule}" th:text="${etatVehicule}"></option>
-    </select>
+    <h1 th:text="${titre}"></h1>
+    <form th:action="@{/vehicules/add}" th:object="${vehiculeForm}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-    <!--    <input type="text" th:field="*{etatVehicule}"/>-->
-    <br/>
-    <input type="submit" value="Create"/>
-</form>
-<a th:href="@{/vehicules/list}">Retour</a>
+        Marque:
+        <input type="text" th:field="*{marque}"/>
+        <br/>
+        Modele:
+        <input type="text" th:field="*{modele}"/>
+        <br/>
+        Quantité:
+        <input type="text" th:field="*{quantiteStock}"/>
+        <br/>
+        Prix:
+        <input type="text" th:field="*{prix}"/>
+        <br/>
+        Prix facturé:
+        <input type="text" th:field="*{prixFacture}"/>
+        <br/>
+        Couleur:
+        <input type="text" th:field="*{couleur}"/>
+        <br/>
+        Etat:
+        <label for="etatVehicule">Etat</label>
+        <select class="form-control" id="etatVehicule" th:field="*{etatVehicule}">
+            <option th:each="etatVehicule : ${T(fr.diginamic.appspring.enums.EtatVehicule).values()}"
+                    th:value="${etatVehicule}" th:text="${etatVehicule}"></option>
+        </select>
+
+        <!--    <input type="text" th:field="*{etatVehicule}"/>-->
+        <br/>
+        <input type="submit" value="Create"/>
+    </form>
+    <a th:href="@{/vehicules/list}">Retour</a>
 </body>
 </html>

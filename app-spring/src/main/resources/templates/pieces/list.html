@@ -10,43 +10,42 @@
 -->
 <head th:replace="fragments/header :: taghead"></head>
 <body>
-<div th:replace="fragments/menu :: tagmenu">  </div>
-<div class="container">
-    <h2>Pièces & Articles / <a th:href="@{/vehicules/list}">Véhicules</a></h2>
-    <h3><a th:href="@{demandes/list}">Demandes</a></h3>
-    <a href="add">Ajouter une pièce</a>
-    <br/><br/>
-    <div>
+    <div th:replace="fragments/menu :: tagmenu">  </div>
+    <div class="container">
+        <h1 th:text="${titre}"></h1>
+        <!--    <h3><a th:href="@{demandes/list}">Demandes</a></h3>-->
+        <a class="btn btn-success mb-2 float-right" th:href="@{add}">Créer une nouvelle pièce</a>
+
         <table class="table table-striped">
-            <thead class="thead-dark">
-            <tr>
-                <th>Nom</th>
-                <th>Type</th>
-                <th>Quantite</th>
-                <th>Prix</th>
-                <th>Prix facturé</th>
-                <th>Modifier</th>
-                <th>Modifier</th>
-                <th>Add</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each ="piece : ${pieces}">
-                <td th:utext="${piece.nomPiece}">...</td>
-                <td th:utext="${piece.type}">...</td>
-                <td th:utext="${piece.quantiteStock}">...</td>
-                <td th:utext="${piece.prix}">...</td>
-                <td th:utext="${piece.prixFacture}">...</td>
-                <td><a class="btn btn-primary mb-2" th:href="@{/pieces/edit/{id}(id=${piece.id})}">Modifier</a></td>
-                <td><a class="btn btn-primary mb-2" href="#">Commander</a></td>
-                <td>
-                    <a class="btn btn-primary mb-2" th:href="@{/pieces/increase/{id}(id=${piece.id})}">+</a> /
-                    <a class="btn btn-primary mb-2" th:href="@{/pieces/decrease/{id}(id=${piece.id})}">-</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                <thead class="thead-dark">
+                <tr>
+                    <th>Nom</th>
+                    <th>Type</th>
+                    <th>Quantite</th>
+                    <th>Prix</th>
+                    <th>Prix facturé</th>
+                    <th>Modifier</th>
+                    <th>Modifier</th>
+                    <th>Add</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each ="piece : ${pieces}">
+                    <td th:utext="${piece.nomPiece}">...</td>
+                    <td th:utext="${piece.type}">...</td>
+                    <td th:utext="${piece.quantiteStock}">...</td>
+                    <td th:utext="${piece.prix}">...</td>
+                    <td th:utext="${piece.prixFacture}">...</td>
+                    <td><a class="btn btn-primary mb-2" th:href="@{/pieces/edit/{id}(id=${piece.id})}">Modifier</a></td>
+                    <td><a class="btn btn-primary mb-2" href="#">Commander</a></td>
+                    <td>
+                        <a class="btn btn-primary mb-2" th:href="@{/pieces/increase/{id}(id=${piece.id})}">+</a>
+                        <a class="btn btn-primary mb-2" th:href="@{/pieces/decrease/{id}(id=${piece.id})}">-</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 </body>
 </html>

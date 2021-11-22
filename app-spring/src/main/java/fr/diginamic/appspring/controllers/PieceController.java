@@ -28,19 +28,7 @@ public class PieceController {
         return "pieces/list";
 
     }
-//    @GetMapping("/all")
-//    public Iterable<ElemStock> stockAll() {
-//        return cs.findAll();
-//    }
 
-    //    @PostMapping("/addV")
-//    public String vechiculeCreate(@Valid @RequestBody Piece v) {
-//        /**
-//         * Transactionnel avec commit ou rollback
-//         */
-//        daoPiece.add(v);//save insert ou update selon l'id !
-//        return "Create Ok : " + v.getId();
-//    }
     @GetMapping("/add")
     public String addT(Model model) {
         model.addAttribute("pieceForm", new Piece() );
