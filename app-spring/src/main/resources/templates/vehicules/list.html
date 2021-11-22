@@ -18,26 +18,28 @@
     <div>
         <table class="table table-striped">
             <thead class="thead-dark">
-                <tr>
-                    <th>Marque</th>
-                    <th>Modele</th>
-                    <th>Qté en stock</th>
-                    <th>Etat</th>
-                    <th>Prix</th>
-                    <th>Prix facturé</th>
-                    <th></th>
-                </tr>
+            <tr>
+                <th>Marque</th>
+                <th>Modele</th>
+                <th>Qté en stock</th>
+                <th>Etat</th>
+                <th>Prix</th>
+                <th>Prix facturé</th>
+                <th></th>
+                <th></th>
+            </tr>
             </thead>
             <tbody>
-                <tr th:each ="vehicule : ${vehicules}">
-                    <td th:utext="${vehicule.marque}">...</td>
-                    <td th:utext="${vehicule.modele}">...</td>
-                    <td th:utext="${vehicule.quantiteStock}">...</td>
-                    <td th:utext="${vehicule.etatVehicule}">...</td>
-                    <td th:utext="${vehicule.prix}">...</td>
-                    <td th:utext="${vehicule.prixFacture}">...</td>
-                    <td><a class="btn btn-primary mb-2" th:href="@{/vehicules/showUpdateForm(id=${vehicule.id})}">Modifier</a></td>
-                </tr>
+            <tr th:each ="vehicule : ${vehicules}">
+                <td th:utext="${vehicule.marque}">...</td>
+                <td th:utext="${vehicule.modele}">...</td>
+                <td th:utext="${vehicule.quantiteStock}">...</td>
+                <td th:utext="${vehicule.etatVehicule}">...</td>
+                <td th:utext="${vehicule.prix}">...</td>
+                <td th:utext="${vehicule.prixFacture}">...</td>
+                <td><a class="btn btn-primary mb-2" th:href="@{/vehicules/edit/{id}(id=${vehicule.id})}">Modifier</a></td>
+                <td><a class="btn btn-primary mb-2" href="#">Commander</a></td>
+            </tr>
             </tbody>
         </table>
     </div>
