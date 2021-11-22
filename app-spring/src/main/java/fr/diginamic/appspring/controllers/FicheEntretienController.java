@@ -84,7 +84,6 @@ public class FicheEntretienController {
 		tempFiche = getTempFiche();
 		
 		model.addAttribute("fiche", tempFiche);
-		model.addAttribute("clients", cr.findAll());
 		model.addAttribute("taches", tempTaches);
 		model.addAttribute("nouvelleFicheEntretien", tempFiche);
 		
@@ -96,7 +95,14 @@ public class FicheEntretienController {
 			@ModelAttribute("nouvelleFicheEntretien") @Valid FicheEntretien f,
 			BindingResult result,
 			@ModelAttribute("tempsFiche") FicheEntretien tempFiche,
-			@ModelAttribute("tempTaches") Set<Tache> tempTaches) {
+			@ModelAttribute("tempTaches") Set<Tache> tempTaches,
+			Model model) {
+		
+		if(result.hasErrors()) {
+			model.addAttribute("fiche", tempFiche);
+			model.addAttribute("taches", tempTaches);
+			return "fiche_entretien/creation_fiche_entretien";
+		}
 		
 		tempFiche.setClient(f.getClient());
 		tempFiche.setTaches(tempTaches);
