@@ -27,6 +27,7 @@
                 <th>Prix facturé</th>
                 <th></th>
                 <th></th>
+                <th>add</th>
             </tr>
             </thead>
             <tbody>
@@ -39,6 +40,10 @@
                 <td th:utext="${vehicule.prixFacture}">...</td>
                 <td><a class="btn btn-primary mb-2" th:href="@{/vehicules/edit/{id}(id=${vehicule.id})}">Modifier</a></td>
                 <td><a class="btn btn-primary mb-2" href="#">Commander</a></td>
+                <td>
+                    <a class="btn btn-primary mb-2" th:href="@{/vehicules/increase/{id}(id=${vehicule.id})}">+</a> /
+                    <a class="btn btn-primary mb-2" th:href="@{/vehicules/decrease/{id}(id=${vehicule.id})}">-</a>
+                </td>
             </tr>
             </tbody>
         </table>

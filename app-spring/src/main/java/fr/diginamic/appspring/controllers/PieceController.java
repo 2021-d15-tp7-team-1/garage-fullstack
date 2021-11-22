@@ -75,4 +75,34 @@ public class PieceController {
         cp.save(piece);
         return "redirect:/pieces/list";
     }
+
+    @RequestMapping("/increase/{id}")
+    public String increaseAmountOfPieces(@PathVariable("id") long id,
+                                                   Model model) {
+        Piece piece = cp.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        int qte = piece.getQuantiteStock() + 1;
+        piece.setQuantiteStock(qte);
+        model.addAttribute("piece",piece);
+        cp.save(piece);
+
+        return "redirect:/pieces/list";
+    }
+
+    @RequestMapping("/decrease/{id}")
+    public String decreaseAmountOfPieces(@PathVariable("id") long id,
+                                                   Model model) {
+        Piece piece = cp.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        if (piece.getQuantiteStock() >= 1) {
+            int qte = piece.getQuantiteStock() - 1;
+            piece.setQuantiteStock(qte);
+            model.addAttribute("piece",piece);
+            cp.save(piece);
+        }
+        System.out.println("Quantité nulle");
+
+        return "redirect:/pieces/list";
+    }
+
 }

@@ -27,6 +27,7 @@
                 <th>Prix facturé</th>
                 <th>Modifier</th>
                 <th>Modifier</th>
+                <th>Add</th>
             </tr>
             </thead>
             <tbody>
@@ -38,6 +39,10 @@
                 <td th:utext="${piece.prixFacture}">...</td>
                 <td><a class="btn btn-primary mb-2" th:href="@{/pieces/edit/{id}(id=${piece.id})}">Modifier</a></td>
                 <td><a class="btn btn-primary mb-2" href="#">Commander</a></td>
+                <td>
+                    <a class="btn btn-primary mb-2" th:href="@{/pieces/increase/{id}(id=${piece.id})}">+</a> /
+                    <a class="btn btn-primary mb-2" th:href="@{/pieces/decrease/{id}(id=${piece.id})}">-</a>
+                </td>
             </tr>
             </tbody>
         </table>

@@ -1,5 +1,6 @@
 package fr.diginamic.appspring.controllers;
 
+import fr.diginamic.appspring.entities.Piece;
 import fr.diginamic.appspring.entities.Vehicule;
 import fr.diginamic.appspring.repository.CrudVehiculeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,35 @@ public class VehiculeController {
         }
 
         cs.save(v);
+        return "redirect:/vehicules/list";
+    }
+
+    @RequestMapping("/increase/{id}")
+    public String increaseAmountOfVehicules(@PathVariable("id") long id,
+                                         Model model) {
+        Vehicule v = cs.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        int qte = v.getQuantiteStock() + 1;
+        v.setQuantiteStock(qte);
+        model.addAttribute("v",v);
+        cs.save(v);
+
+        return "redirect:/vehicules/list";
+    }
+
+    @RequestMapping("/decrease/{id}")
+    public String decreaseAmountOfVehicules(@PathVariable("id") long id,
+                                         Model model) {
+        Vehicule v = cs.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        if (v.getQuantiteStock() >= 1) {
+            int qte = v.getQuantiteStock() - 1;
+            v.setQuantiteStock(qte);
+            model.addAttribute("v",v);
+            cs.save(v);
+        }
+        System.out.println("Quantité nulle");
+
         return "redirect:/vehicules/list";
     }
 }
