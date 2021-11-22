@@ -28,20 +28,29 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and().authorizeRequests()
-				.antMatchers("/admin/**").hasAuthority(ApplicationUserRole.ADMIN.name()) // TODO définir URI (ici
-																							// exemples)
-				.antMatchers("/chef/**").hasAuthority(ApplicationUserRole.CHEF.name()) // TODO définir URI (ici
-																						// exemples)
-				.antMatchers("/magasinier/**").hasAuthority(ApplicationUserRole.MAGASINIER.name()) // TODO définir URI
-																									// (ici exemples)
+		http
+			.csrf()
+				.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+			.and()
+			.authorizeRequests()
+				.antMatchers("/admin/**").hasAuthority(ApplicationUserRole.ADMIN.name())
+				.antMatchers("/chef/**").hasAuthority(ApplicationUserRole.CHEF.name())
+				.antMatchers("/magasinier/**").hasAuthority(ApplicationUserRole.MAGASINIER.name())
 				.antMatchers("/entretien/create").hasAuthority(ApplicationUserRole.CHEF.name())
-
-				// TODO compléter éventuellement les URI
-				.anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll()
-				.defaultSuccessUrl("/home", true) // TODO définir URI page accueil
-				.and().logout().clearAuthentication(true).invalidateHttpSession(true)
-				.deleteCookies("JSESSIONID", "XSRF-TOKEN").logoutSuccessUrl("/login").and().exceptionHandling()
+			.anyRequest()
+				.authenticated()
+			.and()
+			.formLogin()
+				.loginPage("/login").permitAll()
+				.defaultSuccessUrl("/home", true)
+			.and()
+			.logout()
+				.clearAuthentication(true)
+				.invalidateHttpSession(true)
+				.deleteCookies("JSESSIONID", "XSRF-TOKEN")
+				.logoutSuccessUrl("/login")
+			.and()
+			.exceptionHandling()
 				.accessDeniedPage("/access_denied");
 	}
 
