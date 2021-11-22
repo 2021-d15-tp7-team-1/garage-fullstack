@@ -1,8 +1,8 @@
 package fr.diginamic.appspring.entities;
 
-import fr.diginamic.appspring.enums.TypeTache;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -16,8 +16,8 @@ public class FicheEntretien {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
 
-    private boolean isValid = false;
-    private boolean isCloture = false;
+    private boolean isValid;
+    private boolean isCloture;
     
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateCreation;
@@ -28,11 +28,12 @@ public class FicheEntretien {
 
     @ManyToOne
     @JoinColumn(name="CLIENT_ID")
+    @NotNull(message = "Vous devez indiquer un client existant.")
     private Client client;
 
     public FicheEntretien() {
         taches = new HashSet<Tache>();
-        isValid = false;
+        isValid = true;
         isCloture = false;
         dateCreation = LocalDate.now();
     }

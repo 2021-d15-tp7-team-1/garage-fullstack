@@ -1,14 +1,5 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="fr">
-<!--
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<title>CRÉATION FICHE ENTRETIEN</title>
-		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
-		<link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet">
-	</head>
-	-->
 	<head th:replace="fragments/header :: taghead"></head>
 	<body>
 		<div th:replace="fragments/menu :: tagmenu">  </div>
@@ -17,12 +8,12 @@
 			<form class="" th:action="@{/entretien/create}" th:object="${nouvelleFicheEntretien}" method="post">
 			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 				<h2 class="">Création d'une fiche d'entretien</h2>
-								  	
+				
 				<p>
-					<label for="client" class="">Client : </label>
-					<select id="client" name="client" th:field="*{client}">
-						<option th:each="c : ${clients}" th:text="${c.nom + ' ' + c.prenom}" th:value="${c.id}"></option>
-					</select>
+					<label for="client" class="">Client via AJAX : </label>
+					<input type="text" id="rechercheClient"/>&nbsp;&nbsp;
+					<span style="color:red" th:if="${#fields.hasErrors('client')}" th:errors="*{client}"></span><br/>
+					<span id="clientsTrouves" th:field="*{client}"></span>
 				</p>
 				
 				<p>
@@ -49,17 +40,53 @@
 							<td th:text="${t.mecanicienAttribue.nom + ' ' + t.mecanicienAttribue.prenom}"></td>
 							<td th:text="${t.getPriorite().name()}"></td>
 							<td>
-								<a class="btn btn-primary mb-2" href="#">Modifier</a>
-								<a class="btn btn-danger mb-2" href="#">Supprimer</a>
+								<a class="btn btn-warning mb-2" th:href="@{/entretien/create/modification-tache/{id}(id=${t.id})}">Modifier</a>
+								<a class="btn btn-danger mb-2" th:href="@{/entretien/create/suppression-tache/{id}(id=${t.id})}">Supprimer</a>
 							</td>
 						</tr>
 					</tbody>
 				</table>
 				
-				<a  class="btn btn-warning" th:href="@{/entretien/create/ajout-tache}">Ajouter une tâche</a>
-				<button class="btn btn-success" name="enregistrer" value="enregistrer" type="submit">Enregistrer la fiche</button>
-				<a class="btn btn-danger" th:href="@{/entretien/list}">Retour</a>
+				<a  class="btn btn-primary" th:href="@{/entretien/create/ajout-tache}">Ajouter une tâche</a>
+				<button class="btn btn-success" type="submit">Enregistrer la fiche</button>
+				<a class="btn btn-secondary" th:href="@{/entretien/create/abort}">Retour</a>
 			</form>
 		</div>
+		
+	<script th:inline="javascript">
+		(function() {
+			var httpRequest;
+			const source = document.getElementById("rechercheClient");
+			const cible = document.getElementById("clientsTrouves");
+			
+			let myCallBack = () => {
+				if(httpRequest.readyState === XMLHttpRequest.DONE) {
+					if(httpRequest.status === 200) {
+						const jsonResponse = JSON.parse(httpRequest.responseText);
+						let clientResponse = "";
+							
+						jsonResponse.forEach(o => {
+							if(o["nom"].toLowerCase().startsWith(source.value.toLowerCase())) {
+								clientResponse += '<input type="radio" name="client" value="' + o["id"] + '" />' + o["nom"] + ' ' + o["prenom"] + '<br/>';
+							}
+						});
+						
+						cible.innerHTML = clientResponse;
+					}	
+				}	
+			}
+			
+			let myKeyPress = () => {
+				httpRequest = new XMLHttpRequest();
+				httpRequest.onreadystatechange = myCallBack;
+				httpRequest.open('GET', 'http://localhost:8090/rest/clients/all', true);
+				
+				httpRequest.send();
+			}
+			
+			source.addEventListener("keypress", myKeyPress);
+		})();
+	</script>
+	
 	</body>
 </html>

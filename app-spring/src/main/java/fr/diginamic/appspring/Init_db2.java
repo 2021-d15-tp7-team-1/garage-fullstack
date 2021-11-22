@@ -92,15 +92,21 @@ public class Init_db2 {
 		Client c1 = new Client(TypeClient.ATELIER, "Proust", "Marcel", "02", "06");
 		Client c2 = new Client(TypeClient.ATELIER, "Simenon", "Georges", "02", "06");
 		Client c3 = new Client(TypeClient.VENTE, "Houellebecq", "Michel", "02", "06");
+		Client c4 = new Client(TypeClient.ATELIER, "Puccini", "Giacomo", "02", "06");
+		Client c5 = new Client(TypeClient.ATELIER, "Prokofiev", "Sergei", "02", "06");
 		Adresse a1 = new Adresse("1 rue des Mimosas", "Quimper", 29000);
 		Adresse a2 = new Adresse("2 rue des Mimosas", "Rennes", 35000);
 		Adresse a3 = new Adresse("3 rue des Mimosas", "Nantes", 44000);
 		c1.setAdresse(a1);
 		c2.setAdresse(a2);
 		c3.setAdresse(a3);
+		c4.setAdresse(a3);
+		c5.setAdresse(a3);
 		cr.save(c1);
 		cr.save(c2);
 		cr.save(c3);
+		cr.save(c4);
+		cr.save(c5);
 		
 		Piece volant = new Piece(10, 100, 120, "volant", TypePiece.PIECE);
 		Piece frein = new Piece(10, 100, 120, "frein", TypePiece.PIECE);
