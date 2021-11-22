@@ -36,13 +36,13 @@
 						<td th:text="${t.mecanicienAttribue.nom + ' ' + t.mecanicienAttribue.prenom}"></td>
 						<td th:text="${t.getPriorite().name()}"></td>
 						<td>
-							<a th:href="@{/entretien/create/modification-tache/{id}(id=${t.id})}">Modifier</a>
-							<a th:href="@{/entretien/create/suppression-tache/{id}(id=${t.id})}">Supprimer</a>
+							<a class="btn btn-warning" th:href="@{/entretien/create/modification-tache/{id}(id=${t.id})}">Modifier</a>
+							<a class="btn btn-danger" th:href="@{/entretien/create/suppression-tache/{id}(id=${t.id})}">Supprimer</a>
 						</td>
 					</tr>
 				</table>
 				
-				<a  class="btn btn-warning" th:href="@{/entretien/create/ajout-tache}">Ajouter une tâche</a>
+				<a  class="btn btn-primary" th:href="@{/entretien/create/ajout-tache}">Ajouter une tâche</a>
 				<button class="btn btn-success" type="submit">Enregistrer la fiche</button>
 				<a class="btn btn-secondary" th:href="@{/entretien/create/abort}">Retour</a>
 			</form>
