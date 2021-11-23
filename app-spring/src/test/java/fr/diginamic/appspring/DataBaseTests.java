@@ -19,14 +19,12 @@ import javax.transaction.Transactional;
 public class DataBaseTests {
 
     @Autowired
-    Init_db2 db;
+    Init_db initDB;
 
     @Test
-    void initDB(){
-        db.init();
+    void remplirDatabase(){
+        initDB.init();
     }
-
-
 
 
 }
