@@ -5,25 +5,19 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import fr.diginamic.appspring.entities.*;
+import fr.diginamic.appspring.enums.TypeTache;
+import fr.diginamic.appspring.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import fr.diginamic.appspring.entities.Adresse;
-import fr.diginamic.appspring.entities.Client;
-import fr.diginamic.appspring.entities.Piece;
-import fr.diginamic.appspring.entities.Role;
-import fr.diginamic.appspring.entities.User;
 import fr.diginamic.appspring.enums.ApplicationUserRole;
 import fr.diginamic.appspring.enums.TypeClient;
 import fr.diginamic.appspring.enums.TypePiece;
-import fr.diginamic.appspring.repository.CrudClientRepository;
-import fr.diginamic.appspring.repository.CrudPieceRepository;
-import fr.diginamic.appspring.repository.CrudRoleRepository;
-import fr.diginamic.appspring.repository.CrudUserRepository;
 
 @Component
-public class Init_db2 {
+public class Init_db {
 	
 	@Autowired
 	private PasswordEncoder pwdEncoder;
@@ -39,8 +33,14 @@ public class Init_db2 {
 	
 	@Autowired
 	private CrudPieceRepository pr;
-	
-//	@PostConstruct
+
+	@Autowired
+	private CrudFicheRepository fr;
+
+	@Autowired
+	private CrudTacheRepository tr;
+
+
 	public void init() {
 		
 		Role admin = new Role(ApplicationUserRole.ADMIN.name());
@@ -112,11 +112,40 @@ public class Init_db2 {
 		Piece frein = new Piece(10, 100, 120, "frein", TypePiece.PIECE);
 		Piece pare_brise = new Piece(10, 100, 120, "pare-brise", TypePiece.PIECE);
 		Piece huile = new Piece(10, 100, 120, "huile", TypePiece.ARTICLE);
+		Piece peinture = new Piece(8, 25, 40, "peinture gris metallisé", TypePiece.ARTICLE);
 		pr.save(volant);
 		pr.save(frein);
 		pr.save(pare_brise);
 		pr.save(huile);
-		
+		pr.save(peinture);
+
+		// CREATON DE FICHES
+
+		FicheEntretien f1 = new FicheEntretien();
+		FicheEntretien f2 = new FicheEntretien();
+		FicheEntretien f3 = new FicheEntretien();
+		fr.save(f1);
+		fr.save(f2);
+		fr.save(f3);
+
+		Tache t1 = new Tache("Vidange vehicule", TypeTache.Vidange);
+		Tache t2 = new Tache("Changement carburateur", TypeTache.Pannes);
+		Tache t3 = new Tache("Retouches peinture portière", TypeTache.Peinture);
+		Tache t4 = new Tache("Nettoyage habitacle", TypeTache.Nettoyage);
+		tr.save(t1);
+		tr.save(t2);
+		tr.save(t3);
+		tr.save(t4);
+
+		f1.setClient(c1);
+		f2.setClient(c2);
+		f3.setClient(c3);
+
+		f1.ajouterTache(t1);
+		f1.ajouterTache(t4);
+		f2.ajouterTache(t2);
+		f3.ajouterTache(t3);
+
 	}
 	
 }
