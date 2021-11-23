@@ -56,7 +56,7 @@ public class FicheEntretienController {
 
 	@GetMapping("/{id}")
 	public String afficherFiche(@PathVariable("id") Long id, Model model){
-		model.addAttribute("fiche", daoFiche.selectOne(id));
+		model.addAttribute("fiche", fr.findById(id));
 		return "fiche_entretien/detail-fiche";
 	}
 	
@@ -140,7 +140,16 @@ public class FicheEntretienController {
 		
 		return "redirect:/entretien/list";
 	}
-	
+
+	@PostMapping("/cloturer/{id}")
+	public String cloturerFiche(@PathVariable Long id){
+		FicheEntretien ficheACloturer = fr.findById(id).get();
+		ficheACloturer.setCloture(true);
+		fr.save(ficheACloturer);
+
+		return "redirect:/entretien/list/";
+	}
+
 	private List<Tache> sortTacheCollectionById(Set<Tache> collection) {
 		List<Tache> lstTaches = new ArrayList<Tache>();
 		for(Tache t : collection) {

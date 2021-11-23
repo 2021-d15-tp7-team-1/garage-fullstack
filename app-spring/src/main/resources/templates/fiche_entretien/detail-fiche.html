@@ -4,9 +4,9 @@
 <body>
     <div th:replace="fragments/menu :: tagmenu">  </div>
     <br/>
-    <a class="btn btn-danger mb-2 float-right" th:onclick="${fiche.setValid(false)}" th:href="@{/entretien/list}">Annuler la fiche</a>
+    <a class="btn btn-danger mb-2 float-right" th:href="@{/entretien/list}">Annuler la fiche</a>
     <a class="btn btn-primary mb-2 float-right">Modifier la fiche</a>
-    <a class="btn btn-success mb-2 float-right" th:unless="${fiche.isCloture()}" th:onclick="${fiche.setCloture(true)}">Cloturer</a>
+    <a class="btn btn-success mb-2 float-right" th:href="@{/entretien/cloturer/{id}(id=${fiche.id})}">Cloturer</a>
     <div class="container">
         <fieldset class="form-group border p-3">
             <legend class="w-auto px-2"><h1>Fiche d'entretien</h1></legend>
