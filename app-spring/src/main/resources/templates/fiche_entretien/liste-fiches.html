@@ -13,10 +13,10 @@
             <tr>
                 <th>Référence</th>
                 <th>Date création fiche</th>
-                <th>Date de validation</th>
+                <th>Date de cloture</th>
                 <th>Nb de taches</th>
                 <!-- <th>Proportion effectuée</th> -->
-                <th>Etat entretien</th>
+                <th>Validité fiche</th>
                 <th>Etat fiche</th>
                 <th></th>
                 <th></th>
@@ -31,21 +31,21 @@
                 <td th:text="${fiche.taches.size()}"></td>
                 <!-- <td>calcul proportion</td> -->
                 <td>
-                    <span th:if="${fiche.isValid}">Validée</span>
-                    <span th:unless="${fiche.isValid}">En cours</span>
+                    <span th:if="${fiche.isValid}">Valide</span>
+                    <span th:unless="${fiche.isValid}">Annulée</span>
                 </td>
                 <td>
                     <span th:if="${fiche.isCloture}">Cloturée</span>
-                    <span th:unless="${fiche.isCloture}">Ouverte</span>
+                    <span th:if="${!fiche.isCloture} and ${fiche.isValid()}">Ouverte</span>
                 </td>
                 <td>
                     <a class="btn btn-primary mb-2" th:href="@{/entretien/{id}(id=${fiche.id})}">Accéder</a>
                 </td>
                 <td>
-                    <a class="btn btn-warning mb-2" href="#">Annuler fiche</a>
+                    <a class="btn btn-warning mb-2" th:if="${fiche.isValid()}" th:href="@{/entretien/annuler-fiche/{id}(id=${fiche.id})}">Annuler fiche</a>
                 </td>
                 <td>
-                    <a class="btn btn-danger mb-2" href="#">Cloturer fiche</a>
+                    <a class="btn btn-danger mb-2" th:if="${!fiche.isCloture} and ${fiche.isValid()}" th:href="@{/entretien/cloturer/{id}(id=${fiche.id})}">Cloturer fiche</a>
                 </td>
             </tr>
             </tbody>
