@@ -124,6 +124,9 @@ public class Init_db {
 		FicheEntretien f1 = new FicheEntretien();
 		FicheEntretien f2 = new FicheEntretien();
 		FicheEntretien f3 = new FicheEntretien();
+		f1.setClient(c1);
+		f2.setClient(c2);
+		f3.setClient(c3);
 		fr.save(f1);
 		fr.save(f2);
 		fr.save(f3);
@@ -137,14 +140,14 @@ public class Init_db {
 		tr.save(t3);
 		tr.save(t4);
 
-		f1.setClient(c1);
-		f2.setClient(c2);
-		f3.setClient(c3);
 
 		f1.ajouterTache(t1);
 		f1.ajouterTache(t4);
 		f2.ajouterTache(t2);
 		f3.ajouterTache(t3);
+		fr.save(f1);
+		fr.save(f2);
+		fr.save(f3);
 
 	}
 	

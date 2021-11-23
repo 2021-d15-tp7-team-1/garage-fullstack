@@ -56,8 +56,8 @@ public class FicheEntretienController {
 
 	@GetMapping("/{id}")
 	public String afficherFiche(@PathVariable("id") Long id, Model model){
-		model.addAttribute("fiche", daoFiche.selectOne(id));
-		return "fiches/detail-fiche";
+		model.addAttribute("fiche", fr.findById(id).get());
+		return "fiche_entretien/detail-fiche";
 	}
 	
 	@ModelAttribute("tempFiche")
@@ -131,6 +131,21 @@ public class FicheEntretienController {
 		
 		return "redirect:/entretien/list";
 	}
+
+	@GetMapping("/modification-fiche/{id}")
+	public String updateFiche(@PathVariable("id") Long id, Model model){
+		model.addAttribute("ficheToUpdate", fr.findById(id).get());
+		model.addAttribute("titre", "MODIFICATION DE FICHE");
+
+		return "fiche_entretien/modification_fiche";
+	}
+
+	@PostMapping("/modification-fiche/{id}")
+	public String updateFiche(@PathVariable("id") Long id, @ModelAttribute("ficheUpdated") @Valid FicheEntretien ficheModifiee){
+		fr.save(ficheModifiee);
+
+		return "redirect:/entretien/list";
+	}
 	
 	@GetMapping("create/abort")
 	public String abortCreation(
@@ -140,7 +155,25 @@ public class FicheEntretienController {
 		
 		return "redirect:/entretien/list";
 	}
-	
+
+	@GetMapping("/cloturer/{id}")
+	public String cloturerFiche(@PathVariable Long id){
+		FicheEntretien ficheACloturer = fr.findById(id).get();
+		ficheACloturer.cloturerFiche();
+		fr.save(ficheACloturer);
+
+		return "redirect:/entretien/list/";
+	}
+
+	@GetMapping("/annuler-fiche/{id}")
+	public String annulerFiche(@PathVariable Long id){
+		FicheEntretien ficheAannuler = fr.findById(id).get();
+		ficheAannuler.setValid(false);
+		fr.save(ficheAannuler);
+
+		return "redirect:/entretien/list/";
+	}
+
 	private List<Tache> sortTacheCollectionById(Set<Tache> collection) {
 		List<Tache> lstTaches = new ArrayList<Tache>();
 		for(Tache t : collection) {
