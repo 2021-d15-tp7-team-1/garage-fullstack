@@ -24,10 +24,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class UserController {
 
     @Autowired
-    CrudUserRepository col;
+    CrudUserRepository userRepo;
 
     @Autowired
-    CrudRoleRepository roles;
+    CrudRoleRepository roleRepo;
 
     public UserController() {
 
@@ -35,8 +35,8 @@ public class UserController {
 
     @GetMapping
     public String findall(Model model) {
-        model.addAttribute("users", (List<User>) col.findAll());
-        model.addAttribute("col", col);
+        model.addAttribute("users", (List<User>) userRepo.findAll());
+        model.addAttribute("col", userRepo);
         model.addAttribute("titre", "Liste des collaborateurs");
         return "user/Liste";
     }
@@ -44,7 +44,7 @@ public class UserController {
     @GetMapping("/add")
     public String addT(Model model) {
         model.addAttribute("collabForm", new User());
-        model.addAttribute("roles", roles.findAll());
+        model.addAttribute("roles", roleRepo.findAll());
         model.addAttribute("choixRoles", "choixRoles");
         // ajout liste des roles et aficher le libelle et garder en value l'id
         model.addAttribute("titre", "Ajout collaborateurs");
@@ -71,10 +71,10 @@ public class UserController {
 
     @PostMapping("/add")
     public String add(Model model, @Valid @ModelAttribute("collabForm") User collabForm) {
-        col.save(collabForm); //ajout du nouvel user à la base
+        userRepo.save(collabForm); //ajout du nouvel user à la base
         collabForm.getUserRoles().forEach(role -> {
             role.getUsers().add(collabForm);
-            roles.save(role); //update de la liste de users de ce role
+            roleRepo.save(role); //update de la liste de users de ce role
             System.out.println(role.getNomRole());
         });
         return "redirect:/admin/user";
@@ -82,12 +82,12 @@ public class UserController {
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long pid) throws Exception {
-        Optional<User> c = col.findById(pid);
+        Optional<User> c = userRepo.findById(pid);
         if (c.isEmpty()) {
             throw (new Exception("Collaborateurs id : " + pid + "non trouvé !"));
         }
 
-        col.deleteById(pid);
+        userRepo.deleteById(pid);
         return "redirect:/admin/user";
     }
 }

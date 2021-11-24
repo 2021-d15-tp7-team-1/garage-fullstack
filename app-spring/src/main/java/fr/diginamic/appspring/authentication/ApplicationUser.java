@@ -66,4 +66,16 @@ public class ApplicationUser implements UserDetails {
 		return this.user.isSpaActive();
 	}
 
+	public String getNom(){
+		return this.user.getNom();
+	}
+
+	public String getPrenom(){
+		return this.user.getPrenom();
+	}
+
+	public String getEmail(){
+		return this.user.getEmail();
+	}
+
 }
