@@ -21,6 +21,7 @@
                 <th></th>
                 <th></th>
                 <th></th>
+                <th>Facture</th>
             </tr>
             </thead>
             <tbody>
@@ -46,6 +47,10 @@
                 </td>
                 <td>
                     <a class="btn btn-danger mb-2" href="#">Cloturer fiche</a>
+                </td>
+                <td>
+                    <span th:if="${fiche.isCloture}"><a class="btn btn-primary mb-2" href="#">Facture</a></span>
+                    <span th:unless="${fiche.isCloture}">Facure indisponible</span>
                 </td>
             </tr>
             </tbody>

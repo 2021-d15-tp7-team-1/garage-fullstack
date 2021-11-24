@@ -12,6 +12,8 @@ import javax.validation.Valid;
 
 import fr.diginamic.appspring.dao.DaoFicheEntretien;
 
+import fr.diginamic.appspring.entities.Facture;
+import fr.diginamic.appspring.enums.TypeFacture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -156,4 +158,20 @@ public class FicheEntretienController {
 		return lstTaches;
 	}
 
+	public void createFactureEntretien(@PathVariable("id") Long id, Model model) {
+		FicheEntretien f = fr.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+		if (f.isCloture()) {
+			Facture facture = new Facture();
+			float sum = 0;
+			for (Tache t : f.getTaches()) {
+				for (Piece p : t.getPiecesNecessaires()) {
+					sum = sum + p.getPrixFacture();
+				}
+			}
+			facture.setPrix(sum);
+			facture.setFicheConcernee(f);
+			facture.setType(TypeFacture.ENTRETIEN);
+		}
+	}
 }
