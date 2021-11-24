@@ -109,11 +109,13 @@ public class Init_db {
 		cr.save(c5);
 		
 		Piece volant = new Piece(10, 100, 120, "volant", TypePiece.PIECE);
+		Piece volant2 = new Piece(10, 100, 120, "volant_2", TypePiece.PIECE);
 		Piece frein = new Piece(10, 100, 120, "frein", TypePiece.PIECE);
 		Piece pare_brise = new Piece(10, 100, 120, "pare-brise", TypePiece.PIECE);
 		Piece huile = new Piece(10, 100, 120, "huile", TypePiece.ARTICLE);
 		Piece peinture = new Piece(8, 25, 40, "peinture gris metallisé", TypePiece.ARTICLE);
 		pr.save(volant);
+		pr.save(volant2);
 		pr.save(frein);
 		pr.save(pare_brise);
 		pr.save(huile);

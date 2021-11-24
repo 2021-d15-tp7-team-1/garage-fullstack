@@ -4,6 +4,7 @@ import fr.diginamic.appspring.enums.PrioriteTache;
 import fr.diginamic.appspring.enums.TypeTache;
 
 import javax.persistence.*;
+
 import java.util.HashSet;
 import java.util.Set;
 

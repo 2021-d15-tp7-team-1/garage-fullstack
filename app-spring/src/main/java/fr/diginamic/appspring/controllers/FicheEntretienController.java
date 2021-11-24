@@ -92,7 +92,7 @@ public class FicheEntretienController {
 		List<Tache> lstTaches = sortTacheCollectionById(tempTaches);
 		
 		model.addAttribute("fiche", tempFiche);
-		model.addAttribute("taches", tempTaches);
+		model.addAttribute("taches", lstTaches);
 		model.addAttribute("nouvelleFicheEntretien", tempFiche);
 		model.addAttribute("titre", "CRÉATION DE FICHE");
 		

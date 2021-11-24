@@ -4,14 +4,12 @@ import fr.diginamic.appspring.enums.TypeClient;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Client {
 
 
@@ -117,6 +115,7 @@ public class Client {
         this.telMobile = telMobile;
     }
 
+    @JsonIgnore
     public Set<FicheEntretien> getFichesEntretien() {
         return fichesEntretien;
     }

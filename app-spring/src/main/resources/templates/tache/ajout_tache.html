@@ -4,7 +4,7 @@
 	
 	<body>
 		<div th:replace="fragments/menu :: tagmenu"></div>
-		<div class="container">
+		<div class="container mt-4" id ="formAjoutUser">
 			<form class="" th:action="@{/entretien/create/ajout-tache}" th:object="${nouvelleTache}" method="post">
 			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 				<h2 class="">Ajout d'une tâche</h2>
@@ -35,14 +35,24 @@
 				</p>
 				
 				<p>
-					<label for="pieces_necessaires" class="">Pièce(s) nécessaire(s) : </label>
-					<select id="pieces_necessaires" name="pieces_necessaires" th:field="*{piecesNecessaires}" multiple size="2"> 
-						<option th:each="p : ${pieces}" th:text="${p.nomPiece}" th:value="${p.id}"></option>
-					</select>
+					<label for="recherchePiece" class="">Rechercher une pièce : </label>
+					<input type="text" id="recherchePiece"/><br/>
+					<ul id="piecesTrouvees"></ul>
 				</p>
-				<button class="btn btn-success" type="submit">Ajouter la tâche</button>
-				<a class="btn btn-primary" th:href="@{/entretien/create}">Retour à la fiche</a>
+				
+				<fieldset id="fieldSetPiecesAjoutees" hidden>
+					<legend>Pièce(s) nécessaire(s) à la tâche :</legend>
+					<div id="piecesAjoutees"></div>
+				</fieldset>
+				
+				<div class="mt-4 mb-4">
+					<button class="btn btn-success" type="submit">Ajouter la tâche</button>
+					<a class="btn btn-primary" th:href="@{/entretien/create}">Retour à la fiche</a>
+				</div>
 			</form>
 		</div>
+		
+		<script th:inline="javascript" src="/js/ajout_tache.js"></script>
+		
 	</body>
 </html>

@@ -1,7 +1,6 @@
 package fr.diginamic.appspring.entities;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;

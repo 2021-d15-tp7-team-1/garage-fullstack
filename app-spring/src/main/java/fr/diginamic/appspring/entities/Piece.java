@@ -3,6 +3,9 @@ package fr.diginamic.appspring.entities;
 import fr.diginamic.appspring.enums.TypePiece;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -64,6 +67,7 @@ public class Piece extends ElemStock {
         this.demandes = demandes;
     }
 
+    @JsonIgnore
     public Set<Tache> getTachesPiece() {
         return tachesPiece;
     }
