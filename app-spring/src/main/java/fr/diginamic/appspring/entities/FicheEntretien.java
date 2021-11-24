@@ -25,6 +25,10 @@ public class FicheEntretien {
     @OneToMany(mappedBy = "fiche")
     private Set<Tache> taches;
 
+    @OneToOne
+    @JoinColumn(name = "facture_id", referencedColumnName = "id")
+    private Facture facture;
+
     @ManyToOne
     @JoinColumn(name="CLIENT_ID")
     @NotNull(message = "Vous devez indiquer un client existant.")

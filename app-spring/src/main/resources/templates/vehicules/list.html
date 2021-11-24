@@ -12,32 +12,39 @@
 <body>
 <div th:replace="fragments/menu :: tagmenu">  </div>
 <div class="container">
-    <h1><a th:href="@{/pieces/list}">Pièces & Articles</a> / Véhicules</h1>
-    <a class="btn btn-success mb-2 float-right" href="add">Ajouter un véhicule</a>
+    <a class="btn btn-success mb-2 float-right" th:href="@{add}">Créer un nouveau véhicule</a>
+
     <br/><br/>
     <div>
         <table class="table table-striped">
             <thead class="thead-dark">
-                <tr>
-                    <th>Marque</th>
-                    <th>Modele</th>
-                    <th>Qté en stock</th>
-                    <th>Etat</th>
-                    <th>Prix</th>
-                    <th>Prix facturé</th>
-                    <th></th>
-                </tr>
+            <tr>
+                <th>Marque</th>
+                <th>Modele</th>
+                <th>Qté en stock</th>
+                <th>Etat</th>
+                <th>Prix</th>
+                <th>Prix facturé</th>
+                <th></th>
+                <th></th>
+                <th>add</th>
+            </tr>
             </thead>
             <tbody>
-                <tr th:each ="vehicule : ${vehicules}">
-                    <td th:utext="${vehicule.marque}">...</td>
-                    <td th:utext="${vehicule.modele}">...</td>
-                    <td th:utext="${vehicule.quantiteStock}">...</td>
-                    <td th:utext="${vehicule.etatVehicule}">...</td>
-                    <td th:utext="${vehicule.prix}">...</td>
-                    <td th:utext="${vehicule.prixFacture}">...</td>
-                    <td><a class="btn btn-primary mb-2" th:href="@{/vehicules/showUpdateForm(id=${vehicule.id})}">Modifier</a></td>
-                </tr>
+            <tr th:each ="vehicule : ${vehicules}">
+                <td th:utext="${vehicule.marque}">...</td>
+                <td th:utext="${vehicule.modele}">...</td>
+                <td th:utext="${vehicule.quantiteStock}">...</td>
+                <td th:utext="${vehicule.etatVehicule}">...</td>
+                <td th:utext="${vehicule.prix}">...</td>
+                <td th:utext="${vehicule.prixFacture}">...</td>
+                <td><a class="btn btn-primary mb-2" th:href="@{/vehicules/edit/{id}(id=${vehicule.id})}">Modifier</a></td>
+                <td><a class="btn btn-primary mb-2" href="#">Commander</a></td>
+                <td>
+                    <a class="btn btn-primary mb-2" th:href="@{/vehicules/increase/{id}(id=${vehicule.id})}">+</a>
+                    <a class="btn btn-primary mb-2" th:href="@{/vehicules/decrease/{id}(id=${vehicule.id})}">-</a>
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>

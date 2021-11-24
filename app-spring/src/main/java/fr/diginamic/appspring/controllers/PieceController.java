@@ -5,10 +5,8 @@ import fr.diginamic.appspring.repository.CrudPieceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -30,19 +28,7 @@ public class PieceController {
         return "pieces/list";
 
     }
-//    @GetMapping("/all")
-//    public Iterable<ElemStock> stockAll() {
-//        return cs.findAll();
-//    }
 
-    //    @PostMapping("/addV")
-//    public String vechiculeCreate(@Valid @RequestBody Piece v) {
-//        /**
-//         * Transactionnel avec commit ou rollback
-//         */
-//        daoPiece.add(v);//save insert ou update selon l'id !
-//        return "Create Ok : " + v.getId();
-//    }
     @GetMapping("/add")
     public String addT(Model model) {
         model.addAttribute("pieceForm", new Piece() );
@@ -54,6 +40,56 @@ public class PieceController {
                       @Valid @ModelAttribute("pieceForm") Piece pieceForm)
     {
         cp.save(pieceForm);
+        return "redirect:/pieces/list";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String showUpdateForm(@PathVariable("id") long id, Model model) {
+        Piece p = cp.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+
+        model.addAttribute("piece", p);
+        return "pieces/update";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateUser(@PathVariable("id") long id, @Valid Piece piece,
+                             BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            piece.setId(id);
+            return "pieces/update";
+        }
+
+        cp.save(piece);
+        return "redirect:/pieces/list";
+    }
+
+    @RequestMapping("/increase/{id}")
+    public String increaseAmountOfPieces(@PathVariable("id") long id,
+                                                   Model model) {
+        Piece piece = cp.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        int qte = piece.getQuantiteStock() + 1;
+        piece.setQuantiteStock(qte);
+        model.addAttribute("piece",piece);
+        cp.save(piece);
+
+        return "redirect:/pieces/list";
+    }
+
+    @RequestMapping("/decrease/{id}")
+    public String decreaseAmountOfPieces(@PathVariable("id") long id,
+                                                   Model model) {
+        Piece piece = cp.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        if (piece.getQuantiteStock() >= 1) {
+            int qte = piece.getQuantiteStock() - 1;
+            piece.setQuantiteStock(qte);
+            model.addAttribute("piece",piece);
+            cp.save(piece);
+        }
+        System.out.println("Quantité nulle");
+
         return "redirect:/pieces/list";
     }
 
