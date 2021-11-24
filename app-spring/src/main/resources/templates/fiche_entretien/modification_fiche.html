@@ -31,23 +31,25 @@
                     <th>N°</th><th>Intitulé</th><th>Type</th><th>Pièces nécessaires</th><th>Assignation</th><th>Priorité</th><th></th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr th:each="t : ${ficheToUpdate.taches}">
-                    <td th:text="${t.id}"></td>
-                    <td th:text="${t.intitule}"></td>
-                    <td th:text="${t.getType().name()}"></td>
-                    <td><span th:each="pn : ${t.piecesNecessaires}"><span th:text="${pn.nomPiece}"></span><br/></span></td>
-                    <td th:text="${t.mecanicienAttribue.nom + ' ' + t.mecanicienAttribue.prenom}"></td>
-                    <td th:text="${t.getPriorite().name()}"></td>
-                    <td>
-                        <a class="btn btn-warning mb-2" th:href="@{/entretien/create/modification-tache/{id}(id=${t.id})}">Modifier</a>
-                        <a class="btn btn-danger mb-2" th:href="@{/entretien/create/suppression-tache/{id}(id=${t.id})}">Supprimer</a>
-                    </td>
-                </tr>
+                <tbody th:each="setTaches : ${toutesTaches}">
+                
+                    <tr th:each="t : ${setTaches}">
+                    	<td th:text="${t.id}"></td>
+	                    <td th:text="${t.intitule}"></td>
+	                    <td th:text="${t.getType().name()}"></td>
+	                    <td><span th:each="pn : ${t.piecesNecessaires}"><span th:text="${pn.nomPiece}"></span><br/></span></td>
+	                    <td th:text="${t.mecanicienAttribue.nom + ' ' + t.mecanicienAttribue.prenom}"></td>
+	                    <td th:text="${t.getPriorite().name()}"></td>
+	                    <td>
+	                        <a class="btn btn-warning mb-2" th:href="@{/entretien/create/modification-tache/{id}(id=${t.id})}">Modifier</a>
+	                        <a class="btn btn-danger mb-2" th:href="@{/entretien/create/suppression-tache/{id}(id=${t.id})}">Supprimer</a>
+	                    </td>
+                	</tr>
+                
                 </tbody>
             </table>
 
-            <a  class="btn btn-primary" th:href="@{/entretien/create/ajout-tache}">Ajouter une tâche</a>
+            <a  class="btn btn-primary" th:href="@{/entretien/modification-fiche/{id}/ajout-tache(id=${ficheToUpdate.id})}">Ajouter une tâche</a>
             <button class="btn btn-success" type="submit">Enregistrer la fiche</button>
             <a class="btn btn-secondary" th:href="@{/entretien/create/abort}">Retour</a>
         </form>

@@ -40,7 +40,7 @@ public class Init_db {
 	@Autowired
 	private CrudTacheRepository tr;
 
-
+//	@PostConstruct
 	public void init() {
 		
 		Role admin = new Role(ApplicationUserRole.ADMIN.name());
@@ -123,33 +123,33 @@ public class Init_db {
 
 		// CREATON DE FICHES
 
-		FicheEntretien f1 = new FicheEntretien();
-		FicheEntretien f2 = new FicheEntretien();
-		FicheEntretien f3 = new FicheEntretien();
-		f1.setClient(c1);
-		f2.setClient(c2);
-		f3.setClient(c3);
-		fr.save(f1);
-		fr.save(f2);
-		fr.save(f3);
-
-		Tache t1 = new Tache("Vidange vehicule", TypeTache.Vidange);
-		Tache t2 = new Tache("Changement carburateur", TypeTache.Pannes);
-		Tache t3 = new Tache("Retouches peinture portière", TypeTache.Peinture);
-		Tache t4 = new Tache("Nettoyage habitacle", TypeTache.Nettoyage);
-		tr.save(t1);
-		tr.save(t2);
-		tr.save(t3);
-		tr.save(t4);
-
-
-		f1.ajouterTache(t1);
-		f1.ajouterTache(t4);
-		f2.ajouterTache(t2);
-		f3.ajouterTache(t3);
-		fr.save(f1);
-		fr.save(f2);
-		fr.save(f3);
+//		FicheEntretien f1 = new FicheEntretien();
+//		FicheEntretien f2 = new FicheEntretien();
+//		FicheEntretien f3 = new FicheEntretien();
+//		f1.setClient(c1);
+//		f2.setClient(c2);
+//		f3.setClient(c3);
+//		fr.save(f1);
+//		fr.save(f2);
+//		fr.save(f3);
+//
+//		Tache t1 = new Tache("Vidange vehicule", TypeTache.Vidange);
+//		Tache t2 = new Tache("Changement carburateur", TypeTache.Pannes);
+//		Tache t3 = new Tache("Retouches peinture portière", TypeTache.Peinture);
+//		Tache t4 = new Tache("Nettoyage habitacle", TypeTache.Nettoyage);
+//		tr.save(t1);
+//		tr.save(t2);
+//		tr.save(t3);
+//		tr.save(t4);
+//
+//
+//		f1.ajouterTache(t1);
+//		f1.ajouterTache(t4);
+//		f2.ajouterTache(t2);
+//		f3.ajouterTache(t3);
+//		fr.save(f1);
+//		fr.save(f2);
+//		fr.save(f3);
 
 	}
 	

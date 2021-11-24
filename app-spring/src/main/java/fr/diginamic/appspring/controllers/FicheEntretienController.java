@@ -43,9 +43,27 @@ public class FicheEntretienController {
 	
 	@Autowired
 	CrudPieceRepository pr;
-
+	
 	@Autowired
 	DaoFicheEntretien daoFiche;
+	
+	
+	@ModelAttribute("tempFiche")
+	public FicheEntretien getTempFiche() {
+		FicheEntretien tempFiche = new FicheEntretien();
+		tempFiche.setDateCreation(LocalDate.now());
+		return tempFiche;
+	}
+	
+	@ModelAttribute("tempTaches")
+	public Set<Tache> getTempTaches() {
+		return new HashSet<Tache>();
+	}
+	
+	@ModelAttribute("tempExistingTaches")
+	public Set<Tache> getTempExistingTaches() {
+		return new HashSet<Tache>();
+	}
 
 	@GetMapping("/list")
 	public String findAll(Model model){
@@ -58,18 +76,6 @@ public class FicheEntretienController {
 	public String afficherFiche(@PathVariable("id") Long id, Model model){
 		model.addAttribute("fiche", fr.findById(id).get());
 		return "fiche_entretien/detail-fiche";
-	}
-	
-	@ModelAttribute("tempFiche")
-	public FicheEntretien getTempFiche() {
-		FicheEntretien tempFiche = new FicheEntretien();
-		tempFiche.setDateCreation(LocalDate.now());
-		return tempFiche;
-	}
-	
-	@ModelAttribute("tempTaches")
-	public Set<Tache> getTempTaches() {
-		return new HashSet<Tache>();
 	}
 	
 	@GetMapping("/create-init")
@@ -114,11 +120,15 @@ public class FicheEntretienController {
 		}
 		
 		tempFiche.setClient(f.getClient());
+		
+		for(Tache t : tempTaches) {
+			t.setId(0);
+		}
 		tempFiche.setTaches(tempTaches);
 		
 		FicheEntretien fiche = fr.save(tempFiche);
 		
-		for (Tache t : tempTaches) {
+		for (Tache t : fiche.getTaches()) {
 			t.setFiche(fiche);
 			t = tr.save(t);
 			for(Piece p : t.getPiecesNecessaires()) {
@@ -133,15 +143,33 @@ public class FicheEntretienController {
 	}
 
 	@GetMapping("/modification-fiche/{id}")
-	public String updateFiche(@PathVariable("id") Long id, Model model){
-		model.addAttribute("ficheToUpdate", fr.findById(id).get());
+	public String updateFiche(
+			@PathVariable("id") Long id,
+			@ModelAttribute("tempExistingTaches") Set<Tache> tempExistingTaches,
+			@ModelAttribute("tempTaches") Set<Tache> tempTaches,
+			Model model){
+		
+		FicheEntretien ficheToUpdate = fr.findById(id).get();
+		for(Tache t : ficheToUpdate.getTaches()) {
+			tempExistingTaches.add(t);
+		}
+		
+		Set<Set<Tache>> toutesTaches = new HashSet<Set<Tache>>();
+		toutesTaches.add(tempExistingTaches);
+		toutesTaches.add(tempTaches);
+		
+		model.addAttribute("ficheToUpdate", ficheToUpdate);
+		model.addAttribute("toutesTaches", toutesTaches);
 		model.addAttribute("titre", "MODIFICATION DE FICHE");
 
 		return "fiche_entretien/modification_fiche";
 	}
 
 	@PostMapping("/modification-fiche/{id}")
-	public String updateFiche(@PathVariable("id") Long id, @ModelAttribute("ficheUpdated") @Valid FicheEntretien ficheModifiee){
+	public String updateFiche(
+			@PathVariable("id") Long id, 
+			@ModelAttribute("ficheUpdated") @Valid FicheEntretien ficheModifiee){
+		
 		fr.save(ficheModifiee);
 
 		return "redirect:/entretien/list";

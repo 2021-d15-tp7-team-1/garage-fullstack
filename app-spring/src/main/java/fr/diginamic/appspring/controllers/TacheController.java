@@ -49,6 +49,7 @@ public class TacheController {
 	public String addTache(Model model) {
 		
 		model.addAttribute("nouvelleTache", new Tache());
+		model.addAttribute("creation", true);
 		model.addAttribute("titre", "CRÉATION DE TACHE");
 
 		setTacheFormData(model);
@@ -116,6 +117,37 @@ public class TacheController {
 	}
 	
 	
+	
+	@GetMapping("/modification-fiche/{id}/ajout-tache")
+	public String addTacheToExistingFiche(
+			@PathVariable("id") Long id,
+			Model model) {
+		
+		model.addAttribute("nouvelleTache", new Tache());
+		model.addAttribute("creation", false);
+		model.addAttribute("titre", "CRÉATION DE TACHE");
+
+		setTacheFormData(model);
+		
+		return "tache/ajout_tache";
+	}
+	
+	@PostMapping("/modification-fiche/{id}/ajout-tache")
+	public String addTacheToExistingFiche(
+			@PathVariable("id") Long idFiche,
+			@ModelAttribute("nouvelleTache") @Valid Tache t,
+			BindingResult result,
+			@ModelAttribute("tempTaches") Set<Tache> tempTaches,
+			@ModelAttribute("tempTacheId") Long idTache) {
+		
+		tempId = tempTaches.size() == 0 ? 1 : tempId;
+		idTache = getTempTacheId();
+		t.setId(idTache);
+		tempTaches.add(t);
+		
+		return "redirect:/entretien/modification-fiche/"+idFiche;
+	}
+	
 	private void setTacheFormData(Model model) {
 		Set<String> types = new HashSet<String>();
 		for(TypeTache v : TypeTache.values()) {
@@ -130,7 +162,6 @@ public class TacheController {
 		model.addAttribute("types", types);
 		model.addAttribute("mecanos", ur.findByRoleName(ApplicationUserRole.MECANICIEN.name()));
 		model.addAttribute("priorites", priorites);
-		model.addAttribute("pieces", pr.findAll());
 	}
 	
 	private Tache getTacheInCollectionById(Set<Tache> collection, Long id) {

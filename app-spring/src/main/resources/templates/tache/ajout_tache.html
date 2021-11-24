@@ -5,7 +5,10 @@
 	<body>
 		<div th:replace="fragments/menu :: tagmenu"></div>
 		<div class="container mt-4" id ="formAjoutUser">
-			<form class="" th:action="@{/entretien/create/ajout-tache}" th:object="${nouvelleTache}" method="post">
+			<form class="" 
+				th:action="${creation} == true ? @{/entretien/create/ajout-tache} : @{/entretien/modification-fiche/{id}/ajout-tache(id=${id})}" 
+				th:object="${nouvelleTache}" 
+				method="post">
 			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 				<h2 class="">Ajout d'une tâche</h2>
 				<p>
