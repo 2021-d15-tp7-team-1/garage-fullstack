@@ -28,7 +28,7 @@ import fr.diginamic.appspring.repository.CrudTacheRepository;
 
 
 @Controller
-@SessionAttributes({"tempFiche", "tempTaches"})
+@SessionAttributes({"tempFiche", "tempTaches", "tempExistingTaches"})
 @RequestMapping(value = "/entretien")
 public class FicheEntretienController {
 	
@@ -46,7 +46,7 @@ public class FicheEntretienController {
 	
 	@Autowired
 	DaoFicheEntretien daoFiche;
-	
+
 	
 	@ModelAttribute("tempFiche")
 	public FicheEntretien getTempFiche() {
@@ -54,21 +54,17 @@ public class FicheEntretienController {
 		tempFiche.setDateCreation(LocalDate.now());
 		return tempFiche;
 	}
-	
+
 	@ModelAttribute("tempTaches")
 	public Set<Tache> getTempTaches() {
 		return new HashSet<Tache>();
 	}
-	
+
 	@ModelAttribute("tempExistingTaches")
 	public Set<Tache> getTempExistingTaches() {
 		return new HashSet<Tache>();
 	}
-	
-	@ModelAttribute("toutesTaches")
-	public List<Set<Tache>> getToutesTaches() {
-		return new ArrayList<Set<Tache>>();
-	}
+
 
 	@GetMapping("/list")
 	public String findAll(Model model){
@@ -152,20 +148,17 @@ public class FicheEntretienController {
 			@PathVariable("id") Long id,
 			@ModelAttribute("tempExistingTaches") Set<Tache> tempExistingTaches,
 			@ModelAttribute("tempTaches") Set<Tache> tempTaches,
-			@ModelAttribute("toutesTaches") List<Set<Tache>> toutesTaches,
 			Model model){
-		
+
 		FicheEntretien ficheToUpdate = fr.findById(id).get();
+		tempExistingTaches.clear();
 		for(Tache t : ficheToUpdate.getTaches()) {
 			tempExistingTaches.add(t);
 		}
-		
+
+		List<Set<Tache>> toutesTaches = new ArrayList<Set<Tache>>();
 		toutesTaches.add(tempExistingTaches);
 		toutesTaches.add(tempTaches);
-		
-		System.err.println("GET toutesTaches : " + toutesTaches.size());
-		System.err.println("GET tempExistingTaches : " + tempExistingTaches.size());
-		System.err.println("GET tempTaches : " + tempTaches.size());
 		
 		model.addAttribute("ficheToUpdate", ficheToUpdate);
 		model.addAttribute("tempExistingTaches", tempExistingTaches);
@@ -182,37 +175,32 @@ public class FicheEntretienController {
 			@ModelAttribute("ficheToUpdate") @Valid FicheEntretien ficheToUpdate,
 			BindingResult result,
 			@ModelAttribute("tempExistingTaches") Set<Tache> tempExistingTaches,
-			@ModelAttribute("tempTaches") Set<Tache> tempTaches,
-			@ModelAttribute("toutesTaches") List<Set<Tache>> toutesTaches){
+			@ModelAttribute("tempTaches") Set<Tache> tempTaches){
 		
 		FicheEntretien ficheEnBase = fr.findById(id).get();
-		ficheEnBase.setTaches(null);
+		ficheEnBase.getTaches().clear();
 		
-		System.err.println("POST toutesTaches : " + toutesTaches.size());
-		System.err.println("POST tempExistingTaches : " + tempExistingTaches.size());
-		System.err.println("POST tempTaches : " + tempTaches.size());
-		
-		for(Tache t : toutesTaches.get(0)) {
+		for(Tache t : tempExistingTaches) {
+			tr.save(t);
 			ficheEnBase.ajouterTache(t);
 		}
 		
-		for(Tache t : toutesTaches.get(1)) {
+		for(Tache t : tempTaches) { //Ajoute les nouvelles taches
 			t.setId(0);
+			tr.save(t);
 			ficheEnBase.ajouterTache(t);
 		}
 		
-		FicheEntretien fiche = fr.save(ficheEnBase);
-		
-		for (Tache t : fiche.getTaches()) {
-			t.setFiche(fiche);
-			t = tr.save(t);
+		for (Tache t : ficheEnBase.getTaches()) {
+			t.setFiche(ficheEnBase);
+			//t = tr.save(t);
 			for(Piece p : t.getPiecesNecessaires()) {
 				p.getTachesPiece().add(t);
 				pr.save(p);
 			}
 		}
-		
-		toutesTaches.clear();
+		fr.save(ficheEnBase);
+
 		tempExistingTaches.clear();
 		tempTaches.clear();
 
