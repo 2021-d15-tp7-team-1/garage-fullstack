@@ -10,6 +10,7 @@ import fr.diginamic.appspring.repository.CrudUserRepository;
 import fr.diginamic.appspring.repository.CrudRoleRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 @RequestMapping("/admin/user")
 public class UserController {
+
+    @Autowired
+    private PasswordEncoder pwdEncoder;
 
     @Autowired
     CrudUserRepository userRepo;
@@ -71,6 +75,7 @@ public class UserController {
 
     @PostMapping("/add")
     public String add(Model model, @Valid @ModelAttribute("collabForm") User collabForm) {
+        collabForm.setPassword(pwdEncoder.encode(collabForm.getPassword()));
         userRepo.save(collabForm); //ajout du nouvel user à la base
         collabForm.getUserRoles().forEach(role -> {
             role.getUsers().add(collabForm);
