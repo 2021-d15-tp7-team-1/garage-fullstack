@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+                      "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: taghead"></head>
+<body>
+	<div th:replace="fragments/menu :: tagmenu">  </div>
+    <a class="btn btn-success mb-2 float-left" th:href="@{/clients/listeClients}">Retour</a>
+    <br>
+    <br>
+    <div class="container" id ="modifClient">  
+       <h2>Modifier un client</h2>
+       <br>
+    <div class="container">
+        <form class="needs-validation" novalidate th:action="@{/clients/listeClients/modification}"  th:object="${modifClient}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <div class="form-col" ></div>
+                    <tbody>
+                        <tr>
+                            <td>Référence : </td>
+                            
+                            <input type="hidden" class="form-control" name = "id" id="id" th:field='*{id}' required>
+                        </tr>
+                        <tr>
+                            <div class="col-md-4 mb-3">
+                            <label for="nom">Nom : </label>
+                            <input type="text" class="form-control" name = "nom" id="nom" th:field='*{nom}' required>
+                            <div class="valid-feedback">Ok !</div>
+                            <div class="invalid-feedback">Valeur incorrecte</div>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                            <br>
+                            <label for="prenom">Prénom : </label>
+                            <input type="text" class="form-control" name = "prenom" id="prenom" th:field="*{prenom}" required>
+                            <div class="valid-feedback">Ok !</div>
+                            <div class="invalid-feedback">Valeur incorrecte</div>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+            
+                            <br> 
+                            <label for="telMobile">Téléphone mobile : </label>
+                            <input type="text" class="form-control" name = "tel" id="telMobile" th:field="*{telMobile}" required>
+                            <div class="valid-feedback">Ok !</div>
+                            <div class="invalid-feedback">Valeur incorrecte</div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+            
+                            <br> 
+                            <label for="telFixe">Téléphone fixe : </label>
+                            <input type="tel" class="form-control" name = "telFixe" id="telFixe" th:field="*{telFixe}" >
+                            <div class="valid-feedback">Ok !</div>
+                            <div class="invalid-feedback">Valeur incorrecte</div>
+                            </div>
+                            <div class="col-md-4 mb-3">    
+                            
+                            <br> 
+                            <label for="libelle">Libellé :</label>
+                            <input type="text" class="form-control" name = "libelle" id="libelle" th:field="*{adresse.libelle}" required>
+                            <div class="valid-feedback">Ok !</div>
+                            <div class="invalid-feedback">Valeur incorrecte</div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+            
+                            <br> 
+                            <label for="codePostal">Code Postal :</label>
+                            <input type="text" class="form-control" name = "codePostal" id="codePostal" th:field="*{adresse.codePostal}" required>
+                            <div class="valid-feedback">Ok !</div>
+                            <div class="invalid-feedback">Valeur incorrecte</div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+            
+                            <br> 
+                            <label for="ville">Ville : </label>
+                            <input type="text" class="form-control" name = "ville" id="ville" th:field="*{adresse.ville}" required>
+                            <div class="valid-feedback">Ok !</div>
+                            <div class="invalid-feedback">Valeur incorrecte</div>
+                            </div>
+                            <div>
+                            <br> 
+                            <p>Type :</p>
+                            <label for="atelier">Atelier </label>
+                            <input type="radio" name = "type" id="atelier" value ="ATELIER" th:field="*{type}" required>
+            
+                            <br> 
+                            <label for="vente">Vente </label>
+                            <input type="radio" name = "type" id="vente" value = "VENTE" th:field="*{type}" required>
+            
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <button class="btn btn-primary" type="submit">Modifier le compte</button>
+                            </div>
+                        </tr>
+                    </tbody>
+            </form>
+            </div>
+    </div>
+</body>
+</html>

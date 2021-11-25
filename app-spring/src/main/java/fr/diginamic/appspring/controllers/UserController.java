@@ -1,15 +1,17 @@
 package fr.diginamic.appspring.controllers;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import fr.diginamic.appspring.entities.Role;
 import fr.diginamic.appspring.entities.User;
 import fr.diginamic.appspring.repository.CrudUserRepository;
 
 import fr.diginamic.appspring.repository.CrudRoleRepository;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,7 +33,6 @@ public class UserController {
     @Autowired
 
     CrudRoleRepository roles;
-
 
     public UserController() {
 
@@ -55,33 +56,27 @@ public class UserController {
         return "user/add";
     }
 
+    /**
+     * @PostMapping("/add") public String add(Model
+     * model, @Valid @ModelAttribute("collabForm") User collabForm) { // récupérer
+     * la selection des rôles et ajouter dans une boucles les rôles // (addrole)
+     * dans l'objet collabForm collabForm.getUserRoles().forEach(role -> {
+     * collabForm.getUserRoles().add(role); col.save(collabForm);
+     * role.getUsers().add(collabForm); roles.save(role);
+     * System.out.println(role.getNomRole()); }); col.save(collabForm); return
+     * "redirect:/admin/user"; }
+     */
 
     @PostMapping("/add")
     public String add(Model model, @Valid @ModelAttribute("collabForm") User collabForm) {
-        // récupérer la selection des rôles et ajouter dans une boucles les rôles
-        // (addrole) dans l'objet collabForm
-        collabForm.getUserRoles().forEach(role -> {
-            collabForm.getUserRoles().add(role);
-            col.save(collabForm);
-            role.getUsers().add(collabForm);
-            roles.save(role);
-            System.out.println(role.getNomRole());
-        });
-        col.save(collabForm);
-        return "redirect:/admin/user";
-    }
-
-    @PostMapping("/add")
-    public String add(Model model, @Valid @ModelAttribute("collabForm") User collabForm) {
-        col.save(collabForm); //ajout du nouvel user à la base
+        col.save(collabForm); // ajout du nouvel user à la base
         collabForm.getUserRoles().forEach(role -> {
             role.getUsers().add(collabForm);
-            roles.save(role); //update de la liste de users de ce role
+            roles.save(role); // update de la liste de users de ce role
             System.out.println(role.getNomRole());
         });
         return "redirect:/admin/user";
     }
-
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long pid) throws Exception {
@@ -92,5 +87,38 @@ public class UserController {
 
         col.deleteById(pid);
         return "redirect:/admin/user";
+    }
+
+    @GetMapping("/modificationUser/{id}")
+    public String modifClient(Model model, @PathVariable("id") Long dip) {
+        User d = col.findById(dip).get();
+        Set<Role> lr = new HashSet <Role>();
+        // Obligation dû a des problèmes de droits (priorité entre le Join table de role
+        // et celui de User)
+        d.getUserRoles().forEach(role -> {
+            lr.add(role);
+            role.getUsers().remove(d);
+            roles.save(role);
+        });
+        d.getUserRoles().clear();
+        col.save(d);
+        model.addAttribute("modifUser", d);
+        model.addAttribute("roles", roles.findAll());
+        model.addAttribute("ancienRoles", lr);
+        return "/user/modificationUser";
+
+    }
+
+    @PostMapping("/modificationUser")
+    public String modifUser(Model model, @ModelAttribute("modifUser") @Valid User userDip) {
+
+        userDip.getUserRoles().forEach(role -> {
+            role.getUsers().add(userDip);
+            roles.save(role); // update de la liste de users de ce role
+            System.out.println(role.getNomRole());
+        });
+        col.save(userDip);
+        return "redirect:/admin/user";
+
     }
 }

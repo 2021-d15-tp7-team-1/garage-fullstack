@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: taghead"></head>
+<body>
+    <div th:replace="fragments/menu :: tagmenu">  </div>
+    <div class="container">
+        <h1 th:text="${titre}"></h1>
+        <hr/>
+        <a class="btn btn-success mb-2 float-right" th:href="@{/clients/listeClients/add}">Ajouter un client</a>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Téléphone mobile</th>
+                <th>Ville</th>
+                <th>Type</th>
+                <th colspan="2"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="c: ${clients}">
+                <td th:text="${c.id}"></td>
+                <td th:text="${c.nom}"></td>
+                <td th:text="${c.prenom}"></td>
+                <td th:text="${c.telMobile}"></td>
+                <td th:text="${c.adresse.ville}"></td>
+
+                <td th:text="${c.type.name}"></td>
+                    
+                
+                <td>
+                    <a class="btn btn-primary mb-2" th:href="@{/clients/listeClients/accesClient/{id}(id=${c.id})}">Accéder</a>
+                </td>
+                <td>
+                    <a class="btn btn-warning mb-2" th:href="@{/clients/listeClients/modification/{id}(id=${c.id})}">Modifier</a>
+                </td>
+                
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
