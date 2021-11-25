@@ -64,6 +64,11 @@ public class FicheEntretienController {
 	public Set<Tache> getTempExistingTaches() {
 		return new HashSet<Tache>();
 	}
+	
+	@ModelAttribute("toutesTaches")
+	public List<Set<Tache>> getToutesTaches() {
+		return new ArrayList<Set<Tache>>();
+	}
 
 	@GetMapping("/list")
 	public String findAll(Model model){
@@ -147,6 +152,7 @@ public class FicheEntretienController {
 			@PathVariable("id") Long id,
 			@ModelAttribute("tempExistingTaches") Set<Tache> tempExistingTaches,
 			@ModelAttribute("tempTaches") Set<Tache> tempTaches,
+			@ModelAttribute("toutesTaches") List<Set<Tache>> toutesTaches,
 			Model model){
 		
 		FicheEntretien ficheToUpdate = fr.findById(id).get();
@@ -154,11 +160,16 @@ public class FicheEntretienController {
 			tempExistingTaches.add(t);
 		}
 		
-		Set<Set<Tache>> toutesTaches = new HashSet<Set<Tache>>();
 		toutesTaches.add(tempExistingTaches);
 		toutesTaches.add(tempTaches);
 		
+		System.err.println("GET toutesTaches : " + toutesTaches.size());
+		System.err.println("GET tempExistingTaches : " + tempExistingTaches.size());
+		System.err.println("GET tempTaches : " + tempTaches.size());
+		
 		model.addAttribute("ficheToUpdate", ficheToUpdate);
+		model.addAttribute("tempExistingTaches", tempExistingTaches);
+		model.addAttribute("tempTaches", tempTaches);
 		model.addAttribute("toutesTaches", toutesTaches);
 		model.addAttribute("titre", "MODIFICATION DE FICHE");
 
@@ -168,11 +179,44 @@ public class FicheEntretienController {
 	@PostMapping("/modification-fiche/{id}")
 	public String updateFiche(
 			@PathVariable("id") Long id, 
-			@ModelAttribute("ficheUpdated") @Valid FicheEntretien ficheModifiee){
+			@ModelAttribute("ficheToUpdate") @Valid FicheEntretien ficheToUpdate,
+			BindingResult result,
+			@ModelAttribute("tempExistingTaches") Set<Tache> tempExistingTaches,
+			@ModelAttribute("tempTaches") Set<Tache> tempTaches,
+			@ModelAttribute("toutesTaches") List<Set<Tache>> toutesTaches){
 		
-		fr.save(ficheModifiee);
+		FicheEntretien ficheEnBase = fr.findById(id).get();
+		ficheEnBase.setTaches(null);
+		
+		System.err.println("POST toutesTaches : " + toutesTaches.size());
+		System.err.println("POST tempExistingTaches : " + tempExistingTaches.size());
+		System.err.println("POST tempTaches : " + tempTaches.size());
+		
+		for(Tache t : toutesTaches.get(0)) {
+			ficheEnBase.ajouterTache(t);
+		}
+		
+		for(Tache t : toutesTaches.get(1)) {
+			t.setId(0);
+			ficheEnBase.ajouterTache(t);
+		}
+		
+		FicheEntretien fiche = fr.save(ficheEnBase);
+		
+		for (Tache t : fiche.getTaches()) {
+			t.setFiche(fiche);
+			t = tr.save(t);
+			for(Piece p : t.getPiecesNecessaires()) {
+				p.getTachesPiece().add(t);
+				pr.save(p);
+			}
+		}
+		
+		toutesTaches.clear();
+		tempExistingTaches.clear();
+		tempTaches.clear();
 
-		return "redirect:/entretien/list";
+		return "redirect:/entretien/"+id;
 	}
 	
 	@GetMapping("create/abort")
