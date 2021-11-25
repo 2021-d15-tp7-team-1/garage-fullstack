@@ -56,23 +56,26 @@ public class UserController {
         return "user/add";
     }
 
-    /**
-     * @PostMapping("/add") public String add(Model
-     * model, @Valid @ModelAttribute("collabForm") User collabForm) { // récupérer
-     * la selection des rôles et ajouter dans une boucles les rôles // (addrole)
-     * dans l'objet collabForm collabForm.getUserRoles().forEach(role -> {
-     * collabForm.getUserRoles().add(role); col.save(collabForm);
-     * role.getUsers().add(collabForm); roles.save(role);
-     * System.out.println(role.getNomRole()); }); col.save(collabForm); return
-     * "redirect:/admin/user"; }
-     */
-
+    /*
     @PostMapping("/add")
     public String add(Model model, @Valid @ModelAttribute("collabForm") User collabForm) {
         col.save(collabForm); // ajout du nouvel user à la base
         collabForm.getUserRoles().forEach(role -> {
             role.getUsers().add(collabForm);
             roles.save(role); // update de la liste de users de ce role
+            System.out.println(role.getNomRole());
+        });
+        return "redirect:/admin/user";
+    }
+
+     */
+
+    @PostMapping("/add")
+    public String add(Model model, @Valid @ModelAttribute("collabForm") User collabForm) {
+        col.save(collabForm); //ajout du nouvel user à la base
+        collabForm.getUserRoles().forEach(role -> {
+            role.getUsers().add(collabForm);
+            roles.save(role); //update de la liste de users de ce role
             System.out.println(role.getNomRole());
         });
         return "redirect:/admin/user";
