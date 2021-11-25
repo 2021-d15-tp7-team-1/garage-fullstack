@@ -13,7 +13,7 @@
 <div th:replace="fragments/menu :: tagmenu">  </div>
 <div class="container">
     <h1><a th:href="@{/pieces/list}">Pièces & Articles</a> / Véhicules</h1>
-    <a class="btn btn-success mb-2 float-right" href="add">Ajouter un véhicule</a>
+    <a class="btn btn-success mb-2 float-right" sec:authorize="hasAuthority('MAGASINIER')" href="add">Ajouter un véhicule</a>
     <br/><br/>
     <div>
         <table class="table table-striped">
