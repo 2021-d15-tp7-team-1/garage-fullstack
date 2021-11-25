@@ -143,6 +143,8 @@ public class FicheEntretienController {
 		return "redirect:/entretien/list";
 	}
 
+
+
 	@GetMapping("/modification-fiche/{id}")
 	public String updateFiche(
 			@PathVariable("id") Long id,
@@ -151,9 +153,11 @@ public class FicheEntretienController {
 			Model model){
 
 		FicheEntretien ficheToUpdate = fr.findById(id).get();
-		tempExistingTaches.clear();
-		for(Tache t : ficheToUpdate.getTaches()) {
-			tempExistingTaches.add(t);
+
+		if(tempExistingTaches.isEmpty()){
+			for(Tache t : ficheToUpdate.getTaches()) {
+				tempExistingTaches.add(t);
+			}
 		}
 
 		List<Set<Tache>> toutesTaches = new ArrayList<Set<Tache>>();
@@ -178,6 +182,13 @@ public class FicheEntretienController {
 			@ModelAttribute("tempTaches") Set<Tache> tempTaches){
 		
 		FicheEntretien ficheEnBase = fr.findById(id).get();
+		System.err.println("size in db :" + ficheEnBase.getTaches().size());
+		System.err.println("size in temp :" + tempExistingTaches.size());
+		for(Tache t : ficheEnBase.getTaches()){
+			if(!tempExistingTaches.contains(t)){//suppression tache en base
+				tr.delete(t);
+			}
+		}
 		ficheEnBase.getTaches().clear();
 		
 		for(Tache t : tempExistingTaches) {
