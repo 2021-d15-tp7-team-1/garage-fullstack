@@ -49,8 +49,8 @@
                     <a class="btn btn-danger mb-2" th:if="${!fiche.isCloture} and ${fiche.isValid()}" th:href="@{/entretien/cloturer/{id}(id=${fiche.id})}">Cloturer fiche</a>
                 </td>
                 <td>
-                    <span th:if="${fiche.isCloture}"><a class="btn btn-primary mb-2" href="#">Facture</a></span>
-                    <span th:unless="${fiche.isCloture}">Facure indisponible</span>
+                    <span th:if="${fiche.isCloture}"><a class="btn btn-primary mb-2" th:href="@{/entretien/facture/{id}(id=${fiche.facture.id})}">Facture</a></span>
+                    <span th:unless="${fiche.isCloture}">Facture indisponible</span>
                 </td>
             </tr>
             </tbody>

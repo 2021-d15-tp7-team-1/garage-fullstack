@@ -1,5 +1,6 @@
 package fr.diginamic.appspring.controllers;
 
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,13 +9,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.itextpdf.html2pdf.ConverterProperties;
+import com.itextpdf.html2pdf.HtmlConverter;
+import com.lowagie.text.DocumentException;
 import fr.diginamic.appspring.dao.DaoFicheEntretien;
 
 import fr.diginamic.appspring.entities.Facture;
 import fr.diginamic.appspring.enums.TypeFacture;
+import fr.diginamic.appspring.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,10 +32,12 @@ import org.springframework.web.bind.annotation.*;
 import fr.diginamic.appspring.entities.FicheEntretien;
 import fr.diginamic.appspring.entities.Piece;
 import fr.diginamic.appspring.entities.Tache;
-import fr.diginamic.appspring.repository.CrudClientRepository;
-import fr.diginamic.appspring.repository.CrudFicheRepository;
-import fr.diginamic.appspring.repository.CrudPieceRepository;
-import fr.diginamic.appspring.repository.CrudTacheRepository;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.context.WebContext;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
 
 @Controller
@@ -36,7 +47,10 @@ public class FicheEntretienController {
 	
 	@Autowired
 	CrudFicheRepository fr;
-	
+
+	@Autowired
+	CrudFactureRepository fa;
+
 	@Autowired
 	CrudClientRepository cr;
 	
@@ -162,6 +176,7 @@ public class FicheEntretienController {
 	public String cloturerFiche(@PathVariable Long id){
 		FicheEntretien ficheACloturer = fr.findById(id).get();
 		ficheACloturer.cloturerFiche();
+		createFactureEntretien(ficheACloturer);
 		fr.save(ficheACloturer);
 
 		return "redirect:/entretien/list/";
@@ -191,10 +206,13 @@ public class FicheEntretienController {
 		return lstTaches;
 	}
 
-	public void createFactureEntretien(@PathVariable("id") Long id, Model model) {
-		FicheEntretien f = fr.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-		if (f.isCloture()) {
+	@GetMapping("facture/{id}")
+	public String afficherFacture(@PathVariable("id") Long id, Model model){
+		model.addAttribute("facture", fa.findById(id).get());
+		return "factures/facture_entretien";
+	}
+
+	public void createFactureEntretien(FicheEntretien f) {
 			Facture facture = new Facture();
 			float sum = 0;
 			for (Tache t : f.getTaches()) {
@@ -205,6 +223,8 @@ public class FicheEntretienController {
 			facture.setPrix(sum);
 			facture.setFicheConcernee(f);
 			facture.setType(TypeFacture.ENTRETIEN);
+			f.setFacture(facture);
+			fa.save(facture);
 		}
-	}
 }
+

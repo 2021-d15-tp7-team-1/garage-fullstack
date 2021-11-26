@@ -7,9 +7,6 @@ import java.time.LocalDate;
 
 @Entity
 public class Facture {
-
-
-
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
@@ -22,7 +19,7 @@ public class Facture {
     @OneToOne(mappedBy = "facture")
     private Commande commandeConcernee;
 
-    @OneToOne(mappedBy = "facture")
+    @OneToOne(mappedBy = "factureEntretien")
     private FicheEntretien ficheConcernee;
 
     public Facture() {
