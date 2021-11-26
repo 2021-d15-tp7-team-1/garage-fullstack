@@ -1,6 +1,5 @@
 package fr.diginamic.appspring.controllers;
 
-import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,10 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 
@@ -22,8 +18,6 @@ import fr.diginamic.appspring.entities.Facture;
 import fr.diginamic.appspring.enums.TypeFacture;
 import fr.diginamic.appspring.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,11 +26,6 @@ import org.springframework.web.bind.annotation.*;
 import fr.diginamic.appspring.entities.FicheEntretien;
 import fr.diginamic.appspring.entities.Piece;
 import fr.diginamic.appspring.entities.Tache;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
-import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 
 @Controller
@@ -285,7 +274,8 @@ public class FicheEntretienController {
 
 		return "redirect:/entretien/list/";
 	}
-
+	
+	
 	private List<Tache> sortTacheCollectionById(Set<Tache> collection) {
 		List<Tache> lstTaches = new ArrayList<Tache>();
 		for(Tache t : collection) {

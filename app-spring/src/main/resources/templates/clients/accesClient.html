@@ -8,7 +8,7 @@
     <div th:replace="fragments/menu :: tagmenu">  </div>
     <br/>
     <h1>Client</h1>
-    <a class="btn btn-primary mb-2 float-right" href="@{/clients/listeClients/modification/{id}(id=${c.id})}">Modifier</a>
+    <a class="btn btn-primary mb-2 float-right" th:href="@{/clients/listeClients/modification/{id}(id=${client.id})}">Modifier</a>
     
     <div class="container">
         <fieldset class="form-group border p-3" th:action="@{/clients/listeClients/accesClient}"  th:object="${accesClient}" method="get">
