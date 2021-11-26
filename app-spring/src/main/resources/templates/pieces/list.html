@@ -36,7 +36,7 @@
                     <td th:utext="${piece.quantiteStock}">...</td>
                     <td th:utext="${piece.prix}">...</td>
                     <td th:utext="${piece.prixFacture}">...</td>
-                    <td><a class="btn btn-primary mb-2" sec:authorize="hasAuthority('MAGASINIER')" th:href="@{/pieces/edit/{id}(id=${piece.id})}">Modifier</a></td>
+                    <td><a class="btn btn-warning mb-2" sec:authorize="hasAuthority('MAGASINIER')" th:href="@{/pieces/edit/{id}(id=${piece.id})}">Modifier</a></td>
                     <td><a class="btn btn-primary mb-2" sec:authorize="hasAuthority('MAGASINIER')" href="#">Commander</a></td>
                     <td>
                         <a class="btn btn-primary mb-2" th:href="@{/pieces/increase/{id}(id=${piece.id})}">+</a>

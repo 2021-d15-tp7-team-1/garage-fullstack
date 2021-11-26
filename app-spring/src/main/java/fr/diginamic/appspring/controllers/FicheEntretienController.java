@@ -57,11 +57,6 @@ public class FicheEntretienController {
 		return "fiche_entretien/liste-fiches";
 	}
 
-	@GetMapping("/{id}")
-	public String afficherFiche(@PathVariable("id") Long id, Model model) {
-		model.addAttribute("fiche", daoFiche.selectOne(id));
-		return "fiches/detail-fiche";
-	}
 
 	@ModelAttribute("tempFiche")
 	public FicheEntretien getTempFiche() {
@@ -80,12 +75,6 @@ public class FicheEntretienController {
 		return new HashSet<Tache>();
 	}
 
-	@GetMapping("/list")
-	public String findAll(Model model){
-		model.addAttribute("fiches", (List<FicheEntretien>) daoFiche.selectAll());
-		model.addAttribute("titre", "Fiches d'entretien");
-		return "fiche_entretien/liste-fiches";
-	}
 
 	@GetMapping("/{id}")
 	public String afficherFiche(@PathVariable("id") Long id, Model model){

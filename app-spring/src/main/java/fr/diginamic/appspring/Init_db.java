@@ -18,19 +18,19 @@ import fr.diginamic.appspring.enums.TypePiece;
 
 @Component
 public class Init_db {
-	
+
 	@Autowired
 	private PasswordEncoder pwdEncoder;
-	
+
 	@Autowired
 	private CrudRoleRepository rr;
-	
+
 	@Autowired
 	private CrudUserRepository ur;
-	
+
 	@Autowired
 	private CrudClientRepository cr;
-	
+
 	@Autowired
 	private CrudPieceRepository pr;
 
@@ -40,9 +40,9 @@ public class Init_db {
 	@Autowired
 	private CrudTacheRepository tr;
 
-
+	
 	public void init() {
-		
+
 		Role admin = new Role(ApplicationUserRole.ADMIN.name());
 		Role chef = new Role(ApplicationUserRole.CHEF.name());
 		Role magasinier = new Role(ApplicationUserRole.MAGASINIER.name());
@@ -53,7 +53,7 @@ public class Init_db {
 		rr.save(magasinier);
 		rr.save(mecanicien);
 		rr.save(commercial);
-		
+
 		List<User> users = new ArrayList<User>();
 		users.add(new User("a", pwdEncoder.encode("123"), "email", "admin", "admin"));
 		users.add(new User("c", pwdEncoder.encode("123"), "email", "chef", "chef"));
@@ -64,7 +64,7 @@ public class Init_db {
 		users.add(new User("m4", pwdEncoder.encode("123"), "email", "mecanicien4", "mecanicien4"));
 		users.add(new User("com", pwdEncoder.encode("123"), "email", "commercial", "commercial"));
 		ur.saveAll(users);
-		
+
 		users.get(0).getUserRoles().add(admin);
 		users.get(1).getUserRoles().add(chef);
 		users.get(2).getUserRoles().add(magasinier);
@@ -74,7 +74,7 @@ public class Init_db {
 		users.get(6).getUserRoles().add(mecanicien);
 		users.get(7).getUserRoles().add(commercial);
 		ur.saveAll(users);
-		
+
 		admin.getUsers().add(users.get(0));
 		chef.getUsers().add(users.get(1));
 		magasinier.getUsers().add(users.get(2));
@@ -88,7 +88,7 @@ public class Init_db {
 		rr.save(magasinier);
 		rr.save(mecanicien);
 		rr.save(commercial);
-		
+
 		Client c1 = new Client(TypeClient.ATELIER, "Proust", "Marcel", "02", "06");
 		Client c2 = new Client(TypeClient.ATELIER, "Simenon", "Georges", "02", "06");
 		Client c3 = new Client(TypeClient.VENTE, "Houellebecq", "Michel", "02", "06");
@@ -107,7 +107,7 @@ public class Init_db {
 		cr.save(c3);
 		cr.save(c4);
 		cr.save(c5);
-		
+
 		Piece volant = new Piece(10, 100, 120, "volant", TypePiece.PIECE);
 		Piece volant2 = new Piece(10, 100, 120, "volant_2", TypePiece.PIECE);
 		Piece frein = new Piece(10, 100, 120, "frein", TypePiece.PIECE);
@@ -142,7 +142,6 @@ public class Init_db {
 		tr.save(t3);
 		tr.save(t4);
 
-
 		f1.ajouterTache(t1);
 		f1.ajouterTache(t4);
 		f2.ajouterTache(t2);
@@ -152,5 +151,5 @@ public class Init_db {
 		fr.save(f3);
 
 	}
-	
+
 }
