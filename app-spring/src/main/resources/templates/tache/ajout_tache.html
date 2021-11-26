@@ -50,7 +50,10 @@
 				
 				<div class="mt-4 mb-4">
 					<button class="btn btn-success" type="submit">Ajouter la tâche</button>
-					<a class="btn btn-primary" th:href="${creation} == true ? @{/entretien/create} : @{/entretien/modification-fiche/{id}(id=${id})}">Retour à la fiche</a>
+					<a class="btn btn-primary" 
+						th:href="${creation} == true ? @{/entretien/create} : @{/entretien/modification-fiche/{id}(id=${id})}">
+						Retour à la fiche
+					</a>
 				</div>
 			</form>
 		</div>

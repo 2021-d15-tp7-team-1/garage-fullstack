@@ -82,6 +82,12 @@ public class FicheEntretienController {
 		return "fiche_entretien/detail-fiche";
 	}
 	
+	@GetMapping("facture/{id}")
+	public String afficherFacture(@PathVariable("id") Long id, Model model){
+		model.addAttribute("facture", fa.findById(id).get());
+		return "factures/facture_entretien";
+	}
+	
 	@GetMapping("/create-init")
 	public String createFicheWithoutTache(
 			@ModelAttribute("tempTaches") Set<Tache> tempTaches) {
@@ -97,12 +103,8 @@ public class FicheEntretienController {
 			@ModelAttribute("tempTaches") Set<Tache> tempTaches,
 			Model model) {
 		
-		tempFiche = getTempFiche();
-		
-		List<Tache> lstTaches = sortTacheCollectionById(tempTaches);
-		
 		model.addAttribute("fiche", tempFiche);
-		model.addAttribute("taches", lstTaches);
+		model.addAttribute("taches", sortTacheCollectionById(tempTaches));
 		model.addAttribute("nouvelleFicheEntretien", tempFiche);
 		model.addAttribute("titre", "CRÉATION DE FICHE");
 		
@@ -155,9 +157,9 @@ public class FicheEntretienController {
 		
 		FicheEntretien ficheToUpdate = fr.findById(id).get();
 		
-		for(Tache t : ficheToUpdate.getTaches()) {
-			tempExistingTaches.add(t);
-		}
+		ficheToUpdate.getTaches()
+			.stream()
+			.forEach(t -> tempExistingTaches.add(t));
 
 		return "redirect:/entretien/modification-fiche/"+id;
 	}
@@ -189,57 +191,15 @@ public class FicheEntretienController {
 		
 		FicheEntretien ficheEnBase = fr.findById(id).get();
 		
+		deleteObsoleteTasks(ficheEnBase, tempExistingTaches);
+
+		saveActualTasksAndPieces(ficheEnBase, tempExistingTaches, tempTaches);
 		
+		updateClient(ficheEnBase, ficheToUpdate);
+
+		ficheEnBase.setDateCreation(ficheToUpdate.getDateCreation());
 		
-		Set<Long> IdsTachesASupprimer = getObjectsIdsToDelete(ficheEnBase.getTaches(), tempExistingTaches);
-		
-		IdsTachesASupprimer
-			.stream()
-			.forEach(i -> {
-				Tache t = tr.findById(i).get();
-				if(t.getPiecesNecessaires().size() > 0) {
-					for(Piece p : t.getPiecesNecessaires()) {
-						p.getTachesPiece().remove(t);
-						pr.save(p);
-					}
-				}
-				t.setPiecesNecessaires(null);
-				tr.delete(t);
-			});
-		
-		ficheEnBase.getTaches().clear();
-		
-		for(Tache t : tempExistingTaches) {
-			t.setFiche(ficheEnBase);
-			t = tr.save(t);
-			ficheEnBase.ajouterTache(t);
-		}
-		
-		for(Tache t : tempTaches) {
-			t.setId(0);
-			t.setFiche(ficheEnBase);
-			t = tr.save(t);
-			ficheEnBase.ajouterTache(t);
-		}
-		
-//		ficheEnBase.getClient().getFichesEntretien().remove(ficheEnBase);
-//		cr.save(ficheEnBase.getClient());
-//		
-//		ficheEnBase.setClient(ficheToUpdate.getClient());
-//		ficheEnBase.getClient().addFiche(ficheEnBase);
-//		cr.save(ficheToUpdate.getClient());
-//
-//		ficheEnBase = fr.save(ficheEnBase);
-//		
-//		ficheEnBase.setDateCreation(ficheToUpdate.getDateCreation());
-		
-		
-		for(Tache t : ficheEnBase.getTaches()) {
-			for(Piece p : t.getPiecesNecessaires()) {
-				p.getTachesPiece().add(t);
-				pr.save(p);
-			}
-		}
+		ficheEnBase = fr.save(ficheEnBase);
 
 		tempExistingTaches.clear();
 		tempTaches.clear();
@@ -278,9 +238,11 @@ public class FicheEntretienController {
 	
 	private List<Tache> sortTacheCollectionById(Set<Tache> collection) {
 		List<Tache> lstTaches = new ArrayList<Tache>();
-		for(Tache t : collection) {
-			lstTaches.add(t);
-		}
+//		for(Tache t : collection) {
+//			lstTaches.add(t);
+//		}
+		
+		collection.stream().forEach(t -> lstTaches.add(t));
 		
 		Collections.sort(lstTaches, new Comparator<Tache>() {
 			public int compare(Tache t1, Tache t2) {
@@ -306,20 +268,111 @@ public class FicheEntretienController {
 				.sorted()
 				.collect(Collectors.toSet());
 			
-			Set<Long> idsAConserver = tachesAConserver
-				.stream()
-				.map(t -> t.getId())
-				.sorted()
-				.collect(Collectors.toSet());
-			
-			idsASupprimer.removeAll(idsAConserver);
-			return idsASupprimer;
+		Set<Long> idsAConserver = tachesAConserver
+			.stream()
+			.map(t -> t.getId())
+			.sorted()
+			.collect(Collectors.toSet());
+		
+		idsASupprimer.removeAll(idsAConserver);
+		return idsASupprimer;
 	}
+	
+	private void deleteObsoleteTasks(FicheEntretien ficheInBase, Set<Tache> oldTasksToUpdate) {
 
-	@GetMapping("facture/{id}")
-	public String afficherFacture(@PathVariable("id") Long id, Model model){
-		model.addAttribute("facture", fa.findById(id).get());
-		return "factures/facture_entretien";
+		getObjectsIdsToDelete(ficheInBase.getTaches(), oldTasksToUpdate)
+		.stream()
+		.forEach(i -> {
+			Tache t = tr.findById(i).get();
+			if(t.getPiecesNecessaires().size() > 0) {
+				for(Piece p : t.getPiecesNecessaires()) {
+					p.getTachesPiece().remove(t);
+					pr.save(p);
+				}
+			}
+			t.setPiecesNecessaires(null);
+			tr.delete(t);
+		});
+	}
+	
+	private void saveActualTasksAndPieces(FicheEntretien ficheInBase, Set<Tache> oldTasksToUpdate, Set<Tache> newTasksToAdd) {
+//		for(Tache t : ficheInBase.getTaches()) {
+//			if(t.getPiecesNecessaires() != null) {
+//				for(Piece p : t.getPiecesNecessaires()) {
+//					p.getTachesPiece().remove(t);
+//					pr.save(p);
+//				}
+//			}
+//		}
+		
+		ficheInBase.getTaches().stream()
+			.filter(t -> t.getPiecesNecessaires() != null)
+			.forEach(t -> {
+				t.getPiecesNecessaires().stream()
+				.forEach(p -> {
+					p.getTachesPiece().remove(t);
+					pr.save(p);
+				});
+			});
+		
+		ficheInBase.getTaches().clear();
+		
+//		for(Tache t : oldTasksToUpdate) {
+//			t.setFiche(ficheInBase);
+//			t = tr.save(t);
+//			ficheInBase.ajouterTache(t);
+//		}
+		
+		oldTasksToUpdate.stream().forEach(t -> {
+			t.setFiche(ficheInBase);
+			t = tr.save(t);
+			ficheInBase.ajouterTache(t);
+		});
+			
+		
+//		for(Tache t : newTasksToAdd) {
+//			t.setId(0);
+//			t.setFiche(ficheInBase);
+//			t = tr.save(t);
+//			ficheInBase.ajouterTache(t);
+//		}
+		
+		newTasksToAdd.stream().forEach(t -> {
+			t.setId(0);
+			t.setFiche(ficheInBase);
+			t = tr.save(t);
+			ficheInBase.ajouterTache(t);
+		});
+		
+//		for(Tache t : ficheInBase.getTaches()) {
+//			if(t.getPiecesNecessaires() != null) {
+//				for(Piece p : t.getPiecesNecessaires()) {
+//					p.getTachesPiece().add(t);
+//					pr.save(p);
+//				}
+//			}
+//		}
+		
+		ficheInBase.getTaches().stream()
+		.filter(t -> t.getPiecesNecessaires() != null)
+		.forEach(t -> {
+			t.getPiecesNecessaires().stream()
+			.forEach(p -> {
+				p.getTachesPiece().add(t);
+				pr.save(p);
+			});
+		});	
+	}
+	
+	private void updateClient(FicheEntretien ficheInBase, FicheEntretien modifiedFiche) {		
+		if(modifiedFiche.getClient() != null) {
+			ficheInBase.getClient().getFichesEntretien().remove(ficheInBase);
+			cr.save(ficheInBase.getClient());
+			
+			ficheInBase.setClient(modifiedFiche.getClient());
+			ficheInBase.getClient().addFiche(ficheInBase);
+			cr.save(modifiedFiche.getClient());
+		}
 	}
 
 	public void createFactureEntretien(FicheEntretien f) {

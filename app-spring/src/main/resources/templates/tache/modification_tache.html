@@ -37,8 +37,8 @@
 					</select>
 				</p>
 				
-				<div th:if="${tacheToUpdate.getPiecesNecessaires().size() > 0}">
-					<h3>Pièce(s) déjà associée(s) à la tâche <span th:text="${tacheToUpdate.id}"></span> :</h3>
+				<div>
+					<h3 th:if="${tacheToUpdate.getPiecesNecessaires().size() > 0}">Pièce(s) déjà associée(s) à la tâche <span th:text="${tacheToUpdate.id}"></span> :</h3>
 					<span id="piecesDejaAssociees">
 						<input 
 							type="checkbox" 
@@ -46,8 +46,7 @@
 							th:each="p : ${tacheToUpdate.getPiecesNecessaires()}" 
 							th:text="${p.nomPiece}" 
 							th:value="${p.id}"
-							th:field="*{piecesNecessaires}" 
-							th:checked="true" />
+							th:field="*{piecesNecessaires}" />
 					</span>
 				</div>
 				
@@ -66,7 +65,10 @@
 				
 				<div class="mt-4 mb-4">
 					<button class="btn btn-success" type="submit">Modifier la tâche</button>
-					<a class="btn btn-primary" th:href="${isFromCreation} == true ? @{/entretien/create} : @{/entretien/modification-fiche/{idFiche}(idFiche=${idFiche})}">Retour à la fiche</a>
+					<a class="btn btn-primary" 
+						th:href="${isFromCreation} == true ? @{/entretien/create} : @{/entretien/modification-fiche/{idFiche}(idFiche=${idFiche})}">
+						Retour à la fiche
+					</a>
 				</div>
 			</form>
 		</div>
