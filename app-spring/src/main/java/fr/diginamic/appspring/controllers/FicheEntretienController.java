@@ -8,6 +8,8 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,7 +40,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 
 @Controller
-@SessionAttributes({"tempFiche", "tempTaches"})
+@SessionAttributes({"tempFiche", "tempTaches", "tempExistingTaches"})
 @RequestMapping(value = "/entretien")
 public class FicheEntretienController {
 	
@@ -56,9 +58,27 @@ public class FicheEntretienController {
 	
 	@Autowired
 	CrudPieceRepository pr;
-
+	
 	@Autowired
 	DaoFicheEntretien daoFiche;
+
+	
+	@ModelAttribute("tempFiche")
+	public FicheEntretien getTempFiche() {
+		FicheEntretien tempFiche = new FicheEntretien();
+		tempFiche.setDateCreation(LocalDate.now());
+		return tempFiche;
+	}
+
+	@ModelAttribute("tempTaches")
+	public Set<Tache> getTempTaches() {
+		return new HashSet<Tache>();
+	}
+
+	@ModelAttribute("tempExistingTaches")
+	public Set<Tache> getTempExistingTaches() {
+		return new HashSet<Tache>();
+	}
 
 	@GetMapping("/list")
 	public String findAll(Model model){
@@ -71,18 +91,6 @@ public class FicheEntretienController {
 	public String afficherFiche(@PathVariable("id") Long id, Model model){
 		model.addAttribute("fiche", fr.findById(id).get());
 		return "fiche_entretien/detail-fiche";
-	}
-	
-	@ModelAttribute("tempFiche")
-	public FicheEntretien getTempFiche() {
-		FicheEntretien tempFiche = new FicheEntretien();
-		tempFiche.setDateCreation(LocalDate.now());
-		return tempFiche;
-	}
-	
-	@ModelAttribute("tempTaches")
-	public Set<Tache> getTempTaches() {
-		return new HashSet<Tache>();
 	}
 	
 	@GetMapping("/create-init")
@@ -127,11 +135,15 @@ public class FicheEntretienController {
 		}
 		
 		tempFiche.setClient(f.getClient());
+		
+		for(Tache t : tempTaches) {
+			t.setId(0);
+		}
 		tempFiche.setTaches(tempTaches);
 		
 		FicheEntretien fiche = fr.save(tempFiche);
 		
-		for (Tache t : tempTaches) {
+		for(Tache t : fiche.getTaches()) {
 			t.setFiche(fiche);
 			t = tr.save(t);
 			for(Piece p : t.getPiecesNecessaires()) {
@@ -144,20 +156,106 @@ public class FicheEntretienController {
 		
 		return "redirect:/entretien/list";
 	}
+	
+	@GetMapping("/modification-fiche-init/{id}")
+	public String updateFicheInit(
+			@PathVariable("id") Long id,
+			@ModelAttribute("tempExistingTaches") Set<Tache> tempExistingTaches) {
+		
+		tempExistingTaches.clear();
+		
+		FicheEntretien ficheToUpdate = fr.findById(id).get();
+		
+		for(Tache t : ficheToUpdate.getTaches()) {
+			tempExistingTaches.add(t);
+		}
+
+		return "redirect:/entretien/modification-fiche/"+id;
+	}
 
 	@GetMapping("/modification-fiche/{id}")
-	public String updateFiche(@PathVariable("id") Long id, Model model){
-		model.addAttribute("ficheToUpdate", fr.findById(id).get());
+	public String updateFiche(
+			@PathVariable("id") Long id,
+			@ModelAttribute("tempExistingTaches") Set<Tache> tempExistingTaches,
+			@ModelAttribute("tempTaches") Set<Tache> tempTaches,
+			Model model){
+		
+		FicheEntretien ficheToUpdate = fr.findById(id).get();
+		
+		model.addAttribute("ficheToUpdate", ficheToUpdate);
+		model.addAttribute("tempExistingTaches", tempExistingTaches);
+		model.addAttribute("tempTaches", tempTaches);
 		model.addAttribute("titre", "MODIFICATION DE FICHE");
 
 		return "fiche_entretien/modification_fiche";
 	}
 
 	@PostMapping("/modification-fiche/{id}")
-	public String updateFiche(@PathVariable("id") Long id, @ModelAttribute("ficheUpdated") @Valid FicheEntretien ficheModifiee){
-		fr.save(ficheModifiee);
+	public String updateFiche(
+			@PathVariable("id") Long id, 
+			@ModelAttribute("ficheToUpdate") @Valid FicheEntretien ficheToUpdate,
+			BindingResult result,
+			@ModelAttribute("tempExistingTaches") Set<Tache> tempExistingTaches,
+			@ModelAttribute("tempTaches") Set<Tache> tempTaches){
+		
+		FicheEntretien ficheEnBase = fr.findById(id).get();
+		
+		
+		
+		Set<Long> IdsTachesASupprimer = getObjectsIdsToDelete(ficheEnBase.getTaches(), tempExistingTaches);
+		
+		IdsTachesASupprimer
+			.stream()
+			.forEach(i -> {
+				Tache t = tr.findById(i).get();
+				if(t.getPiecesNecessaires().size() > 0) {
+					for(Piece p : t.getPiecesNecessaires()) {
+						p.getTachesPiece().remove(t);
+						pr.save(p);
+					}
+				}
+				t.setPiecesNecessaires(null);
+				tr.delete(t);
+			});
+		
+		ficheEnBase.getTaches().clear();
+		
+		for(Tache t : tempExistingTaches) {
+			t.setFiche(ficheEnBase);
+			t = tr.save(t);
+			ficheEnBase.ajouterTache(t);
+		}
+		
+		for(Tache t : tempTaches) {
+			t.setId(0);
+			t.setFiche(ficheEnBase);
+			t = tr.save(t);
+			ficheEnBase.ajouterTache(t);
+		}
+		
+//		ficheEnBase.getClient().getFichesEntretien().remove(ficheEnBase);
+//		cr.save(ficheEnBase.getClient());
+//		
+//		ficheEnBase.setClient(ficheToUpdate.getClient());
+//		ficheEnBase.getClient().addFiche(ficheEnBase);
+//		cr.save(ficheToUpdate.getClient());
+//
+//		ficheEnBase = fr.save(ficheEnBase);
+//		
+//		ficheEnBase.setDateCreation(ficheToUpdate.getDateCreation());
+		
+		
+		for(Tache t : ficheEnBase.getTaches()) {
+			for(Piece p : t.getPiecesNecessaires()) {
+				p.getTachesPiece().add(t);
+				pr.save(p);
+			}
+		}
 
-		return "redirect:/entretien/list";
+		tempExistingTaches.clear();
+		tempTaches.clear();
+
+		return "redirect:/entretien/"+id;
 	}
 	
 	@GetMapping("create/abort")
@@ -201,6 +299,31 @@ public class FicheEntretienController {
 		});
 		
 		return lstTaches;
+	}
+	
+	/**
+	 * Compare les ids de deux collections de tâches : 
+	 * d'une part les tâches associées à la fiche modifiée
+	 * d'autre part les tâches en base associées à la fiche en base destinée à être modifiée
+	 * @param tachesEnBase
+	 * @param tachesAConserver
+	 * @return les ids des tâches à supprimer en base
+	 */
+	private Set<Long> getObjectsIdsToDelete(Set<Tache> tachesEnBase, Set<Tache> tachesAConserver) {
+		Set<Long> idsASupprimer = tachesEnBase
+				.stream()
+				.map(t -> t.getId())
+				.sorted()
+				.collect(Collectors.toSet());
+			
+			Set<Long> idsAConserver = tachesAConserver
+				.stream()
+				.map(t -> t.getId())
+				.sorted()
+				.collect(Collectors.toSet());
+			
+			idsASupprimer.removeAll(idsAConserver);
+			return idsASupprimer;
 	}
 
 	@GetMapping("facture/{id}")
