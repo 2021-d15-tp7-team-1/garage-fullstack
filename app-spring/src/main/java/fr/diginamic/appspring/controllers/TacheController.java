@@ -25,7 +25,7 @@ import fr.diginamic.appspring.repository.CrudTacheRepository;
 import fr.diginamic.appspring.repository.CrudUserRepository;
 
 @Controller
-@SessionAttributes({"tempTaches", "tempTacheId"})
+@SessionAttributes({"tempTaches", "tempTacheId", "tempExistingTaches"})
 @RequestMapping(value = "/entretien")
 public class TacheController {
 	
@@ -49,6 +49,7 @@ public class TacheController {
 	public String addTache(Model model) {
 		
 		model.addAttribute("nouvelleTache", new Tache());
+		model.addAttribute("creation", true);
 		model.addAttribute("titre", "CRÉATION DE TACHE");
 
 		setTacheFormData(model);
@@ -80,6 +81,7 @@ public class TacheController {
 		Tache tacheToUpdate = getTacheInCollectionById(tempTaches, id);
 		
 		model.addAttribute("tacheToUpdate", tacheToUpdate);
+		model.addAttribute("isFromCreation", true);
 		model.addAttribute("titre", "MODIFICATION DE TACHE");
 
 		setTacheFormData(model);
@@ -115,6 +117,107 @@ public class TacheController {
 		return "redirect:/entretien/create/";
 	}
 	
+	@GetMapping("/modification-fiche/{id}/ajout-tache")
+	public String addTacheToExistingFiche(
+			@PathVariable("id") Long id,
+			Model model) {
+		
+		model.addAttribute("nouvelleTache", new Tache());
+		model.addAttribute("creation", false);
+		model.addAttribute("titre", "CRÉATION DE TACHE");
+
+		setTacheFormData(model);
+		
+		return "tache/ajout_tache";
+	}
+	
+	@PostMapping("/modification-fiche/{id}/ajout-tache")
+	public String addTacheToExistingFiche(
+			@PathVariable("id") Long idFiche,
+			@ModelAttribute("nouvelleTache") @Valid Tache t,
+			BindingResult result,
+			@ModelAttribute("tempTaches") Set<Tache> tempTaches,
+			@ModelAttribute("tempTacheId") Long idTache) {
+		
+		tempId = tempTaches.size() == 0 ? 1 : tempId;
+		idTache = getTempTacheId();
+		t.setId(idTache);
+		tempTaches.add(t);
+		
+		return "redirect:/entretien/modification-fiche/"+idFiche;
+	}
+
+	@GetMapping("/modification-fiche/{idFiche}/modification-tache/{idTache}/{isInBase}")
+	public String updateTacheModifFiche(
+			@PathVariable("idFiche") Long idFiche,
+			@PathVariable("idTache") Long idTache,
+			@PathVariable("isInBase") Boolean isInBase,
+			@ModelAttribute("tempExistingTaches") Set<Tache> tempExistingTaches,
+			@ModelAttribute("tempTaches") Set<Tache> tempTaches,
+			Model model) {
+
+		Tache tacheToUpdate = isInBase == true 
+				? getTacheInCollectionById(tempExistingTaches, idTache) 
+				: getTacheInCollectionById(tempTaches, idTache);
+
+		model.addAttribute("idFiche", idFiche);
+		model.addAttribute("isInBase", isInBase);
+		model.addAttribute("tacheToUpdate", tacheToUpdate);
+		model.addAttribute("tempExistingTaches", tempExistingTaches);
+		model.addAttribute("tempTaches", tempTaches);
+		model.addAttribute("isFromCreation", false);
+		model.addAttribute("titre", "MODIFICATION DE TACHE");
+
+		setTacheFormData(model);
+
+		return "tache/modification_tache";
+	}
+
+	@PostMapping("/modification-fiche/{idFiche}/modification-tache/{idTache}/{isInBase}")
+	public String updateTacheModifFiche(
+			@PathVariable("idFiche") Long idFiche,
+			@PathVariable("idTache") Long idTache,
+			@PathVariable("isInBase") Boolean isInBase,
+			@ModelAttribute("tempExistingTaches") Set<Tache> tempExistingTaches,
+			@ModelAttribute("tempTaches") Set<Tache> tempTaches,
+			@ModelAttribute("tacheToUpdate") @Valid Tache tacheModifiee,
+			BindingResult result) {
+
+		if(isInBase){
+			Tache tacheObsolete = getTacheInCollectionById(tempExistingTaches, idTache);
+			tempExistingTaches.remove(tacheObsolete);
+			tacheModifiee.setId(idTache);
+			tempExistingTaches.add(tacheModifiee);
+		}
+		else {
+			Tache tacheObsolete = getTacheInCollectionById(tempTaches, idTache);
+			tempTaches.remove(tacheObsolete);
+			tacheModifiee.setId(idTache);
+			tempTaches.add(tacheModifiee);
+		}
+
+		return "redirect:/entretien/modification-fiche/"+idFiche;
+	}
+
+	@GetMapping("/modification-fiche/{idFiche}/suppression-tache/{idTache}/{isInBase}")
+	public String deleteTacheFromModifFiche(
+			@PathVariable("idFiche") Long idFiche,
+			@PathVariable("idTache") Long idTache,
+			@PathVariable("isInBase") Boolean isInBase,
+			@ModelAttribute("tempExistingTaches") Set<Tache> tempExistingTaches,
+			@ModelAttribute("tempTaches") Set<Tache> tempTaches) {
+
+		if(isInBase){
+			Tache tacheObsolete = getTacheInCollectionById(tempExistingTaches, idTache);
+			tempExistingTaches.remove(tacheObsolete);
+		}
+		else {
+			Tache tacheObsolete = getTacheInCollectionById(tempTaches, idTache);
+			tempTaches.remove(tacheObsolete);
+		}
+
+		return "redirect:/entretien/modification-fiche/"+idFiche;
+	}
 	
 	private void setTacheFormData(Model model) {
 		Set<String> types = new HashSet<String>();
@@ -130,7 +233,6 @@ public class TacheController {
 		model.addAttribute("types", types);
 		model.addAttribute("mecanos", ur.findByRoleName(ApplicationUserRole.MECANICIEN.name()));
 		model.addAttribute("priorites", priorites);
-		model.addAttribute("pieces", pr.findAll());
 	}
 	
 	private Tache getTacheInCollectionById(Set<Tache> collection, Long id) {

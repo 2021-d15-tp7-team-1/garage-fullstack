@@ -1,7 +1,6 @@
 package fr.diginamic.appspring.entities;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -25,6 +24,10 @@ public class FicheEntretien {
 
     @OneToMany(mappedBy = "fiche")
     private Set<Tache> taches;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "facture_id")
+    private Facture factureEntretien;
 
     @ManyToOne
     @JoinColumn(name="CLIENT_ID")
@@ -107,5 +110,13 @@ public class FicheEntretien {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public Facture getFacture() {
+        return factureEntretien;
+    }
+
+    public void setFacture(Facture facture) {
+        this.factureEntretien = facture;
     }
 }

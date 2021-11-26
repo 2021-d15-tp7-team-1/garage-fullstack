@@ -1,20 +1,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Fiches</title>
-    <link th:rel="stylesheet" type="text/css" th:href="@{/static/css/bootstrap.min.css} "/>
-    <link rel="stylesheet" type="text/css" th:href="@{/static/css/style.css}"/>
-</head>
-<script th:src="@{/static/js/bootstrap.min.js}"></script>
+<head th:replace="fragments/header :: taghead"></head>
 <body>
-    <h1>Fiche d'entretien</h1>
-    <a class="btn btn-danger mb-2 float-right">Annuler la fiche</a>
-    <a class="btn btn-primary mb-2 float-right">Modifier la fiche</a>
-    <a class="btn btn-success mb-2 float-right">Cloturer</a>
+    <div th:replace="fragments/menu :: tagmenu">  </div>
+    <br/>
+    <a class="btn btn-danger mb-2 float-right" sec:authorize="hasAuthority('CHEF')" th:if="${fiche.isValid()}" th:href="@{/entretien/annuler-fiche/{id}(id=${fiche.id})}">Annuler la fiche</a>
+    <a class="btn btn-primary mb-2 float-right" sec:authorize="hasAuthority('CHEF')" th:href="@{/entretien/modification-fiche/{id}(id=${fiche.id})}">Modifier la fiche</a>
+    <a class="btn btn-success mb-2 float-right" sec:authorize="hasAuthority('CHEF')" th:if="${!fiche.isCloture()} and ${fiche.isValid()}" th:href="@{/entretien/cloturer/{id}(id=${fiche.id})}">Cloturer</a>
     <div class="container">
         <fieldset class="form-group border p-3">
-            <legend class="w-auto px-2"><h1>Fiche d'entretien<h1/></legend>
+            <legend class="w-auto px-2">Fiche d'entretien n°<span th:text="${fiche.id}"></span></legend>
             <div class="form-group">
                 <table class="table">
                     <tbody>
@@ -24,22 +19,27 @@
                         </tr>
                         <tr>
                             <td>Client : </td>
-                            <td></td>
+                            <td th:text="${fiche.client.prenom} + ' ' + ${fiche.client.nom}"></td>
                         </tr>
                         <tr>
                             <td>Date de création : </td>
                             <td th:text="${fiche.dateCreation}"></td>
                         </tr>
+                        <tr th:if="${fiche.isCloture()}">
+                            <td>Date de cloture : </td>
+                            <td th:text="${fiche.dateCloture}"></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
             <hr/>
-            <div class="form-group">
+            <div th:if="${fiche.getTaches().size() > 0}" class="form-group">
                 <h2>Liste des taches</h2>
                 <table class="table table-striped">
                     <thead class="thead-dark">
                     <tr>
                         <th>N°</th>
+                        <th>Intitulé</th>
                         <th>Type</th>
                         <th>Pièces nécessaires</th>
                         <th>Assignation</th>
@@ -50,15 +50,23 @@
                     <tbody>
                     <tr th:each="tache: ${fiche.taches}">
                         <td th:text="${tache.id}"></td>
+                        <td th:text="${tache.intitule}"></td>
                         <td th:text="${tache.type}"></td>
-                        <td th:text="${tache}"></td>
-                        <td th:text=""></td> // TODO
+                        <td ><span th:each="pn : ${tache.piecesNecessaires}"><span th:text="${pn.nomPiece}"></span><br/></span></td>
+                        <td th:text="${tache.mecanicienAttribue.prenom} + ' ' + ${tache.mecanicienAttribue.nom}"></td>
                         <td th:text="${tache.priorite}"></td>
-                        <td th:text="${tache.terminee}"></td>
+                        <td>
+                            <span th:if="${tache.terminee}">Terminée</span>
+                            <span th:unless="${tache.terminee}">A faire</span>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
+            <div th:unless="${fiche.getTaches().size() > 0}">
+            	<h2>Aucune tâche n'est associée à cette fiche</h2>
+            </div>
+            <a class="btn btn-danger float-right" th:href="@{/entretien/list}">Retour</a>
         </fieldset>
     </div>
 </body>

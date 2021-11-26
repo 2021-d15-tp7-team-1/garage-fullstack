@@ -1,19 +1,14 @@
 package fr.diginamic.appspring.controllers;
 
-import fr.diginamic.appspring.dao.DaoClient;
-import fr.diginamic.appspring.dao.DaoVehicule;
-import fr.diginamic.appspring.entities.ElemStock;
+import fr.diginamic.appspring.entities.Piece;
 import fr.diginamic.appspring.entities.Vehicule;
-import fr.diginamic.appspring.enums.EtatVehicule;
-import fr.diginamic.appspring.form.VehiculeForm;
-import fr.diginamic.appspring.repository.CrudStockRepo;
 import fr.diginamic.appspring.repository.CrudVehiculeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 
@@ -23,7 +18,7 @@ public class VehiculeController {
     @Autowired
     CrudVehiculeRepository cs;
 //    @Autowired
-//    private static DaoVehicule daoVehicule;
+//    private DaoVehicule daoVehicule;
 
     public VehiculeController() {
     }
@@ -34,19 +29,7 @@ public class VehiculeController {
         return "vehicules/list";
 
     }
-//    @GetMapping("/all")
-//    public Iterable<ElemStock> stockAll() {
-//        return cs.findAll();
-//    }
 
-//    @PostMapping("/addV")
-//    public String vechiculeCreate(@Valid @RequestBody Vehicule v) {
-//        /**
-//         * Transactionnel avec commit ou rollback
-//         */
-//        daoVehicule.add(v);//save insert ou update selon l'id !
-//        return "Create Ok : " + v.getId();
-//    }
     @GetMapping("/add")
     public String addT(Model model) {
         model.addAttribute("vehiculeForm", new Vehicule() );
@@ -61,4 +44,53 @@ public class VehiculeController {
         return "redirect:/vehicules/list";
     }
 
+    @GetMapping("/edit/{id}")
+    public String showUpdateForm(@PathVariable("id") long id, Model model) {
+        Vehicule v = cs.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+
+        model.addAttribute("vehicule", v);
+        return "vehicules/update";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateUser(@PathVariable("id") long id, @Valid Vehicule v,
+                             BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            v.setId(id);
+            return "vehicules/update";
+        }
+
+        cs.save(v);
+        return "redirect:/vehicules/list";
+    }
+
+    @RequestMapping("/increase/{id}")
+    public String increaseAmountOfVehicules(@PathVariable("id") long id,
+                                         Model model) {
+        Vehicule v = cs.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        int qte = v.getQuantiteStock() + 1;
+        v.setQuantiteStock(qte);
+        model.addAttribute("v",v);
+        cs.save(v);
+
+        return "redirect:/vehicules/list";
+    }
+
+    @RequestMapping("/decrease/{id}")
+    public String decreaseAmountOfVehicules(@PathVariable("id") long id,
+                                         Model model) {
+        Vehicule v = cs.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        if (v.getQuantiteStock() >= 1) {
+            int qte = v.getQuantiteStock() - 1;
+            v.setQuantiteStock(qte);
+            model.addAttribute("v",v);
+            cs.save(v);
+        }
+        System.out.println("Quantité nulle");
+
+        return "redirect:/vehicules/list";
+    }
 }

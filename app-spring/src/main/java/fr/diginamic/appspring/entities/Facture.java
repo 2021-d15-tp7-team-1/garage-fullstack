@@ -1,13 +1,12 @@
 package fr.diginamic.appspring.entities;
 
+import fr.diginamic.appspring.enums.TypeFacture;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 public class Facture {
-
-    private enum TypeFacture { VENTE_VEHICULE, ENTRETIEN }
-
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
@@ -19,6 +18,9 @@ public class Facture {
 
     @OneToOne(mappedBy = "facture")
     private Commande commandeConcernee;
+
+    @OneToOne(mappedBy = "factureEntretien")
+    private FicheEntretien ficheConcernee;
 
     public Facture() {
         dateCreation = LocalDate.now();
@@ -76,5 +78,13 @@ public class Facture {
 
     public void setCommandeConcernee(Commande commandeConcernee) {
         this.commandeConcernee = commandeConcernee;
+    }
+
+    public FicheEntretien getFicheConcernee() {
+        return ficheConcernee;
+    }
+
+    public void setFicheConcernee(FicheEntretien ficheConcernee) {
+        this.ficheConcernee = ficheConcernee;
     }
 }

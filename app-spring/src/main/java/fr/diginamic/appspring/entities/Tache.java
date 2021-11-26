@@ -4,6 +4,7 @@ import fr.diginamic.appspring.enums.PrioriteTache;
 import fr.diginamic.appspring.enums.TypeTache;
 
 import javax.persistence.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,7 +27,7 @@ public class Tache {
     @JoinColumn(name="USER_ID")
     private User mecanicienAttribue;
 
-    @ManyToMany(mappedBy="tachesPiece")
+    @ManyToMany(mappedBy="tachesPiece", fetch = FetchType.EAGER)
     private Set<Piece> piecesNecessaires;
 
     public Tache() {
