@@ -13,9 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import com.itextpdf.html2pdf.ConverterProperties;
-import com.itextpdf.html2pdf.HtmlConverter;
-import com.lowagie.text.DocumentException;
+
 import fr.diginamic.appspring.dao.DaoFicheEntretien;
 
 import fr.diginamic.appspring.entities.Facture;
@@ -37,7 +35,6 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-import org.xhtmlrenderer.pdf.ITextRenderer;
 
 
 @Controller
