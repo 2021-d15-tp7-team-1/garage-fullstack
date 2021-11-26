@@ -187,8 +187,7 @@ public class FicheEntretienController {
 		
 		FicheEntretien ficheEnBase = fr.findById(id).get();
 		
-		ficheEnBase.setClient(ficheToUpdate.getClient());
-		ficheEnBase.setDateCreation(ficheToUpdate.getDateCreation());
+		
 		
 		Set<Long> IdsTachesASupprimer = getObjectsIdsToDelete(ficheEnBase.getTaches(), tempExistingTaches);
 		
@@ -221,7 +220,17 @@ public class FicheEntretienController {
 			ficheEnBase.ajouterTache(t);
 		}
 		
+		ficheEnBase.getClient().getFichesEntretien().remove(ficheEnBase);
+		cr.save(ficheEnBase.getClient());
+		
+		ficheEnBase.setClient(ficheToUpdate.getClient());
+		ficheEnBase.getClient().addFiche(ficheEnBase);
+		cr.save(ficheToUpdate.getClient());
+
 		ficheEnBase = fr.save(ficheEnBase);
+		
+		ficheEnBase.setDateCreation(ficheToUpdate.getDateCreation());
+		
 		
 		for(Tache t : ficheEnBase.getTaches()) {
 			for(Piece p : t.getPiecesNecessaires()) {
