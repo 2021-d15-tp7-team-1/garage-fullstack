@@ -98,19 +98,19 @@ public class UserController {
 
     @GetMapping("/modificationUser/{id}")
     public String modifClient(Model model, @PathVariable("id") Long dip) {
-        User d = col.findById(dip).get();
+        User d = userRepo.findById(dip).get();
         Set<Role> lr = new HashSet <Role>();
         // Obligation dû a des problèmes de droits (priorité entre le Join table de role
         // et celui de User)
         d.getUserRoles().forEach(role -> {
             lr.add(role);
             role.getUsers().remove(d);
-            roles.save(role);
+            roleRepo.save(role);
         });
         d.getUserRoles().clear();
-        col.save(d);
+        userRepo.save(d);
         model.addAttribute("modifUser", d);
-        model.addAttribute("roles", roles.findAll());
+        model.addAttribute("roles", roleRepo.findAll());
         model.addAttribute("ancienRoles", lr);
         return "/user/modificationUser";
 
@@ -121,10 +121,10 @@ public class UserController {
 
         userDip.getUserRoles().forEach(role -> {
             role.getUsers().add(userDip);
-            roles.save(role); // update de la liste de users de ce role
+            roleRepo.save(role); // update de la liste de users de ce role
             System.out.println(role.getNomRole());
         });
-        col.save(userDip);
+        userRepo.save(userDip);
         return "redirect:/admin/user";
 
     }
