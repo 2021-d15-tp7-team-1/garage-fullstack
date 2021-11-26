@@ -1,0 +1,51 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: taghead"></head>
+<body>
+<div th:replace="fragments/menu :: tagmenu">  </div>
+<br/>
+
+<div class="container">
+<!--    <button class="btn btn-primary" onclick="window.print();return false;">Imprimer</button>-->
+
+
+    <fieldset class="form-group border p-3" id="printableArea">
+        <legend class="w-auto px-2"><h1>Facture de la fiche d'entretien <span th:text="${facture.ficheConcernee.id}"></span></h1></legend>
+        <div class="form-group">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <td>Référence : </td>
+                    <td th:text="${facture.id}"></td>
+                </tr>
+                <tr>
+                    <td>Prix : </td>
+                    <td th:text="${facture.prix}"></td>
+                </tr>
+                <tr>
+                    <td>Date de création : </td>
+                    <td th:text="${facture.dateCreation}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr/>
+    </fieldset>
+    <button class="btn btn-primary float-righ" onclick="printDiv('printableArea')">Imprimer</button>
+    <a class="btn btn-danger float-right" th:href="@{/entretien/list}">Retour</a>
+</div>
+
+<script th:inline="javascript">
+    function printDiv(divName) {
+     var printContents = document.getElementById(divName).innerHTML;
+     var originalContents = document.body.innerHTML;
+
+     document.body.innerHTML = printContents;
+
+     window.print();
+
+     document.body.innerHTML = originalContents;
+}
+</script>
+</body>
+</html>

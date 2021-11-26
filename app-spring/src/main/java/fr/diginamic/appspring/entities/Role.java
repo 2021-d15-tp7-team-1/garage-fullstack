@@ -2,6 +2,7 @@ package fr.diginamic.appspring.entities;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -12,7 +13,7 @@ public class Role {
 
     private String nomRole;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="COMPO_USER_ROLE",
             joinColumns= @JoinColumn(name="ID_ROLE", referencedColumnName="ID"),
             inverseJoinColumns= @JoinColumn(name="ID_USER", referencedColumnName="ID")
@@ -60,5 +61,9 @@ public class Role {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public List<User> setUserRoles() {
+        return null;
     }
 }

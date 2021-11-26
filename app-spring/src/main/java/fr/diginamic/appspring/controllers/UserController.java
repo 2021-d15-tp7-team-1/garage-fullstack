@@ -1,15 +1,20 @@
 package fr.diginamic.appspring.controllers;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import fr.diginamic.appspring.entities.Role;
 import fr.diginamic.appspring.entities.User;
 import fr.diginamic.appspring.repository.CrudUserRepository;
+
 import fr.diginamic.appspring.repository.CrudRoleRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,10 +29,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class UserController {
 
     @Autowired
-    CrudUserRepository col;
+    private PasswordEncoder pwdEncoder;
 
     @Autowired
-    CrudRoleRepository roles;
+    CrudUserRepository userRepo;
+
+    @Autowired
+    CrudRoleRepository roleRepo;
 
     public UserController() {
 
@@ -35,8 +43,8 @@ public class UserController {
 
     @GetMapping
     public String findall(Model model) {
-        model.addAttribute("users", (List<User>) col.findAll());
-        model.addAttribute("col", col);
+        model.addAttribute("users", (List<User>) userRepo.findAll());
+        model.addAttribute("col", userRepo);
         model.addAttribute("titre", "Liste des collaborateurs");
         return "user/Liste";
     }
@@ -44,7 +52,7 @@ public class UserController {
     @GetMapping("/add")
     public String addT(Model model) {
         model.addAttribute("collabForm", new User());
-        model.addAttribute("roles", roles.findAll());
+        model.addAttribute("roles", roleRepo.findAll());
         model.addAttribute("choixRoles", "choixRoles");
         // ajout liste des roles et aficher le libelle et garder en value l'id
         model.addAttribute("titre", "Ajout collaborateurs");
@@ -54,16 +62,12 @@ public class UserController {
     /*
     @PostMapping("/add")
     public String add(Model model, @Valid @ModelAttribute("collabForm") User collabForm) {
-        // récupérer la selection des rôles et ajouter dans une boucles les rôles
-        // (addrole) dans l'objet collabForm
+        col.save(collabForm); // ajout du nouvel user à la base
         collabForm.getUserRoles().forEach(role -> {
-            collabForm.getUserRoles().add(role);
-            col.save(collabForm);
             role.getUsers().add(collabForm);
-            roles.save(role);
+            roles.save(role); // update de la liste de users de ce role
             System.out.println(role.getNomRole());
         });
-        col.save(collabForm);
         return "redirect:/admin/user";
     }
 
@@ -71,10 +75,11 @@ public class UserController {
 
     @PostMapping("/add")
     public String add(Model model, @Valid @ModelAttribute("collabForm") User collabForm) {
-        col.save(collabForm); //ajout du nouvel user à la base
+        collabForm.setPassword(pwdEncoder.encode(collabForm.getPassword()));
+        userRepo.save(collabForm); //ajout du nouvel user à la base
         collabForm.getUserRoles().forEach(role -> {
             role.getUsers().add(collabForm);
-            roles.save(role); //update de la liste de users de ce role
+            roleRepo.save(role); //update de la liste de users de ce role
             System.out.println(role.getNomRole());
         });
         return "redirect:/admin/user";
@@ -82,12 +87,45 @@ public class UserController {
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long pid) throws Exception {
-        Optional<User> c = col.findById(pid);
+        Optional<User> c = userRepo.findById(pid);
         if (c.isEmpty()) {
             throw (new Exception("Collaborateurs id : " + pid + "non trouvé !"));
         }
 
-        col.deleteById(pid);
+        userRepo.deleteById(pid);
         return "redirect:/admin/user";
+    }
+
+    @GetMapping("/modificationUser/{id}")
+    public String modifClient(Model model, @PathVariable("id") Long dip) {
+        User d = userRepo.findById(dip).get();
+        Set<Role> lr = new HashSet <Role>();
+        // Obligation dû a des problèmes de droits (priorité entre le Join table de role
+        // et celui de User)
+        d.getUserRoles().forEach(role -> {
+            lr.add(role);
+            role.getUsers().remove(d);
+            roleRepo.save(role);
+        });
+        d.getUserRoles().clear();
+        userRepo.save(d);
+        model.addAttribute("modifUser", d);
+        model.addAttribute("roles", roleRepo.findAll());
+        model.addAttribute("ancienRoles", lr);
+        return "/user/modificationUser";
+
+    }
+
+    @PostMapping("/modificationUser")
+    public String modifUser(Model model, @ModelAttribute("modifUser") @Valid User userDip) {
+
+        userDip.getUserRoles().forEach(role -> {
+            role.getUsers().add(userDip);
+            roleRepo.save(role); // update de la liste de users de ce role
+            System.out.println(role.getNomRole());
+        });
+        userRepo.save(userDip);
+        return "redirect:/admin/user";
+
     }
 }

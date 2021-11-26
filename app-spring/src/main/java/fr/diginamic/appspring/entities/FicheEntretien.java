@@ -25,6 +25,10 @@ public class FicheEntretien {
     @OneToMany(mappedBy = "fiche")
     private Set<Tache> taches;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "facture_id")
+    private Facture factureEntretien;
+
     @ManyToOne
     @JoinColumn(name="CLIENT_ID")
     @NotNull(message = "Vous devez indiquer un client existant.")
@@ -106,5 +110,13 @@ public class FicheEntretien {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public Facture getFacture() {
+        return factureEntretien;
+    }
+
+    public void setFacture(Facture facture) {
+        this.factureEntretien = facture;
     }
 }

@@ -1,20 +1,21 @@
-<head th:fragment="taghead">
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:fragment="taghead">
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet"
-          type="text/css"
-          th:href="@{/css/style.css}"/>
-    <title th:text="${ titre }">Titre</title>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+              integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet"
+              type="text/css"
+              th:href="@{/css/style.css}"/>
+        <title th:text="${ titre }">Titre</title>
 
     <link th:rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css} "/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
-
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </head>
-<script th:src="@{/js/bootstrap.min.js}"></script>

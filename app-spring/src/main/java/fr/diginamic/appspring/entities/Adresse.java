@@ -40,4 +40,10 @@ public class Adresse {
     public void setCodePostal(int codePostal) {
         this.codePostal = codePostal;
     }
+
+    @Override
+    public String toString() {
+        return "" + libelle +" "+ codePostal + ", "+ ville + "";
+    }
+
 }

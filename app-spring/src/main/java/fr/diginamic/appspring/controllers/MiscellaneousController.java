@@ -24,4 +24,9 @@ public class MiscellaneousController {
 		return "access_denied";
 	}
 
+	@GetMapping("profile")
+	public String getProfile(){
+		return "profil/profil-info";
+	}
+
 }

@@ -7,7 +7,7 @@
     <div class="container">
         <h1 th:text="${titre}"></h1>
         <hr/>
-        <a class="btn btn-success mb-2 float-right" th:href="@{/entretien/create-init}">Créer une fiche d'entretien</a>
+        <a class="btn btn-success mb-2 float-right" sec:authorize="hasAuthority('CHEF')" th:href="@{/entretien/create-init}">Créer une fiche d'entretien</a>
         <table class="table table-striped">
             <thead class="thead-dark">
             <tr>
@@ -21,6 +21,7 @@
                 <th></th>
                 <th></th>
                 <th></th>
+                <th>Facture</th>
             </tr>
             </thead>
             <tbody>
@@ -42,10 +43,14 @@
                     <a class="btn btn-primary mb-2" th:href="@{/entretien/{id}(id=${fiche.id})}">Accéder</a>
                 </td>
                 <td>
-                    <a class="btn btn-warning mb-2" th:if="${fiche.isValid()}" th:href="@{/entretien/annuler-fiche/{id}(id=${fiche.id})}">Annuler fiche</a>
+                    <a class="btn btn-warning mb-2" sec:authorize="hasAuthority('CHEF')" th:if="${fiche.isValid()}" th:href="@{/entretien/annuler-fiche/{id}(id=${fiche.id})}">Annuler fiche</a>
                 </td>
                 <td>
-                    <a class="btn btn-danger mb-2" th:if="${!fiche.isCloture} and ${fiche.isValid()}" th:href="@{/entretien/cloturer/{id}(id=${fiche.id})}">Cloturer fiche</a>
+                    <a class="btn btn-danger mb-2" sec:authorize="hasAuthority('CHEF')" th:if="${!fiche.isCloture} and ${fiche.isValid()}" th:href="@{/entretien/cloturer/{id}(id=${fiche.id})}">Cloturer fiche</a>
+                </td>
+                <td>
+                    <span th:if="${fiche.isCloture}"><a class="btn btn-primary mb-2" th:href="@{/entretien/facture/{id}(id=${fiche.facture.id})}">Facture</a></span>
+                    <span th:unless="${fiche.isCloture}">Facture indisponible</span>
                 </td>
             </tr>
             </tbody>

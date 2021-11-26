@@ -8,12 +8,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
+
 import fr.diginamic.appspring.dao.DaoFicheEntretien;
 
+import fr.diginamic.appspring.entities.Facture;
+import fr.diginamic.appspring.enums.TypeFacture;
+import fr.diginamic.appspring.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,10 +26,6 @@ import org.springframework.web.bind.annotation.*;
 import fr.diginamic.appspring.entities.FicheEntretien;
 import fr.diginamic.appspring.entities.Piece;
 import fr.diginamic.appspring.entities.Tache;
-import fr.diginamic.appspring.repository.CrudClientRepository;
-import fr.diginamic.appspring.repository.CrudFicheRepository;
-import fr.diginamic.appspring.repository.CrudPieceRepository;
-import fr.diginamic.appspring.repository.CrudTacheRepository;
 
 
 @Controller
@@ -36,7 +35,10 @@ public class FicheEntretienController {
 	
 	@Autowired
 	CrudFicheRepository fr;
-	
+
+	@Autowired
+	CrudFactureRepository fa;
+
 	@Autowired
 	CrudClientRepository cr;
 	
@@ -258,6 +260,7 @@ public class FicheEntretienController {
 	public String cloturerFiche(@PathVariable Long id){
 		FicheEntretien ficheACloturer = fr.findById(id).get();
 		ficheACloturer.cloturerFiche();
+		createFactureEntretien(ficheACloturer);
 		fr.save(ficheACloturer);
 
 		return "redirect:/entretien/list/";
@@ -271,7 +274,8 @@ public class FicheEntretienController {
 
 		return "redirect:/entretien/list/";
 	}
-
+	
+	
 	private List<Tache> sortTacheCollectionById(Set<Tache> collection) {
 		List<Tache> lstTaches = new ArrayList<Tache>();
 		for(Tache t : collection) {
@@ -312,4 +316,25 @@ public class FicheEntretienController {
 			return idsASupprimer;
 	}
 
+	@GetMapping("facture/{id}")
+	public String afficherFacture(@PathVariable("id") Long id, Model model){
+		model.addAttribute("facture", fa.findById(id).get());
+		return "factures/facture_entretien";
+	}
+
+	public void createFactureEntretien(FicheEntretien f) {
+			Facture facture = new Facture();
+			float sum = 0;
+			for (Tache t : f.getTaches()) {
+				for (Piece p : t.getPiecesNecessaires()) {
+					sum = sum + p.getPrixFacture();
+				}
+			}
+			facture.setPrix(sum);
+			facture.setFicheConcernee(f);
+			facture.setType(TypeFacture.ENTRETIEN);
+			f.setFacture(facture);
+			fa.save(facture);
+		}
 }
+
