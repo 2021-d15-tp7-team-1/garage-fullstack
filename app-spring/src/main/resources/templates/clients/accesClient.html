@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+                      "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: taghead"></head>
+
+<body>
+    <div th:replace="fragments/menu :: tagmenu">  </div>
+    <br/>
+    <h1>Client</h1>
+    <a class="btn btn-primary mb-2 float-right" href="@{/clients/listeClients/modification/{id}(id=${c.id})}">Modifier</a>
+    
+    <div class="container">
+        <fieldset class="form-group border p-3" th:action="@{/clients/listeClients/accesClient}"  th:object="${accesClient}" method="get">
+            <legend class="w-auto px-2" th:text='${client.nom +" "+ client.prenom}'></legend>
+            <div class="form-group">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Référence : </td>
+                            <td th:text="${client.id}"></td>
+                        </tr>
+                        <tr>
+                            <td>Nom : </td>
+                            <td th:text="${client.nom}"></td>
+                        </tr>
+                        <tr>
+                            <td>Prénom : </td>
+                            <td th:text="${client.prenom}"></td>
+                        </tr>
+                        <tr>
+                            <td>Adresse : </td>
+                            <td th:text="${client.adresse}"></td>
+                        </tr>
+                        <tr>
+                            <td>Téléphone mobile : </td>
+                            <td th:text="${client.telMobile}"></td>
+                        </tr>
+                        <tr>
+                            <td>Téléphone fixe : </td>
+                            <td th:text="${client.telFixe}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+    </div>
+</body>
+</html>

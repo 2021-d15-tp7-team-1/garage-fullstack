@@ -12,9 +12,8 @@ import java.util.Set;
 @Entity
 public class Client {
 
-
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private TypeClient type;
@@ -47,25 +46,23 @@ public class Client {
         devisVehicule = new HashSet<DevisVehicule>();
     }
 
-    public void addFiche(FicheEntretien f){
-        if(f != null){
+    public void addFiche(FicheEntretien f) {
+        if (f != null) {
             fichesEntretien.add(f);
             System.out.println("Fiche added");
-        }
-        else {
+        } else {
             System.err.println("Can't add a null fiche");
         }
     }
-    public void addDevis(DevisVehicule d){
-        if(d != null){
+
+    public void addDevis(DevisVehicule d) {
+        if (d != null) {
             devisVehicule.add(d);
             System.out.println("Devis added");
-        }
-        else {
+        } else {
             System.err.println("Can't add a null devis");
         }
     }
-
 
     public long getId() {
         return id;
