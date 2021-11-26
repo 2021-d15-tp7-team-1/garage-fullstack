@@ -3,13 +3,27 @@
 <head th:replace="fragments/header :: taghead"></head>
 <body>
     <div th:replace="fragments/menu :: tagmenu">  </div>
-    <br/>
-    <a class="btn btn-danger mb-2 float-right" th:if="${fiche.isValid()}" th:href="@{/entretien/annuler-fiche/{id}(id=${fiche.id})}">Annuler la fiche</a>
-    <a class="btn btn-primary mb-2 float-right" th:href="@{/entretien/modification-fiche/{id}(id=${fiche.id})}">Modifier la fiche</a>
-    <a class="btn btn-success mb-2 float-right" th:if="${!fiche.isCloture()} and ${fiche.isValid()}" th:href="@{/entretien/cloturer/{id}(id=${fiche.id})}">Cloturer</a>
+    
+    <a class="btn btn-danger mt-4 mb-2 float-right" 
+    	th:if="${fiche.isValid()}" 
+    	th:href="@{/entretien/annuler-fiche/{id}(id=${fiche.id})}">
+    	Annuler la fiche
+   	</a>
+    
+    <a class="btn btn-primary mt-4 mb-2 float-right" 
+    	th:href="@{/entretien/modification-fiche-init/{id}(id=${fiche.id})}">
+    	Modifier la fiche
+   	</a>
+    
+    <a class="btn btn-success mt-4 mb-2 float-right" 
+	    th:if="${!fiche.isCloture()} and ${fiche.isValid()}" 
+	    th:href="@{/entretien/cloturer/{id}(id=${fiche.id})}">
+	    Cloturer
+    </a>
+    
     <div class="container">
         <fieldset class="form-group border p-3">
-            <legend class="w-auto px-2"><h1>Fiche d'entretien</h1></legend>
+            <legend class="w-auto px-2">Fiche d'entretien n°<span th:text="${fiche.id}"></span></legend>
             <div class="form-group">
                 <table class="table">
                     <tbody>
@@ -33,7 +47,7 @@
                 </table>
             </div>
             <hr/>
-            <div class="form-group">
+            <div th:if="${fiche.getTaches().size() > 0}" class="form-group">
                 <h2>Liste des taches</h2>
                 <table class="table table-striped">
                     <thead class="thead-dark">
@@ -62,6 +76,9 @@
                     </tr>
                     </tbody>
                 </table>
+            </div>
+            <div th:unless="${fiche.getTaches().size() > 0}">
+            	<h2>Aucune tâche n'est associée à cette fiche</h2>
             </div>
             <a class="btn btn-danger float-right" th:href="@{/entretien/list}">Retour</a>
         </fieldset>

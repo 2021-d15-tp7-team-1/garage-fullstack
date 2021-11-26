@@ -7,6 +7,8 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
@@ -64,7 +66,6 @@ public class FicheEntretienController {
 	public Set<Tache> getTempExistingTaches() {
 		return new HashSet<Tache>();
 	}
-
 
 	@GetMapping("/list")
 	public String findAll(Model model){
@@ -129,7 +130,7 @@ public class FicheEntretienController {
 		
 		FicheEntretien fiche = fr.save(tempFiche);
 		
-		for (Tache t : fiche.getTaches()) {
+		for(Tache t : fiche.getTaches()) {
 			t.setFiche(fiche);
 			t = tr.save(t);
 			for(Piece p : t.getPiecesNecessaires()) {
@@ -142,8 +143,22 @@ public class FicheEntretienController {
 		
 		return "redirect:/entretien/list";
 	}
+	
+	@GetMapping("/modification-fiche-init/{id}")
+	public String updateFicheInit(
+			@PathVariable("id") Long id,
+			@ModelAttribute("tempExistingTaches") Set<Tache> tempExistingTaches) {
+		
+		tempExistingTaches.clear();
+		
+		FicheEntretien ficheToUpdate = fr.findById(id).get();
+		
+		for(Tache t : ficheToUpdate.getTaches()) {
+			tempExistingTaches.add(t);
+		}
 
-
+		return "redirect:/entretien/modification-fiche/"+id;
+	}
 
 	@GetMapping("/modification-fiche/{id}")
 	public String updateFiche(
@@ -151,23 +166,12 @@ public class FicheEntretienController {
 			@ModelAttribute("tempExistingTaches") Set<Tache> tempExistingTaches,
 			@ModelAttribute("tempTaches") Set<Tache> tempTaches,
 			Model model){
-
+		
 		FicheEntretien ficheToUpdate = fr.findById(id).get();
-
-		if(tempExistingTaches.isEmpty()){
-			for(Tache t : ficheToUpdate.getTaches()) {
-				tempExistingTaches.add(t);
-			}
-		}
-
-		List<Set<Tache>> toutesTaches = new ArrayList<Set<Tache>>();
-		toutesTaches.add(tempExistingTaches);
-		toutesTaches.add(tempTaches);
 		
 		model.addAttribute("ficheToUpdate", ficheToUpdate);
 		model.addAttribute("tempExistingTaches", tempExistingTaches);
 		model.addAttribute("tempTaches", tempTaches);
-		model.addAttribute("toutesTaches", toutesTaches);
 		model.addAttribute("titre", "MODIFICATION DE FICHE");
 
 		return "fiche_entretien/modification_fiche";
@@ -182,35 +186,49 @@ public class FicheEntretienController {
 			@ModelAttribute("tempTaches") Set<Tache> tempTaches){
 		
 		FicheEntretien ficheEnBase = fr.findById(id).get();
-		System.err.println("size in db :" + ficheEnBase.getTaches().size());
-		System.err.println("size in temp :" + tempExistingTaches.size());
-		for(Tache t : ficheEnBase.getTaches()){
-			if(!tempExistingTaches.contains(t)){//suppression tache en base
+		
+		ficheEnBase.setClient(ficheToUpdate.getClient());
+		ficheEnBase.setDateCreation(ficheToUpdate.getDateCreation());
+		
+		Set<Long> IdsTachesASupprimer = getObjectsIdsToDelete(ficheEnBase.getTaches(), tempExistingTaches);
+		
+		IdsTachesASupprimer
+			.stream()
+			.forEach(i -> {
+				Tache t = tr.findById(i).get();
+				if(t.getPiecesNecessaires().size() > 0) {
+					for(Piece p : t.getPiecesNecessaires()) {
+						p.getTachesPiece().remove(t);
+						pr.save(p);
+					}
+				}
+				t.setPiecesNecessaires(null);
 				tr.delete(t);
-			}
-		}
+			});
+		
 		ficheEnBase.getTaches().clear();
 		
 		for(Tache t : tempExistingTaches) {
-			tr.save(t);
-			ficheEnBase.ajouterTache(t);
-		}
-		
-		for(Tache t : tempTaches) { //Ajoute les nouvelles taches
-			t.setId(0);
-			tr.save(t);
-			ficheEnBase.ajouterTache(t);
-		}
-		
-		for (Tache t : ficheEnBase.getTaches()) {
 			t.setFiche(ficheEnBase);
-			//t = tr.save(t);
+			t = tr.save(t);
+			ficheEnBase.ajouterTache(t);
+		}
+		
+		for(Tache t : tempTaches) {
+			t.setId(0);
+			t.setFiche(ficheEnBase);
+			t = tr.save(t);
+			ficheEnBase.ajouterTache(t);
+		}
+		
+		ficheEnBase = fr.save(ficheEnBase);
+		
+		for(Tache t : ficheEnBase.getTaches()) {
 			for(Piece p : t.getPiecesNecessaires()) {
 				p.getTachesPiece().add(t);
 				pr.save(p);
 			}
 		}
-		fr.save(ficheEnBase);
 
 		tempExistingTaches.clear();
 		tempTaches.clear();
@@ -258,6 +276,31 @@ public class FicheEntretienController {
 		});
 		
 		return lstTaches;
+	}
+	
+	/**
+	 * Compare les ids de deux collections de tâches : 
+	 * d'une part les tâches associées à la fiche modifiée
+	 * d'autre part les tâches en base associées à la fiche en base destinée à être modifiée
+	 * @param tachesEnBase
+	 * @param tachesAConserver
+	 * @return les ids des tâches à supprimer en base
+	 */
+	private Set<Long> getObjectsIdsToDelete(Set<Tache> tachesEnBase, Set<Tache> tachesAConserver) {
+		Set<Long> idsASupprimer = tachesEnBase
+				.stream()
+				.map(t -> t.getId())
+				.sorted()
+				.collect(Collectors.toSet());
+			
+			Set<Long> idsAConserver = tachesAConserver
+				.stream()
+				.map(t -> t.getId())
+				.sorted()
+				.collect(Collectors.toSet());
+			
+			idsASupprimer.removeAll(idsAConserver);
+			return idsASupprimer;
 	}
 
 }

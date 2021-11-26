@@ -5,12 +5,17 @@
     <div th:replace="fragments/menu :: tagmenu">  </div>
     <br/>
     <div class="container" id ="formAjoutUser">
-        <form class="" th:action="@{/entretien/modification-fiche/{id}(id=${ficheToUpdate.id})}" th:object="${ficheToUpdate}" method="post">
+    
+        <form class="" 
+        	th:action="@{/entretien/modification-fiche/{id}(id=${ficheToUpdate.id})}" 
+			th:object="${ficheToUpdate}" 
+			method="post">
+			
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-            <h2 class="">Modification de la fiche d'entretien</h2>
+            <h2 class="">Modification de la fiche d'entretien <span th:text="${ficheToUpdate.id}"></span></h2>
 
             <p>
-                <label class="">Client via AJAX : </label>
+                <label class="">Client : </label>
                 <input type="text" th:field="*{client.nom}" id="rechercheClient"/>&nbsp;&nbsp;
                 <span style="color:red" th:if="${#fields.hasErrors('client')}" th:errors="*{client}"></span><br/>
                 <span id="clientsTrouves" th:field="*{client}"></span>
@@ -23,16 +28,16 @@
 
             <hr/>
 
-            <h3 th:if="${toutesTaches.size()} > 0">Liste des tâches</h3>
+            <h3 th:if="${tempExistingTaches.size() > 0 or tempTaches.size() > 0}">Liste des tâches de la fiche <span th:text="${ficheToUpdate.id}"></span></h3>
 
             <table class="table table-striped">
                 <thead class="thead-dark">
-                <tr th:if="${toutesTaches.size()} > 0">
+                <tr th:if="${tempExistingTaches.size() > 0 or tempTaches.size() > 0}">
                     <th>N°</th><th>Intitulé</th><th>Type</th><th>Pièces nécessaires</th><th>Assignation</th><th>Priorité</th><th></th>
                 </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="t : ${toutesTaches.get(0)}">
+                    <tr th:each="t : ${tempExistingTaches}">
                     	<td th:text="${t.id}"></td>
 	                    <td th:text="${t.intitule}"></td>
 	                    <td th:text="${t.getType().name()}"></td>
@@ -40,11 +45,19 @@
 	                    <td th:text="${t.mecanicienAttribue.nom + ' ' + t.mecanicienAttribue.prenom}"></td>
 	                    <td th:text="${t.getPriorite().name()}"></td>
 	                    <td>
-	                        <a class="btn btn-warning mb-2" th:href="@{/entretien/modification-fiche/{idFiche}/modification-tache/{id}/{isInBase}(idFiche=${ficheToUpdate.id},id=${t.id}, isInBase=true)}">Modifier</a>
-	                        <a class="btn btn-danger mb-2" th:href="@{/entretien/modification-fiche/{idFiche}/suppression-tache/{id}/{isInBase}(idFiche=${ficheToUpdate.id},id=${t.id}, isInBase=true)}">Supprimer</a>
+	                        <a class="btn btn-warning mb-2" 
+	                        	th:href="@{/entretien/modification-fiche/{idFiche}/modification-tache/{idTache}/{isInBase}(idFiche=${ficheToUpdate.id}, idTache=${t.id}, isInBase=true)}">
+	                        	Modifier
+                        	</a>
+	                        
+	                        <a class="btn btn-danger mb-2" 
+	                        	th:href="@{/entretien/modification-fiche/{idFiche}/suppression-tache/{idTache}/{isInBase}(idFiche=${ficheToUpdate.id}, idTache=${t.id}, isInBase=true)}">
+	                        	Supprimer
+                        	</a>
 	                    </td>
                 	</tr>
-                    <tr th:each="t : ${toutesTaches.get(1)}">
+                    
+                    <tr th:each="t : ${tempTaches}">
                         <td th:text="${t.id}"></td>
                         <td th:text="${t.intitule}"></td>
                         <td th:text="${t.getType().name()}"></td>
@@ -52,52 +65,37 @@
                         <td th:text="${t.mecanicienAttribue.nom + ' ' + t.mecanicienAttribue.prenom}"></td>
                         <td th:text="${t.getPriorite().name()}"></td>
                         <td>
-                            <a class="btn btn-warning mb-2" th:href="@{/entretien/modification-fiche/{idFiche}/modification-tache/{id}/{isInBase}(idFiche=${ficheToUpdate.id},id=${t.id}, isInBase=false)}">Modifier</a>
-                            <a class="btn btn-danger mb-2" th:href="@{/entretien/modification-fiche/{idFiche}/suppression-tache/{id}/{isInBase}(idFiche=${ficheToUpdate.id},id=${t.id}, isInBase=false)}">Supprimer</a>
+                            <a class="btn btn-warning mb-2" 
+                            	th:href="@{/entretien/modification-fiche/{idFiche}/modification-tache/{idTache}/{isInBase}(idFiche=${ficheToUpdate.id}, idTache=${t.id}, isInBase=false)}">
+                            	Modifier
+                           	</a>
+                            
+                            <a class="btn btn-danger mb-2" 
+                            	th:href="@{/entretien/modification-fiche/{idFiche}/suppression-tache/{idTache}/{isInBase}(idFiche=${ficheToUpdate.id}, idTache=${t.id}, isInBase=false)}">
+                            	Supprimer
+                           	</a>
                         </td>
                     </tr>
                 </tbody>
             </table>
 
-            <a  class="btn btn-primary" th:href="@{/entretien/modification-fiche/{id}/ajout-tache(id=${ficheToUpdate.id})}">Ajouter une tâche</a>
-            <button class="btn btn-success" type="submit">Enregistrer la fiche</button>
-            <a class="btn btn-secondary" th:href="@{/entretien/create/abort}">Retour</a>
+            <a  class="btn btn-primary" 
+            	th:href="@{/entretien/modification-fiche/{idFiche}/ajout-tache(idFiche=${ficheToUpdate.id})}">
+            	Ajouter une tâche
+           	</a>
+            
+            <button class="btn btn-success" type="submit">
+            	Enregistrer la fiche
+           	</button>
+            
+            <a class="btn btn-secondary" 
+            	th:href="@{/entretien/create/abort}">
+            	Retour
+           	</a>
         </form>
     </div>
 
-    <script th:inline="javascript">
-        (function() {
-            var httpRequest;
-            const source = document.getElementById("rechercheClient");
-            const cible = document.getElementById("clientsTrouves");
-
-            let myCallBack = () => {
-                if(httpRequest.readyState === XMLHttpRequest.DONE) {
-                    if(httpRequest.status === 200) {
-                        const jsonResponse = JSON.parse(httpRequest.responseText);
-                        let clientResponse = "";
-
-                        jsonResponse.forEach(o => {
-                            if(o["nom"].toLowerCase().startsWith(source.value.toLowerCase())) {
-                                clientResponse += '<input type="radio" name="client" value="' + o["id"] + '" />' + o["nom"] + ' ' + o["prenom"] + '<br/>';
-                            }
-                        });
-
-                        cible.innerHTML = clientResponse;
-                    }
-                }
-            }
-
-            let myKeyPress = () => {
-                httpRequest = new XMLHttpRequest();
-                httpRequest.onreadystatechange = myCallBack;
-                httpRequest.open('GET', 'http://localhost:8090/rest/clients/all', true);
-
-                httpRequest.send();
-            }
-
-            source.addEventListener("keypress", myKeyPress);
-        })();
-    </script>
+    <script th:inline="javascript" src="/js/creation_fiche_entretien.js"></script>
+    
     </body>
 </html>
