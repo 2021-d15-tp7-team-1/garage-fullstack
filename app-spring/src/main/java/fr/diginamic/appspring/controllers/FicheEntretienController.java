@@ -28,6 +28,9 @@ import fr.diginamic.appspring.entities.Piece;
 import fr.diginamic.appspring.entities.Tache;
 
 
+/**
+ * Controller MVC pour gérer les fiches d'entretien
+ */
 @Controller
 @SessionAttributes({"tempFiche", "tempTaches", "tempExistingTaches"})
 @RequestMapping(value = "/entretien")
@@ -69,6 +72,12 @@ public class FicheEntretienController {
 		return new HashSet<Tache>();
 	}
 
+	/**
+	 * Récupère toutes les fiches d'entretien en base,
+	 * les transmets au modèle et les affiche
+	 * @param model
+	 * @return le template thymeleaf qui affiche la liste des fiches
+	 */
 	@GetMapping("/list")
 	public String findAll(Model model){
 		model.addAttribute("fiches", (List<FicheEntretien>) daoFiche.selectAll());
@@ -76,6 +85,12 @@ public class FicheEntretienController {
 		return "fiche_entretien/liste-fiches";
 	}
 
+	/**
+	 * Récupère une fiche d'entretien via son id et affiche son détail
+	 * @param id
+	 * @param model
+	 * @return le template thymeleaf qui détaille un fiche
+	 */
 	@GetMapping("/{id}")
 	public String afficherFiche(@PathVariable("id") Long id, Model model){
 		model.addAttribute("fiche", fr.findById(id).get());
@@ -90,7 +105,14 @@ public class FicheEntretienController {
 		
 		return "redirect:/entretien/create";
 	}
-	
+
+	/**
+	 * Récupère et affiche le formulaire de création de fiche
+	 * @param tempFiche
+	 * @param tempTaches
+	 * @param model
+	 * @return le template thymeleaf du formulaire de création
+	 */
 	@GetMapping("/create")
 	public String createFiche(
 			@ModelAttribute("tempsFiche") FicheEntretien tempFiche,
@@ -108,7 +130,16 @@ public class FicheEntretienController {
 		
 		return "fiche_entretien/creation_fiche_entretien";
 	}
-	
+
+	/**
+	 * Traite les données du formulaire de création de fiche en envoie la fiche en base
+	 * @param f
+	 * @param result
+	 * @param tempFiche
+	 * @param tempTaches
+	 * @param model
+	 * @return redirige vers la page de liste des fiches
+	 */
 	@PostMapping("/create")
 	public String createFiche( 
 			@ModelAttribute("nouvelleFicheEntretien") @Valid FicheEntretien f,
@@ -145,7 +176,7 @@ public class FicheEntretienController {
 		
 		return "redirect:/entretien/list";
 	}
-	
+
 	@GetMapping("/modification-fiche-init/{id}")
 	public String updateFicheInit(
 			@PathVariable("id") Long id,
@@ -162,6 +193,14 @@ public class FicheEntretienController {
 		return "redirect:/entretien/modification-fiche/"+id;
 	}
 
+	/**
+	 * Récupère et affiche le formulaire de modification d'une fiche
+	 * @param id
+	 * @param tempExistingTaches
+	 * @param tempTaches
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/modification-fiche/{id}")
 	public String updateFiche(
 			@PathVariable("id") Long id,
@@ -179,6 +218,15 @@ public class FicheEntretienController {
 		return "fiche_entretien/modification_fiche";
 	}
 
+	/**
+	 * Traite les modifications d'une fiche d'entretien et les envoie en base de donnée
+	 * @param id
+	 * @param ficheToUpdate
+	 * @param result
+	 * @param tempExistingTaches
+	 * @param tempTaches
+	 * @return
+	 */
 	@PostMapping("/modification-fiche/{id}")
 	public String updateFiche(
 			@PathVariable("id") Long id, 
@@ -256,6 +304,11 @@ public class FicheEntretienController {
 		return "redirect:/entretien/list";
 	}
 
+	/**
+	 * Cloture la fiche spécifiée par son id
+	 * @param id
+	 * @return
+	 */
 	@GetMapping("/cloturer/{id}")
 	public String cloturerFiche(@PathVariable Long id){
 		FicheEntretien ficheACloturer = fr.findById(id).get();
@@ -266,6 +319,11 @@ public class FicheEntretienController {
 		return "redirect:/entretien/list/";
 	}
 
+	/**
+	 * Annuler la fiche spécifiée par son id
+	 * @param id
+	 * @return
+	 */
 	@GetMapping("/annuler-fiche/{id}")
 	public String annulerFiche(@PathVariable Long id){
 		FicheEntretien ficheAannuler = fr.findById(id).get();
@@ -274,8 +332,12 @@ public class FicheEntretienController {
 
 		return "redirect:/entretien/list/";
 	}
-	
-	
+
+	/**
+	 * Trie une collection de tache par leur id
+	 * @param collection
+	 * @return
+	 */
 	private List<Tache> sortTacheCollectionById(Set<Tache> collection) {
 		List<Tache> lstTaches = new ArrayList<Tache>();
 		for(Tache t : collection) {

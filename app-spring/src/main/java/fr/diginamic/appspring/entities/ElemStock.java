@@ -7,6 +7,9 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
+/**
+ * Entité abstraite qui représente un element du stock du garage
+ */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @DiscriminatorColumn(name="stock_type")

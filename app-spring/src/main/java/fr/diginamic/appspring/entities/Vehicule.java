@@ -4,6 +4,13 @@ import fr.diginamic.appspring.enums.EtatVehicule;
 
 import javax.persistence.*;
 
+/**
+ * Entité qui représente un vehicule du stock du garage
+ *
+ * @version 1.0
+ *
+ * @see ElemStock
+ */
 @Entity
 @DiscriminatorValue("V")
 @Table(name="VEHICULE")

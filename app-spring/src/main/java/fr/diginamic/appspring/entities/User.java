@@ -4,6 +4,12 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Entité qui représente un utilisateur de l'application
+ *
+ * @version 1.0
+ *
+ */
 @Entity
 public class User {
     @Id
@@ -47,6 +53,10 @@ public class User {
         isSpaActive = true;
     }
 
+    /**
+     * Ajoute un role à la liste des roles accrédités
+     * @param role
+     */
     public void addRole(Role role) {
         if (role != null) {
             userRoles.add(role);
@@ -56,6 +66,10 @@ public class User {
         }
     }
 
+    /**
+     * Ajoute une fiche à la liste des fiches créés par ce user
+     * @param d
+     */
     public void addDevis(DevisVehicule d) {
         if (d != null) {
             devisCrees.add(d);

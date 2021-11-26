@@ -8,6 +8,12 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Entité qui représente une tache à réaliser par un mécanicien
+ *
+ * @version 1.0
+ *
+ */
 @Entity
 public class Tache {
     @Id

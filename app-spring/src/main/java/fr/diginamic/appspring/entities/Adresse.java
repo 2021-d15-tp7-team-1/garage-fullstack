@@ -2,6 +2,13 @@ package fr.diginamic.appspring.entities;
 
 import javax.persistence.Embeddable;
 
+/**
+ * Classe qui représente l'adresse d'un client du garage
+ *
+ * @version 1.0
+ *
+ * @author Mathis
+ */
 @Embeddable
 public class Adresse {
     private String libelle;

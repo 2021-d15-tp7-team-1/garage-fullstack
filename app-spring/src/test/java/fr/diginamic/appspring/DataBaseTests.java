@@ -15,12 +15,18 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.transaction.Transactional;
 
+/**
+ * Tests liés à la base de donnée
+ */
 @SpringBootTest
 public class DataBaseTests {
 
     @Autowired
     Init_db initDB;
 
+    /**
+     * Test à lancer pour remplir une base vierge
+     */
     @Test
     void remplirDatabase(){
         initDB.init();
