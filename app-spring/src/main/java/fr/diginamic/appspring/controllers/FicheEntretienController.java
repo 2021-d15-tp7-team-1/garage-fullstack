@@ -220,16 +220,16 @@ public class FicheEntretienController {
 			ficheEnBase.ajouterTache(t);
 		}
 		
-		ficheEnBase.getClient().getFichesEntretien().remove(ficheEnBase);
-		cr.save(ficheEnBase.getClient());
-		
-		ficheEnBase.setClient(ficheToUpdate.getClient());
-		ficheEnBase.getClient().addFiche(ficheEnBase);
-		cr.save(ficheToUpdate.getClient());
-
-		ficheEnBase = fr.save(ficheEnBase);
-		
-		ficheEnBase.setDateCreation(ficheToUpdate.getDateCreation());
+//		ficheEnBase.getClient().getFichesEntretien().remove(ficheEnBase);
+//		cr.save(ficheEnBase.getClient());
+//		
+//		ficheEnBase.setClient(ficheToUpdate.getClient());
+//		ficheEnBase.getClient().addFiche(ficheEnBase);
+//		cr.save(ficheToUpdate.getClient());
+//
+//		ficheEnBase = fr.save(ficheEnBase);
+//		
+//		ficheEnBase.setDateCreation(ficheToUpdate.getDateCreation());
 		
 		
 		for(Tache t : ficheEnBase.getTaches()) {
