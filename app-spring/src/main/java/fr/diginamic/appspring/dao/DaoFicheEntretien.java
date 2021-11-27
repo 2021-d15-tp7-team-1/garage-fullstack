@@ -43,7 +43,6 @@ public class DaoFicheEntretien implements ICrud<FicheEntretien>{
     @Override
     public List<FicheEntretien> selectAll() {
         List<FicheEntretien> fiches = (List<FicheEntretien>) crud.findAll();
-        System.out.println("nb  : " + fiches.size());
         return fiches;
     }
 
