@@ -469,4 +469,3 @@ public class FicheEntretienController {
 			fa.save(facture);
 		}
 }
-
