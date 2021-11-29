@@ -24,6 +24,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.PostMapping;
 
+
+
+/**
+ * Controller MVC pour gérer les utilisateurs 
+ */
 @Controller
 @RequestMapping("/admin/user")
 public class UserController {
@@ -40,7 +45,11 @@ public class UserController {
     public UserController() {
 
     }
-
+/**
+ * Récupère et affiche la liste des utilisateurs
+ * @param model
+ * @return "user/Liste"
+ */
     @GetMapping
     public String findall(Model model) {
         model.addAttribute("users", (List<User>) userRepo.findAll());
@@ -49,6 +58,11 @@ public class UserController {
         return "user/Liste";
     }
 
+    /**
+     * Récupère et affiche le formulaire d'ajout d'un utilisateur
+     * @param model
+     * @return "user/add"
+     */
     @GetMapping("/add")
     public String addT(Model model) {
         model.addAttribute("collabForm", new User());
@@ -73,6 +87,12 @@ public class UserController {
 
      */
 
+     /**
+      * Traite les données du formulaire d'ajout d'un utlisateur 
+      * @param model
+      * @param collabForm
+      * @return "redirect:/admin/user"
+      */
     @PostMapping("/add")
     public String add(Model model, @Valid @ModelAttribute("collabForm") User collabForm) {
         collabForm.setPassword(pwdEncoder.encode(collabForm.getPassword()));
@@ -85,6 +105,13 @@ public class UserController {
         return "redirect:/admin/user";
     }
 
+    /**
+     * Supprime un utilisateur de la base de donnée 
+     * (pas de visuel de suppression dans l'app pour l'instant)
+     * @param pid
+     * @return "redirect:/admin/user"
+     * @throws Exception
+     */
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long pid) throws Exception {
         Optional<User> c = userRepo.findById(pid);
@@ -96,6 +123,13 @@ public class UserController {
         return "redirect:/admin/user";
     }
 
+    /**
+     * Récupère et affiche le formualaire de modification d'un utilisateur 
+     * en fonction de son id
+     * @param model
+     * @param dip
+     * @return "/user/modificationUser"
+     */
     @GetMapping("/modificationUser/{id}")
     public String modifClient(Model model, @PathVariable("id") Long dip) {
         User d = userRepo.findById(dip).get();
@@ -116,6 +150,13 @@ public class UserController {
 
     }
 
+    /**
+     * Traite les données du formulaire de modification 
+     * et enregistre les modification dans la liste des utilisateurs
+     * @param model
+     * @param userDip
+     * @return"redirect:/admin/user"
+     */
     @PostMapping("/modificationUser")
     public String modifUser(Model model, @ModelAttribute("modifUser") @Valid User userDip) {
 
