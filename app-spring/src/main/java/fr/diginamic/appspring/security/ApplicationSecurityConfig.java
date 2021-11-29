@@ -63,6 +63,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	
+	/**
+	 * attache du système d'authentification à la configuration de l'application
+	 */
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(daoAuthenticationProvider());

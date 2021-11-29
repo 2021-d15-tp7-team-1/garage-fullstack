@@ -63,12 +63,18 @@ public class PieceController {
         cp.save(piece);
         return "redirect:/pieces/list";
     }
-
+    
+    /**
+     * increaseAmountOfPieces() récupère une pièce en base d'après son id et en met à jour la quantité incrémentée (+1).<br/>
+     * l'utilisateur est ensuite redirigé vers la liste des pièces
+     * @param id : l'id de la pièce
+     * @return String : la redirection vers l'affichage de la liste des pièces
+     */
     @RequestMapping("/increase/{id}")
     public String increaseAmountOfPieces(@PathVariable("id") long id,
                                                    Model model) {
         Piece piece = cp.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid piece Id:" + id));
         int qte = piece.getQuantiteStock() + 1;
         piece.setQuantiteStock(qte);
         model.addAttribute("piece",piece);
@@ -76,19 +82,25 @@ public class PieceController {
 
         return "redirect:/pieces/list";
     }
-
+    
+    /**
+     * decreaseAmountOfPieces() récupère une pièce en base d'après son id et en met à jour la quantité décrémentée (-1).<br/>
+     * l'utilisateur est ensuite redirigé vers la liste des pièces
+     * @param id : l'id de la pièce
+     * @return String : la redirection vers l'affichage de la liste des pièces
+     */
     @RequestMapping("/decrease/{id}")
     public String decreaseAmountOfPieces(@PathVariable("id") long id,
                                                    Model model) {
         Piece piece = cp.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid piece Id:" + id));
         if (piece.getQuantiteStock() >= 1) {
             int qte = piece.getQuantiteStock() - 1;
             piece.setQuantiteStock(qte);
             model.addAttribute("piece",piece);
             cp.save(piece);
         }
-        System.out.println("Quantité nulle");
+//        System.out.println("Quantité nulle");
 
         return "redirect:/pieces/list";
     }
