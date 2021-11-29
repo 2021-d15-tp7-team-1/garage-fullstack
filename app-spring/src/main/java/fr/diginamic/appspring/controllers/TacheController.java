@@ -24,6 +24,9 @@ import fr.diginamic.appspring.repository.CrudPieceRepository;
 import fr.diginamic.appspring.repository.CrudTacheRepository;
 import fr.diginamic.appspring.repository.CrudUserRepository;
 
+/**
+ * Controller MVC pour gérer les taches
+ */
 @Controller
 @SessionAttributes({"tempTaches", "tempTacheId", "tempExistingTaches"})
 @RequestMapping(value = "/entretien")
@@ -44,7 +47,12 @@ public class TacheController {
 	public Long getTempTacheId() {
 		return tempId++;
 	}
-	
+
+	/**
+	 * Récupère et affiche le formulaire d'ajout de tache depuis la création de fiche
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/create/ajout-tache")
 	public String addTache(Model model) {
 		
@@ -56,7 +64,15 @@ public class TacheController {
 		
 		return "tache/ajout_tache";
 	}
-	
+
+	/**
+	 * Traite les données du formulaire d'ajout de tache et ajoute cette tache dans la fiche en cours de création
+	 * @param t
+	 * @param result
+	 * @param tempTaches
+	 * @param id
+	 * @return
+	 */
 	@PostMapping("/create/ajout-tache")
 	public String addTache(
 			@ModelAttribute("nouvelleTache") @Valid Tache t,
@@ -71,7 +87,14 @@ public class TacheController {
 		
 		return "redirect:/entretien/create/";
 	}
-	
+
+	/**
+	 * Récupère et affiche le formulaire de modification d'une tache d'une fiche en cours de création
+	 * @param id
+	 * @param tempTaches
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/create/modification-tache/{id}")
 	public String updateTache(
 			@PathVariable("id") Long id,
@@ -88,7 +111,15 @@ public class TacheController {
 		
 		return "tache/modification_tache";
 	}
-	
+
+	/**
+	 * Traite les données du formulaire de modification de tache dans la fiche en cours de création
+	 * @param id
+	 * @param tacheModifiee
+	 * @param result
+	 * @param tempTaches
+	 * @return
+	 */
 	@PostMapping("/create/modification-tache/{id}")
 	public String updateTache(
 			@PathVariable Long id,
@@ -104,7 +135,13 @@ public class TacheController {
 		
 		return "redirect:/entretien/create/";
 	}
-	
+
+	/**
+	 * Supprime une tache de la fiche en cours de création
+	 * @param id
+	 * @param tempTaches
+	 * @return
+	 */
 	@GetMapping("/create/suppression-tache/{id}")
 	public String deleteTache(
 			@PathVariable Long id,
@@ -116,7 +153,13 @@ public class TacheController {
 		
 		return "redirect:/entretien/create/";
 	}
-	
+
+	/**
+	 * Récupère et affiche le formulaire d'ajout de tache depuis la modification de la fiche
+	 * @param id
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/modification-fiche/{id}/ajout-tache")
 	public String addTacheToExistingFiche(
 			@PathVariable("id") Long id,
@@ -130,7 +173,16 @@ public class TacheController {
 		
 		return "tache/ajout_tache";
 	}
-	
+
+	/**
+	 * Traite les données du formulaire d'ajout de tache et ajoute cette tache dans la fiche en cours de modification
+	 * @param idFiche
+	 * @param t
+	 * @param result
+	 * @param tempTaches
+	 * @param idTache
+	 * @return
+	 */
 	@PostMapping("/modification-fiche/{id}/ajout-tache")
 	public String addTacheToExistingFiche(
 			@PathVariable("id") Long idFiche,
@@ -147,6 +199,16 @@ public class TacheController {
 		return "redirect:/entretien/modification-fiche/"+idFiche;
 	}
 
+	/**
+	 * Récupère et affiche le formulaire de modification d'une tache d'une fiche en cours de modification
+	 * @param idFiche
+	 * @param idTache
+	 * @param isInBase
+	 * @param tempExistingTaches
+	 * @param tempTaches
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/modification-fiche/{idFiche}/modification-tache/{idTache}/{isInBase}")
 	public String updateTacheModifFiche(
 			@PathVariable("idFiche") Long idFiche,
@@ -173,6 +235,17 @@ public class TacheController {
 		return "tache/modification_tache";
 	}
 
+	/**
+	 * Traite les données du formulaire de modification de tache dans la fiche en cours de modification
+	 * @param idFiche
+	 * @param idTache
+	 * @param isInBase
+	 * @param tempExistingTaches
+	 * @param tempTaches
+	 * @param tacheModifiee
+	 * @param result
+	 * @return
+	 */
 	@PostMapping("/modification-fiche/{idFiche}/modification-tache/{idTache}/{isInBase}")
 	public String updateTacheModifFiche(
 			@PathVariable("idFiche") Long idFiche,
@@ -199,6 +272,15 @@ public class TacheController {
 		return "redirect:/entretien/modification-fiche/"+idFiche;
 	}
 
+	/**
+	 * Supprime une tache de la fiche en cours de modification
+	 * @param idFiche
+	 * @param idTache
+	 * @param isInBase
+	 * @param tempExistingTaches
+	 * @param tempTaches
+	 * @return
+	 */
 	@GetMapping("/modification-fiche/{idFiche}/suppression-tache/{idTache}/{isInBase}")
 	public String deleteTacheFromModifFiche(
 			@PathVariable("idFiche") Long idFiche,

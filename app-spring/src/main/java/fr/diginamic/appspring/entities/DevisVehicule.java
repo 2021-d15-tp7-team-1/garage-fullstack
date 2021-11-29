@@ -4,6 +4,12 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
 
+/**
+ * Entité qui représente un devis d'une vente de vehicule
+ *
+ * @version 1.0
+ *
+ */
 @Entity
 public class DevisVehicule {
     @Id

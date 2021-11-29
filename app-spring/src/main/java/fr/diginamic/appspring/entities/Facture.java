@@ -5,6 +5,12 @@ import fr.diginamic.appspring.enums.TypeFacture;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+/**
+ * Entité qui représente un facture du garage
+ *
+ * @version 1.0
+ *
+ */
 @Entity
 public class Facture {
     @Id

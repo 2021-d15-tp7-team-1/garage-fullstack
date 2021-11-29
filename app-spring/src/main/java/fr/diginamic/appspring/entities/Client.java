@@ -9,6 +9,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Entité qui représente un client du garage
+ *
+ * @version 1.0
+ *
+ * @author Mathis
+ */
 @Entity
 public class Client {
 
@@ -46,6 +53,10 @@ public class Client {
         devisVehicule = new HashSet<DevisVehicule>();
     }
 
+    /**
+     * Ajoute une fiche d'entretien à la liste des fiches associées à ce client
+     * @param f
+     */
     public void addFiche(FicheEntretien f) {
         if (f != null) {
             fichesEntretien.add(f);
@@ -55,6 +66,10 @@ public class Client {
         }
     }
 
+    /**
+     * Ajoute un devis d'entretien à la liste des devis associés à ce client
+     * @param d
+     */
     public void addDevis(DevisVehicule d) {
         if (d != null) {
             devisVehicule.add(d);

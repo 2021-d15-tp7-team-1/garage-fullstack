@@ -24,7 +24,7 @@
 
         </div>
         <div class="nav-item float-right mb-2" id="connectedUser">
-            <a class="nav-link" th:href="@{/profile}" ><span class="mr-1" sec:authentication="principal.nom"></span><span sec:authentication="principal.prenom"></span></a>
+            <a class="nav-link" th:href="@{/profile}" ><span class="mr-1" sec:authentication="principal.nom"></span><span class="mr-1" sec:authentication="principal.prenom"></span></a>
         </div>
         <form action="/logout" method="post">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>

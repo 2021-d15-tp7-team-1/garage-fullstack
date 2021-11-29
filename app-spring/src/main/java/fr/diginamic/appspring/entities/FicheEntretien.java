@@ -9,6 +9,11 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Entité qui représente une fiche d'entretien du garage
+ * @version 1.0
+ * @author Mathis
+ */
 @Entity
 public class FicheEntretien {
     @Id
@@ -41,11 +46,18 @@ public class FicheEntretien {
         dateCreation = LocalDate.now();
     }
 
+    /**
+     * Cloture un fiche d'entretien valide
+     */
     public void cloturerFiche(){
         isCloture = true;
         dateCloture = LocalDate.now();
     }
 
+    /**
+     * Ajoute une tache à la liste des taches de la liste
+     * @param t
+     */
     public void ajouterTache(Tache t){
         if(t != null){
             taches.add(t);
