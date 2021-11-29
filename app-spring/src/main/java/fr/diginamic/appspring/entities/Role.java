@@ -5,6 +5,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Entité qui représente le role d'un employé et ses accès
+ *
+ * @version 1.0
+ *
+ * @see User
+ *
+ * @author Mathis
+ */
 @Entity
 public class Role {
     @Id

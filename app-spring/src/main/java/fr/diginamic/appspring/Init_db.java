@@ -40,7 +40,9 @@ public class Init_db {
 	@Autowired
 	private CrudTacheRepository tr;
 
-	
+	/**
+	 * Insère un jeu de données dans la database
+	 */
 	public void init() {
 
 		Role admin = new Role(ApplicationUserRole.ADMIN.name());

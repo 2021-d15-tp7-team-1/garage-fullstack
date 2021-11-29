@@ -9,6 +9,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Entité qui représente une pièce du stock
+ *
+ * @version 1.0
+ *
+ * @see ElemStock
+ *
+ * @author Mathis
+ */
 @Entity
 @DiscriminatorValue("P")
 @Table(name="PIECE")

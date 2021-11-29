@@ -16,7 +16,7 @@
 
             <p>
                 <label class="">Client : </label>
-                <input type="text" th:field="*{client.nom}" id="rechercheClient"/>&nbsp;&nbsp;
+                <input type="text" th:value="${ficheToUpdate.client.nom + ' ' + ficheToUpdate.client.prenom}" id="rechercheClient"/>&nbsp;&nbsp;
                 <span style="color:red" th:if="${#fields.hasErrors('client')}" th:errors="*{client}"></span><br/>
                 <span id="clientsTrouves" th:field="*{client}"></span>
             </p>
@@ -30,9 +30,9 @@
 
             <h3 th:if="${tempExistingTaches.size() > 0 or tempTaches.size() > 0}">Liste des tâches de la fiche <span th:text="${ficheToUpdate.id}"></span></h3>
 
-            <table class="table table-striped">
+            <table class="table table-striped" th:if="${tempExistingTaches.size() > 0 or tempTaches.size() > 0}">
                 <thead class="thead-dark">
-                <tr th:if="${tempExistingTaches.size() > 0 or tempTaches.size() > 0}">
+                <tr>
                     <th>N°</th><th>Intitulé</th><th>Type</th><th>Pièces nécessaires</th><th>Assignation</th><th>Priorité</th><th></th>
                 </tr>
                 </thead>
@@ -78,6 +78,8 @@
                     </tr>
                 </tbody>
             </table>
+            
+            <h2 th:unless="${tempExistingTaches.size() > 0 or tempTaches.size() > 0}">Aucune tâche associée à cette fiche</h2>
 
             <a  class="btn btn-primary" 
             	th:href="@{/entretien/modification-fiche/{idFiche}/ajout-tache(idFiche=${ficheToUpdate.id})}">

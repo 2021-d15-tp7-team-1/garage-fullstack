@@ -3,6 +3,13 @@ package fr.diginamic.appspring.entities;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+/**
+ * Entité qui représente une commande lié à un devis
+ *
+ * @version 1.0
+ *
+ * @author Mathis
+ */
 @Entity
 public class Commande {
     @Id

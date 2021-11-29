@@ -5,6 +5,13 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Entité qui represente une demande de pièce
+ *
+ * @version 1.0
+ *
+ * @author Mathis
+ */
 @Entity
 public class DemandePiece {
 
