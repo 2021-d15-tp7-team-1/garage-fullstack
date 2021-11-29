@@ -1,11 +1,9 @@
+/**
+	Gestion du tri des fiches par 6 boutons radio
+ */
 (function() {
 	const valideCells = document.querySelectorAll(".valideCell");
 	const etatCells = document.querySelectorAll(".etatCell");
-	
-	let queryValidCellInto = (elt) => {return elt.querySelector(".valideCell")};
-	let queryEtatCellInto = (elt) => {return elt.querySelector(".etatCell")};
-	
-	let lc = [];
 
 	const vCheckTout = document.getElementById("validiteTout");
 	const vRadioValide = document.getElementById("validiteValide");
@@ -14,99 +12,146 @@
 	const eCheckTout = document.getElementById("etatTout");
 	const eRadioCloturee = document.getElementById("etatCloturee");
 	const eRadioOuverte = document.getElementById("etatOuverte");
-	
-	
-	let enablingDisablingRadioButtons = (checkBox, radioBtn1, radioBtn2) => {
-		checkBox.checked = true;
-		radioBtn1.disabled = true;
-		radioBtn2.disabled = true;
 		
-		checkBox.addEventListener(
-			"change",
-			() => {
-				if(radioBtn1.checked) radioBtn1.checked = false;
-				if(radioBtn2.checked) radioBtn2.checked = false;
-				radioBtn1.disabled = !radioBtn1.disabled;
-				radioBtn2.disabled = !radioBtn2.disabled;
-			}
-		);
+	vCheckTout.checked = true;
+	eCheckTout.checked = true;
+	
+	
+	/**
+	Gestion du clic sur les 2 boutons radio "tout"
+	 */
+	const setEventListenerAndCallBackToRadioBtn_tout = (
+		targetedRadioBtn_tout,
+		event,
+		oppositeRadioBtn_tout,
+		browsedCells,
+		oppositeBrowsedCells,
+		oppositeRadioButton1,
+		oppositeRadioButton1_text,
+		oppositeRadioButton2,
+		oppositeRadioButton2_text) => {
+			
+			targetedRadioBtn_tout.addEventListener(
+				event,
+				() => {
+					if(oppositeRadioBtn_tout.checked) {
+						browsedCells.forEach(td => td.parentNode.removeAttribute("hidden"));
+					}
+					
+					else if(oppositeRadioButton1.checked) {
+						oppositeBrowsedCells.forEach(td => 
+							td.innerText == oppositeRadioButton1_text 
+							? td.parentNode.removeAttribute("hidden") 
+							: td.parentNode.setAttribute("hidden", "hidden"));
+					}
+					
+					else if(oppositeRadioButton2.checked) {
+						oppositeBrowsedCells.forEach(td => 
+							td.innerText == oppositeRadioButton2_text 
+							? td.parentNode.removeAttribute("hidden") 
+							: td.parentNode.setAttribute("hidden", "hidden"));
+					}
+				}
+			);
 	}
 	
-	let isValid = (elt) => {return elt.innerText === "Valide" ? true : false};
-	let isOpen = (elt) => {return elt.innertText === "Ouverte" ? true : false};
-	
-	
-	enablingDisablingRadioButtons(vCheckTout, vRadioValide, vRadioAnnulee);
-	enablingDisablingRadioButtons(eCheckTout, eRadioCloturee, eRadioOuverte);
-	
-	
-	
-	vCheckTout.addEventListener(
-		"click", 
-		() => {
-			if(eCheckTout.checked) valideCells.forEach(c => c.parentNode.removeAttribute("hidden"));
-		}
-	);
-	
-	eCheckTout.addEventListener(
-		"click", 
-		() => {
-			if(vCheckTout.checked) etatCells.forEach(c => c.parentNode.removeAttribute("hidden"));
-		}
-	);
-	
-	//let isValid = (elt) => {return elt.innerText === "Valide" ? true : false};
-	//let isOpen = (elt) => {return elt.innertText === "Ouverte" ? true : false};
-	
-	//const valideCells = document.querySelectorAll(".valideCell");
-	//const etatCells = document.querySelectorAll(".etatCell");
-	
-	//let queryValidCellsInto = (elt) => {return elt.parentNode.querySelectorAll(".valideCell")};
-	//let queryEtatCellsInto = (elt) => {return elt.parentNode.querySelectorAll(".etatCell")};
-	
-	vRadioValide.addEventListener(
-		"click", 
-		() => {
-			lc = [];
-			valideCells.forEach(td => isValid(td) ? lc.push(td.parentNode) : td.parentNode.setAttribute("hidden", "hidden"));
-			
-			if(eCheckTout.checked) {
-				lc.forEach(tr => tr.removeAttribute("hidden"));
-				
-			} else if(eRadioCloturee.checked) {
-				lc.forEach(tr => console.log(queryEtatCellInto(tr).innerText));
-				lc.forEach(tr => tr.removeAttribute("hidden"));
-				lc.forEach(tr => queryEtatCellInto(tr).innertText == "Ouverte" ? tr.setAttribute("hidden", "hidden") : tr.removeAttribute("hidden"));
-				
-			} else if(eRadioOuverte.checked) {
-				lc.forEach(tr => console.log(queryEtatCellInto(tr).innerText));
-				lc.forEach(tr => tr.removeAttribute("hidden"));
-				lc.forEach(tr => queryEtatCellInto(tr).innertText != "Ouverte" ? tr.setAttribute("hidden", "hidden") : tr.removeAttribute("hidden"));
-			}
-		}
-	);
-	
-	vRadioAnnulee.addEventListener(
-		"click", 
-		() => {
-			lc = [];
-			valideCells.forEach(td => !isValid(td) ? lc.push(td.parentNode) : td.parentNode.setAttribute("hidden", "hidden"));
-			
-			if(eCheckTout.checked) {
-				lc.forEach(tr => tr.removeAttribute("hidden"));
-				
-			} else if(eRadioCloturee.checked) {
-				lc.forEach(tr => console.log(queryEtatCellInto(tr).innerText));
-				lc.forEach(tr => tr.removeAttribute("hidden"));
-				lc.forEach(tr => queryEtatCellInto(tr).innerText == "Ouverte" ? tr.setAttribute("hidden", "hidden") : tr.removeAttribute("hidden"));
-				
-			} else if(eRadioOuverte.checked) {
-				lc.forEach(tr => console.log(queryEtatCellInto(tr).innerText));
-				lc.forEach(tr => tr.removeAttribute("hidden"));
-				lc.forEach(tr => queryEtatCellInto(tr).innertText != "Ouverte" ? tr.setAttribute("hidden", "hidden") : tr.removeAttribute("hidden"));
-			}
-		}
-	);
+	setEventListenerAndCallBackToRadioBtn_tout(
+		vCheckTout,
+		"click",
+		eCheckTout,
+		valideCells,
+		etatCells,
+		eRadioCloturee, "Clôturée",
+		eRadioOuverte, "Ouverte");
+		
+	setEventListenerAndCallBackToRadioBtn_tout(
+		eCheckTout,
+		"click",
+		vCheckTout,
+		etatCells,
+		valideCells,
+		vRadioValide, "Valide",
+		vRadioAnnulee, "Annulée");
 	
 
+	/**
+	Gestion du clic sur les boutons radio "valide", "annulée", "clôturée" et "ouverte"
+	 */
+	const setEventListenerAndCallBackToRadioBtn = (
+		targetedRadioButton,
+		targetedRadioButton_text,
+		event,
+		browsedCells,
+		lookedAtCellClass,
+		oppositeRadioBtn_tout,
+		oppositeRadioButton1,
+		oppositeRadioButton1_text,
+		oppositeRadioButton2,
+		oppositeRadioButton2_text) => {
+			
+			targetedRadioButton.addEventListener(
+				event,
+				() => {
+					if(oppositeRadioBtn_tout.checked) {
+						browsedCells.forEach(td => 
+							td.innerText == targetedRadioButton_text 
+							? td.parentNode.removeAttribute("hidden") 
+							: td.parentNode.setAttribute("hidden", "hidden"));
+					}
+					
+					else if(oppositeRadioButton1.checked) {
+						browsedCells.forEach(td =>
+							td.innerText == targetedRadioButton_text && td.parentNode.querySelector(lookedAtCellClass).innerText == oppositeRadioButton1_text
+							? td.parentNode.removeAttribute("hidden")
+							: td.parentNode.setAttribute("hidden", "hidden"));
+					}
+					
+					else if(oppositeRadioButton2.checked) {
+						browsedCells.forEach(td =>
+							td.innerText == targetedRadioButton_text && td.parentNode.querySelector(lookedAtCellClass).innerText == oppositeRadioButton2_text
+							? td.parentNode.removeAttribute("hidden")
+							: td.parentNode.setAttribute("hidden", "hidden"));
+					}
+				}
+			);
+		
+		}
+	
+	setEventListenerAndCallBackToRadioBtn(
+		vRadioValide, "Valide",
+		"click",
+		valideCells,
+		".etatCell",
+		eCheckTout,
+		eRadioCloturee, "Clôturée",
+		eRadioOuverte, "Ouverte");
+		
+	setEventListenerAndCallBackToRadioBtn(
+		vRadioAnnulee, "Annulée",
+		"click",
+		valideCells,
+		".etatCell",
+		eCheckTout,
+		eRadioCloturee, "Clôturée",
+		eRadioOuverte, "Ouverte");
+		
+	
+	setEventListenerAndCallBackToRadioBtn(
+		eRadioCloturee, "Clôturée",
+		"click",
+		etatCells,
+		".valideCell",
+		vCheckTout,
+		vRadioValide, "Valide",
+		vRadioAnnulee, "Annulée");
+		
+	setEventListenerAndCallBackToRadioBtn(
+		eRadioOuverte, "Ouverte",
+		"click",
+		etatCells,
+		".valideCell",
+		vCheckTout,
+		vRadioValide, "Valide",
+		vRadioAnnulee, "Annulée");
+	
 })();
