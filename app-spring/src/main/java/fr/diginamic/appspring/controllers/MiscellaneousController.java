@@ -6,6 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * On trouve dans cette classe les méthodes qui ne nécessitent pas un contrôleur à part entière
+ * @author vincent
+ *
+ */
 @Controller
 @RequestMapping("/")
 public class MiscellaneousController {

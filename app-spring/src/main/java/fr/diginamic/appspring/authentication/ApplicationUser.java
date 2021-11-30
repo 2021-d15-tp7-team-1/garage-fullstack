@@ -8,6 +8,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import fr.diginamic.appspring.entities.User;
 
+/**
+ * ApplicationUser est composé principalement d'un user (connecté) et des rôles de celui-ci
+ * @author vincent
+ *
+ */
 public class ApplicationUser implements UserDetails {
 
 	private static final long serialVersionUID = 1L;

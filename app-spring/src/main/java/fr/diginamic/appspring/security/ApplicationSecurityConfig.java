@@ -13,6 +13,11 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import fr.diginamic.appspring.authentication.ApplicationUserService;
 import fr.diginamic.appspring.enums.ApplicationUserRole;
 
+/**
+ * Classe de configuration de Spring Security
+ * @author vincent
+ *
+ */
 @Configuration
 @EnableWebSecurity
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -24,7 +29,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 		this.passwordEncoder = passwordEncoder;
 		this.applicationUserService = applicationUserService;
 	}
-
+	
+	/**
+	 * Configuration des accès autorisés en fonction de l'authentification et des rôles particuliers de l'utilisateur authentifié
+	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
@@ -53,12 +61,20 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 			.exceptionHandling()
 				.accessDeniedPage("/access_denied");
 	}
-
+	
+	
+	/**
+	 * attache du système d'authentification à la configuration de l'application
+	 */
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(daoAuthenticationProvider());
 	}
-
+	
+	/**
+	 * provider du système d'authentification
+	 * @return le provider
+	 */
 	@Bean
 	public DaoAuthenticationProvider daoAuthenticationProvider() {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();

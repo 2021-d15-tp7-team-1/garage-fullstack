@@ -97,18 +97,18 @@ public class VehiculeController {
         cs.save(v);
         return "redirect:/vehicules/list";
     }
-
+    
     /**
-     * Augmente le nombre de vehicules en stock
-     * @param id
-     * @param model
-     * @return"redirect:/vehicules/list"
+     * increaseAmountOfVehicles() récupère un véhicule en base d'après son id et en met à jour la quantité incrémentée (+1).<br/>
+     * l'utilisateur est ensuite redirigé vers la liste des véhicules
+     * @param id : l'id du véhicule
+     * @return String : la redirection vers l'affichage de la liste des véhicules
      */
     @RequestMapping("/increase/{id}")
     public String increaseAmountOfVehicules(@PathVariable("id") long id,
                                          Model model) {
         Vehicule v = cs.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid vehicle Id:" + id));
         int qte = v.getQuantiteStock() + 1;
         v.setQuantiteStock(qte);
         model.addAttribute("v",v);
@@ -116,25 +116,25 @@ public class VehiculeController {
 
         return "redirect:/vehicules/list";
     }
-
+    
     /**
-     * Réduit le nombre de vehicules en stock
-     * @param id
-     * @param model
-     * @return"redirect:/vehicules/list"
+     * decreaseAmountOfVehicles() récupère un véhicule en base d'après son id et en met à jour la quantité décrémentée (-1).<br/>
+     * l'utilisateur est ensuite redirigé vers la liste des véhicules
+     * @param id : l'id du véhicule
+     * @return String : la redirection vers l'affichage de la liste des véhicules
      */
     @RequestMapping("/decrease/{id}")
     public String decreaseAmountOfVehicules(@PathVariable("id") long id,
                                          Model model) {
         Vehicule v = cs.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid vehicle Id:" + id));
         if (v.getQuantiteStock() >= 1) {
             int qte = v.getQuantiteStock() - 1;
             v.setQuantiteStock(qte);
             model.addAttribute("v",v);
             cs.save(v);
         }
-        System.out.println("Quantité nulle");
+//        System.out.println("Quantité nulle");
 
         return "redirect:/vehicules/list";
     }
