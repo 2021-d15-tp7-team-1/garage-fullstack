@@ -31,4 +31,13 @@ public class TacheRestController {
     public List<Tache> findAll() {
         return (List<Tache>) tr.findAll();
     }
+
+    @GetMapping("/terminer-tache/{id}")
+    public String terminerTache(@PathVariable Long id){
+        Tache tacheBDD = tr.findById(id).get();
+        tacheBDD.setTerminee(true);
+        tr.save(tacheBDD);
+
+        return "Tache n°" + id + " est maintenant terminée";
+    }
 }

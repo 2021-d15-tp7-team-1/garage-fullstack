@@ -43,6 +43,7 @@ class TachesComp extends Component {
                             <td>{data.pieces.map(p => <span>{p.nomPiece}</span>)}</td>
                             <td>{data.priorite.name}</td>
                             <td>{data.isTerminee}</td>
+                            <td><button class="btn btn-primary mb-2" onClick={TacheService.terminerTache(data.id)}>Terminer</button></td>
                         </tr>)}
                     </tbody>
                 </table>
