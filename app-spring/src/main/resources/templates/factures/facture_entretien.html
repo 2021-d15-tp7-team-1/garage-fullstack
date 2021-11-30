@@ -19,15 +19,63 @@
                     <td th:text="${facture.id}"></td>
                 </tr>
                 <tr>
-                    <td>Prix : </td>
+                    <td>Client : </td>
+                    <td th:text="${facture.ficheConcernee.client.nom} + ' ' + ${facture.ficheConcernee.client.prenom}"></td>
+                </tr>
+                <tr>
+                    <td>Prix HT : </td>
                     <td th:text="${facture.prix}"></td>
                 </tr>
                 <tr>
-                    <td>Date de création : </td>
+                    <td>Prix TTC : </td>
+                    <td th:text="${facture.prix + (facture.prix*0.15)}"></td>
+                </tr>
+                <tr>
+                    <td>Prise en charge : </td>
+                    <td th:text="${facture.ficheConcernee.dateCreation}"></td>
+                </tr>
+                <tr>
+                    <td>Edition de la facture : </td>
                     <td th:text="${facture.dateCreation}"></td>
                 </tr>
+
+
                 </tbody>
             </table>
+            <hr/>
+            <legend class="w-auto px-2">Détail de l'entretien</legend>
+            <div th:if="${facture.ficheConcernee.getTaches().size() > 0}" class="form-group">
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Intitulé</th>
+                        <th>Type</th>
+                        <th>Pièces nécessaires</th>
+                        <th>Prix facturé</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="tache: ${facture.ficheConcernee.taches}">
+                        <td th:text="${tache.intitule}"></td>
+                        <td th:text="${tache.type}"></td>
+                        <td>
+                            <p th:each="piece : ${tache.piecesNecessaires}">
+                                <span th:text="${piece.nomPiece}">Nom</span>
+                            </p>
+                        </td>
+                        <td>
+                            <p th:each="piece : ${tache.piecesNecessaires}">
+                                <span th:text="${piece.prixFacture}">Prix Facturé</span>
+                            </p>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:unless="${facture.ficheConcernee.getTaches().size() > 0}">
+                <h2>Aucune tâche n'est associée à cette fiche</h2>
+            </div>
         </div>
         <hr/>
     </fieldset>
