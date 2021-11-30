@@ -8,77 +8,97 @@
         <h1 th:text="${titre}"></h1>
         <hr/>
         
-        <a class="btn btn-success mb-2 float-right" 
-	        sec:authorize="hasAuthority('CHEF')" 
-	        th:href="@{/entretien/create-init}">
-	        Créer une fiche d'entretien
-        </a>
+        <fieldset  class="container w-25 d-inline-flex mb-2 bg-light border border-secondary rounded">
+        	<legend>Trier les fiches</legend>
+        		<div class="row">
+        			<table class="m-2 col-auto">
+		        		<tr><th>Validité fiche</th></tr>
+		        		<tr><td><input type="radio" id="validiteTout" name="validite" class="mr-2" />tout</td></tr>
+		        		<tr><td><input type="radio" id="validiteValide" name="validite" class="mr-2" />valide</td></tr>
+		        		<tr><td><input type="radio" id="validiteAnnulee" name="validite" class="mr-2" />annulée</td></tr>
+		        	</table>
+		        	<table class="m-2 col-auto">
+		        		<tr><th>État fiche</th></tr>
+		        		<tr><td><input type="radio" id="etatTout" name="etat" class="mr-2" />tout</td></tr>
+		        		<tr><td><input type="radio" id="etatCloturee" name="etat" class="mr-2" />clôturée</td></tr>
+		        		<tr><td><input type="radio" id="etatOuverte" name="etat" class="mr-2" />ouverte</td></tr>
+		        	</table>
+        		</div>
+        </fieldset>
         
-        <table class="table table-striped">
-            <thead class="thead-dark">
-            <tr>
-                <th>Référence</th>
-                <th>Date création fiche</th>
-                <th>Date de cloture</th>
-                <th>Nb de taches</th>
-                <!-- <th>Proportion effectuée</th> -->
-                <th>Validité fiche</th>
-                <th>Etat fiche</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th>Facture</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="fiche: ${fiches}">
-                <td th:text="${fiche.id}"></td>
-                <td th:text="${fiche.dateCreation}"></td>
-                <td th:text="${fiche.dateCloture}"></td>
-                <td th:text="${fiche.taches.size()}"></td>
-                <!-- <td>calcul proportion</td> -->
-                <td>
-                    <span th:if="${fiche.isValid}">Valide</span>
-                    <span th:unless="${fiche.isValid}">Annulée</span>
-                </td>
-                <td>
-                    <span th:if="${fiche.isCloture}">Cloturée</span>
-                    <span th:if="${!fiche.isCloture} and ${fiche.isValid()}">Ouverte</span>
-                </td>
-                <td>
-                    <a class="btn btn-primary mb-2" 
-	                    th:href="@{/entretien/{id}(id=${fiche.id})}">
-	                    Accéder
-                    </a>
-                </td>
-                <td>
-                    <a class="btn btn-warning mb-2" 
-	                    sec:authorize="hasAuthority('CHEF')" 
-	                    th:if="${fiche.isValid()}" 
-	                    th:href="@{/entretien/annuler-fiche/{id}(id=${fiche.id})}">
-	                    Annuler fiche
-                    </a>
-                </td>
-                <td>
-                    <a class="btn btn-danger mb-2" 
-	                    sec:authorize="hasAuthority('CHEF')" 
-	                    th:if="${!fiche.isCloture} and ${fiche.isValid()}" 
-	                    th:href="@{/entretien/cloturer/{id}(id=${fiche.id})}">
-	                    Cloturer fiche
-                    </a>
-                </td>
-                <td>
-                    <span th:if="${fiche.isCloture}">
+        <div>
+        	<div class=" mb-2 float-right">
+        		<a class="btn btn-success" 
+		        sec:authorize="hasAuthority('CHEF')" 
+		        th:href="@{/entretien/create-init}">
+		        Créer une fiche d'entretien
+	        	</a>
+        	</div>
+
+	        <table class="table table-striped">
+	            <thead class="thead-dark">
+	            <tr>
+	                <th>Référence</th>
+	                <th>Date création fiche</th>
+	                <th>Date de cloture</th>
+					<th>Client</th>
+	                <th>Nb de taches</th>
+	                <!-- <th>Proportion effectuée</th> -->
+	                <th>Validité fiche</th>
+	                <th>Etat fiche</th>
+	                <th></th>
+	                <th></th>
+	                <th></th>
+	                <th>Facture</th>
+	            </tr>
+	            </thead>
+	            <tbody>
+	            <tr th:each="fiche: ${fiches}">
+	                <td th:text="${fiche.id}"></td>
+	                <td th:text="${fiche.dateCreation}"></td>
+	                <td th:text="${fiche.dateCloture}"></td>
+					<td><span class="mr-2" th:text="${fiche.client.prenom}"></span><span th:text="${fiche.client.nom}"></span></td>
+	                <td th:text="${fiche.taches.size()}"></td>
+	                <!-- <td>calcul proportion</td> -->
+	                <td class="valideCell" th:text="${fiche.isValid == true ? 'Valide' : 'Annulée'}"></td>
+	                <td class="etatCell" th:text="${fiche.isCloture} == true ? 'Clôturée' : 'Ouverte'"></td>
+	                <td>
 	                    <a class="btn btn-primary mb-2" 
-		                    th:href="@{/entretien/facture/{id}(id=${fiche.facture.id})}">
-		                    Facture
+		                    th:href="@{/entretien/{id}(id=${fiche.id})}">
+		                    Accéder
 	                    </a>
-                    </span>
-                    <span th:unless="${fiche.isCloture}">Facture indisponible</span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+	                </td>
+	                <td>
+	                    <a class="btn btn-warning mb-2" 
+		                    sec:authorize="hasAuthority('CHEF')" 
+		                    th:if="${fiche.isValid()}" 
+		                    th:href="@{/entretien/annuler-fiche/{id}(id=${fiche.id})}">
+		                    Annuler fiche
+	                    </a>
+	                </td>
+	                <td>
+	                    <a class="btn btn-danger mb-2" 
+		                    sec:authorize="hasAuthority('CHEF')" 
+		                    th:if="${!fiche.isCloture} and ${fiche.isValid()}" 
+		                    th:href="@{/entretien/cloturer/{id}(id=${fiche.id})}">
+		                    Cloturer fiche
+	                    </a>
+	                </td>
+	                <td>
+	                    <span th:if="${fiche.isCloture}">
+		                    <a class="btn btn-primary mb-2" 
+			                    th:href="@{/entretien/facture/{id}(id=${fiche.facture.id})}">
+			                    Facture
+		                    </a>
+	                    </span>
+	                    <span th:unless="${fiche.isCloture}">Facture indisponible</span>
+	                </td>
+	            </tr>
+	            </tbody>
+	        </table>
+        </div>
     </div>
+    
+	<script th:inline="javascript" src="/js/liste_fiche.js"></script>
 </body>
 </html>
