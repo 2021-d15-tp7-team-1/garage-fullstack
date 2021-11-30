@@ -18,13 +18,17 @@
         <p>
         <br>
         Marque :
-        <input type="text" th:field="*{marque}"/>
+        <input type="text" th:field="*{marque}" required>
+        <div class="valid-feedback">Ok !</div>
+        <div class="invalid-feedback">Valeur incorrecte</div>
     </p>
 
     <p>
         <br/>
         Modele :
-        <input type="text" th:field="*{modele}"/>
+        <input type="text" th:field="*{modele}"required>
+        <div class="valid-feedback">Ok !</div>
+        <div class="invalid-feedback">Valeur incorrecte</div>
     </p>
 
     <p>
@@ -67,6 +71,22 @@
         <a class="btn btn-secondary"th:href="@{/vehicules/list}">Retour</a>
     </form>
     </div>
-   
+    <script>
+    (function() {
+      'use strict';
+      window.addEventListener('load', function() {
+        let forms = document.getElementsByClassName('needs-validation');
+        let validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+  </script>
 </body>
 </html>
