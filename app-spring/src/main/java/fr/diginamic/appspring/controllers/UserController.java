@@ -24,10 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.PostMapping;
 
-
-
 /**
- * Controller MVC pour gérer les utilisateurs 
+ * Controller MVC pour gérer les utilisateurs
  */
 @Controller
 @RequestMapping("/admin/user")
@@ -41,18 +39,20 @@ public class UserController {
 
     @Autowired
     CrudRoleRepository roleRepo;
-    
+
     @Autowired
     PasswordEncoder passwordencoder;
 
     public UserController() {
 
     }
-/**
- * Récupère et affiche la liste des utilisateurs
- * @param model
- * @return "user/Liste"
- */
+
+    /**
+     * Récupère et affiche la liste des utilisateurs
+     * 
+     * @param model
+     * @return "user/Liste"
+     */
     @GetMapping
     public String findall(Model model) {
         model.addAttribute("users", (List<User>) userRepo.findAll());
@@ -63,6 +63,7 @@ public class UserController {
 
     /**
      * Récupère et affiche le formulaire d'ajout d'un utilisateur
+     * 
      * @param model
      * @return "user/add"
      */
@@ -77,40 +78,43 @@ public class UserController {
     }
 
     /*
-    @PostMapping("/add")
-    public String add(Model model, @Valid @ModelAttribute("collabForm") User collabForm) {
-        col.save(collabForm); // ajout du nouvel user à la base
-        collabForm.getUserRoles().forEach(role -> {
-            role.getUsers().add(collabForm);
-            roles.save(role); // update de la liste de users de ce role
-            System.out.println(role.getNomRole());
-        });
-        return "redirect:/admin/user";
-    }
-
+     * @PostMapping("/add")
+     * public String add(Model model, @Valid @ModelAttribute("collabForm") User
+     * collabForm) {
+     * col.save(collabForm); // ajout du nouvel user à la base
+     * collabForm.getUserRoles().forEach(role -> {
+     * role.getUsers().add(collabForm);
+     * roles.save(role); // update de la liste de users de ce role
+     * System.out.println(role.getNomRole());
+     * });
+     * return "redirect:/admin/user";
+     * }
+     * 
      */
 
-     /**
-      * Traite les données du formulaire d'ajout d'un utlisateur 
-      * @param model
-      * @param collabForm
-      * @return "redirect:/admin/user"
-      */
+    /**
+     * Traite les données du formulaire d'ajout d'un utlisateur
+     * 
+     * @param model
+     * @param collabForm
+     * @return "redirect:/admin/user"
+     */
     @PostMapping("/add")
     public String add(Model model, @Valid @ModelAttribute("collabForm") User collabForm) {
         collabForm.setPassword(pwdEncoder.encode(collabForm.getPassword()));
-        userRepo.save(collabForm); //ajout du nouvel user à la base
+        userRepo.save(collabForm); // ajout du nouvel user à la base
         collabForm.getUserRoles().forEach(role -> {
             role.getUsers().add(collabForm);
-            roleRepo.save(role); //update de la liste de users de ce role
+            roleRepo.save(role); // update de la liste de users de ce role
             System.out.println(role.getNomRole());
         });
         return "redirect:/admin/user";
     }
 
     /**
-     * Supprime un utilisateur de la base de donnée 
+     * Supprime un utilisateur de la base de donnée
      * (pas de visuel de suppression dans l'app pour l'instant)
+     * 
      * @param pid
      * @return "redirect:/admin/user"
      * @throws Exception
@@ -127,8 +131,9 @@ public class UserController {
     }
 
     /**
-     * Récupère et affiche le formualaire de modification d'un utilisateur 
+     * Récupère et affiche le formualaire de modification d'un utilisateur
      * en fonction de son id
+     * 
      * @param model
      * @param dip
      * @return "/user/modificationUser"
@@ -136,7 +141,7 @@ public class UserController {
     @GetMapping("/modificationUser/{id}")
     public String modifClient(Model model, @PathVariable("id") Long dip) {
         User d = userRepo.findById(dip).get();
-        Set<Role> lr = new HashSet <Role>();
+        Set<Role> lr = new HashSet<Role>();
         // Obligation dû a des problèmes de droits (priorité entre le Join table de role
         // et celui de User)
         d.getUserRoles().forEach(role -> {
@@ -154,17 +159,18 @@ public class UserController {
     }
 
     /**
-     * Traite les données du formulaire de modification 
+     * Traite les données du formulaire de modification
      * et enregistre les modification dans la liste des utilisateurs
+     * 
      * @param model
      * @param userDip
      * @return"redirect:/admin/user"
      */
     @PostMapping("/modificationUser")
     public String modifUser(Model model, @ModelAttribute("modifUser") @Valid User userDip) {
-    	
-    	userDip.setPassword(passwordencoder.encode(userDip.getPassword()));
-    	
+
+        userDip.setPassword(passwordencoder.encode(userDip.getPassword()));
+
         userDip.getUserRoles().forEach(role -> {
             role.getUsers().add(userDip);
             roleRepo.save(role); // update de la liste de users de ce role

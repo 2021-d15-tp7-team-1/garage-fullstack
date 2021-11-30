@@ -55,13 +55,6 @@ public class FicheEntretienController {
 	@Autowired
 	DaoFicheEntretien daoFiche;
 
-	@GetMapping("/list")
-	public String findAll(Model model) {
-		model.addAttribute("fiches", (List<FicheEntretien>) daoFiche.selectAll());
-		model.addAttribute("titre", "Fiches d'entretien");
-		return "fiche_entretien/liste-fiches";
-	}
-
 
 	/**
 	 * getTempFiche() retourne une nouvelle fiche, chargée d'accueillir temporairement des données relatives, pré-enregistrement.<br>
