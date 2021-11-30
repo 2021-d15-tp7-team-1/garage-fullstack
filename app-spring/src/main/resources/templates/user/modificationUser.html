@@ -25,64 +25,67 @@
                 <div class="valid-feedback">Ok !</div>
                 <div class="invalid-feedback">Valeur incorrecte</div>
                 </div>
-                <div class="col-md-4 mb-3">
                 
+                <div class="col-md-4 mb-3">
                 <br>
                 <label for="nom">Nom : </label>
                 <input type="text" class="form-control" name = "nom" id="nom" th:field="*{nom}" required>
                 <div class="valid-feedback">Ok !</div>
                 <div class="invalid-feedback">Valeur incorrecte</div>
                 </div>
-                <div class="col-md-4 mb-3">
 
+                <div class="col-md-4 mb-3">
                 <br>
                 <label for="prenom">Prénom : </label>
                 <input type="text" class="form-control" name = "prenom" id="prenom" th:field="*{prenom}" required>
                 <div class="valid-feedback">Ok !</div>
                 <div class="invalid-feedback">Valeur incorrecte</div>
                 </div>
-                <div class="col-md-4 mb-3">
 
+                <div class="col-md-4 mb-3">
                 <br> 
                 <label for="password">Mot de passe : </label>
                 <input type="password" class="form-control" name = "password" id="password" th:field="*{password}" required>
                 <div class="valid-feedback">Ok !</div>
                 <div class="invalid-feedback">Valeur incorrecte</div>
                 </div>
-                <div class="col-md-4 mb-3">
 
+                <div class="col-md-4 mb-3">
                 <br> 
                 <label for="email">E-mail : </label>
                 <input type="email" class="form-control" name = "email" id="email" th:field="*{email}" required>
                 <div class="valid-feedback">Ok !</div>
                 <div class="invalid-feedback">Valeur incorrecte</div>
                 </div>
-                <div class="col-md-4 mb-3">
 
+                <div class="col-md-4 mb-3">
                 <br> 
                 <label for="userRoles">Ancien rôle(s) : </label>
                 <ul>
                 <li th:each="role : ${ ancienRoles }" th:text="${role.nomRole}"></li>
               </ul>
+              </div>
+
+              <div class="col-md-4 mb-3">
                 <br>
                 <label for="userRoles">Rôle(s) : </label>
-          
-                <select th:field="*{userRoles}" multiple>
-            
+                <select th:field="*{userRoles}" multiple required>
                     <option th:each="role : ${ roles }" th:value="${role.id}" th:text="${role.nomRole}"></option>
-                    
                 </select>
+                <div class="valid-feedback">Ok !</div>
+                <div class="invalid-feedback">Veuillez selectionner un role</div>
+              </div>
+
                 <br> 
                 <label for="userRoles">Accès : </label>
-                <select th:field="*{isSpaActive}">
+                <select th:field="*{SpaActive}">
                     <option value="true">Actif</option>
                     <option value="false">Bloqué</option>
                 </select>
-                <br>
+              </br>
                 <button class="btn btn-primary" type="submit">Modifier le compte</button>
             </p>
             </div>
-        </div>
             
     </form>
 

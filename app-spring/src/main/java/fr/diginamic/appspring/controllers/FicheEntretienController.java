@@ -36,7 +36,7 @@ import fr.diginamic.appspring.entities.Tache;
 @SessionAttributes({"tempFiche", "tempTaches", "tempExistingTaches"})
 @RequestMapping(value = "/entretien")
 public class FicheEntretienController {
-	
+
 	@Autowired
 	CrudFicheRepository fr;
 
@@ -45,15 +45,16 @@ public class FicheEntretienController {
 
 	@Autowired
 	CrudClientRepository cr;
-	
+
 	@Autowired
 	CrudTacheRepository tr;
-	
+
 	@Autowired
 	CrudPieceRepository pr;
 	
 	@Autowired
 	DaoFicheEntretien daoFiche;
+
 
 	/**
 	 * getTempFiche() retourne une nouvelle fiche, chargée d'accueillir temporairement des données relatives, pré-enregistrement.<br>
@@ -128,11 +129,10 @@ public class FicheEntretienController {
 	 * @return String : la redirection vers la méthode de création d'une nouvelle fiche
 	 */
 	@GetMapping("/create-init")
-	public String createFicheWithoutTache(
-			@ModelAttribute("tempTaches") Set<Tache> tempTaches) {
-		
+	public String createFicheWithoutTache(@ModelAttribute("tempTaches") Set<Tache> tempTaches) {
+
 		tempTaches.clear();
-		
+
 		return "redirect:/entretien/create";
 	}
 	
@@ -156,7 +156,7 @@ public class FicheEntretienController {
 		model.addAttribute("taches", tempTaches);
 		model.addAttribute("nouvelleFicheEntretien", tempFiche);
 		model.addAttribute("titre", "CRÉATION DE FICHE");
-		
+
 		return "fiche_entretien/creation_fiche_entretien";
 	}
 	
@@ -177,8 +177,8 @@ public class FicheEntretienController {
 			@ModelAttribute("tempsFiche") FicheEntretien tempFiche,
 			@ModelAttribute("tempTaches") Set<Tache> tempTaches,
 			Model model) {
-		
-		if(result.hasErrors()) {
+
+		if (result.hasErrors()) {
 			model.addAttribute("fiche", tempFiche);
 			model.addAttribute("taches", tempTaches);
 			return "fiche_entretien/creation_fiche_entretien";
@@ -194,14 +194,14 @@ public class FicheEntretienController {
 		for(Tache t : fiche.getTaches()) {
 			t.setFiche(fiche);
 			t = tr.save(t);
-			for(Piece p : t.getPiecesNecessaires()) {
+			for (Piece p : t.getPiecesNecessaires()) {
 				p.getTachesPiece().add(t);
 				pr.save(p);
 			}
 		}
-		
+
 		tempTaches.clear();
-		
+
 		return "redirect:/entretien/list";
 	}
 	
@@ -304,11 +304,10 @@ public class FicheEntretienController {
 	 */
 	
 	@GetMapping("create/abort")
-	public String abortCreation(
-			@ModelAttribute("tempTaches") Set<Tache> tempTaches) {
-		
+	public String abortCreation(@ModelAttribute("tempTaches") Set<Tache> tempTaches) {
+
 		tempTaches.clear();
-		
+
 		return "redirect:/entretien/list";
 	}
 	

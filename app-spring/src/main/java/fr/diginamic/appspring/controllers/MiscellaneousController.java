@@ -21,12 +21,12 @@ public class MiscellaneousController {
 		
 		return "login";
 	}
-	
+
 	@GetMapping("home")
 	public String toHome() {
 		return "home";
 	}
-	
+
 	@GetMapping("access_denied")
 	public String toAccessDenied() {
 		return "access_denied";

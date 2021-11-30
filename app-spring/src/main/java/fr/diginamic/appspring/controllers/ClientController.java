@@ -25,6 +25,7 @@ public class ClientController {
 
     /**
      * Récupère et affiche la liste des clients
+     * 
      * @param model
      * @return "clients/listeClients"
      * 
@@ -39,6 +40,7 @@ public class ClientController {
 
     /**
      * Récupère et affiche le formulaire d'ajout d'un nouveau client
+     * 
      * @param model
      * @return "clients/add"
      */
@@ -52,6 +54,7 @@ public class ClientController {
     /**
      * Traite les données du formulaire d'ajout d'un client et l'ajoute à la liste
      * des clients
+     * 
      * @param model
      * @param creationClient
      * @return "redirect:/clients/listeClients"
@@ -64,6 +67,7 @@ public class ClientController {
 
     /**
      * Récuèpère et affiche les données d'un client à partir d'un identifiant
+     * 
      * @param model
      * @param pid
      * @return "clients/accesClient"
@@ -78,6 +82,7 @@ public class ClientController {
     /**
      * Récupère et affiche le formulaire de modification d'un client en fonction de
      * son id
+     * 
      * @param model
      * @param dip
      * @return "/clients/modificationClient"
@@ -92,6 +97,7 @@ public class ClientController {
 
     /**
      * Traite les données de modification du client
+     * 
      * @param model
      * @param clientDip
      * @return "redirect:/clients/listeClients"
