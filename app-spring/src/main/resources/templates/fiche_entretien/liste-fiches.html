@@ -41,6 +41,7 @@
 	                <th>Référence</th>
 	                <th>Date création fiche</th>
 	                <th>Date de cloture</th>
+					<th>Client</th>
 	                <th>Nb de taches</th>
 	                <!-- <th>Proportion effectuée</th> -->
 	                <th>Validité fiche</th>
@@ -56,6 +57,7 @@
 	                <td th:text="${fiche.id}"></td>
 	                <td th:text="${fiche.dateCreation}"></td>
 	                <td th:text="${fiche.dateCloture}"></td>
+					<td><span class="mr-2" th:text="${fiche.client.prenom}"></span><span th:text="${fiche.client.nom}"></span></td>
 	                <td th:text="${fiche.taches.size()}"></td>
 	                <!-- <td>calcul proportion</td> -->
 	                <td class="valideCell" th:text="${fiche.isValid == true ? 'Valide' : 'Annulée'}"></td>

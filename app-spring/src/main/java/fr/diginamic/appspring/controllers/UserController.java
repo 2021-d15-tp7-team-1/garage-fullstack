@@ -41,6 +41,9 @@ public class UserController {
 
     @Autowired
     CrudRoleRepository roleRepo;
+    
+    @Autowired
+    PasswordEncoder passwordencoder;
 
     public UserController() {
 
@@ -159,7 +162,9 @@ public class UserController {
      */
     @PostMapping("/modificationUser")
     public String modifUser(Model model, @ModelAttribute("modifUser") @Valid User userDip) {
-
+    	
+    	userDip.setPassword(passwordencoder.encode(userDip.getPassword()));
+    	
         userDip.getUserRoles().forEach(role -> {
             role.getUsers().add(userDip);
             roleRepo.save(role); // update de la liste de users de ce role

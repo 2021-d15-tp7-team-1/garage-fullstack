@@ -4,9 +4,25 @@
 <body>
     <div th:replace="fragments/menu :: tagmenu">  </div>
     <br/>
-    <a class="btn btn-danger mb-2 float-right" sec:authorize="hasAuthority('CHEF')" th:if="${fiche.isValid()}" th:href="@{/entretien/annuler-fiche/{id}(id=${fiche.id})}">Annuler la fiche</a>
-    <a class="btn btn-primary mb-2 float-right" sec:authorize="hasAuthority('CHEF')" th:href="@{/entretien/modification-fiche/{id}(id=${fiche.id})}">Modifier la fiche</a>
-    <a class="btn btn-success mb-2 float-right" sec:authorize="hasAuthority('CHEF')" th:if="${!fiche.isCloture()} and ${fiche.isValid()}" th:href="@{/entretien/cloturer/{id}(id=${fiche.id})}">Cloturer</a>
+    <a class="btn btn-danger mb-2 float-right" 
+	    sec:authorize="hasAuthority('CHEF')" 
+	    th:if="${fiche.isValid()}" 
+	    th:href="@{/entretien/annuler-fiche/{id}(id=${fiche.id})}">
+	    Annuler la fiche
+    </a>
+    
+    <a class="btn btn-primary mb-2 float-right" 
+	    sec:authorize="hasAuthority('CHEF')" 
+	    th:href="@{/entretien/modification-fiche-init/{id}(id=${fiche.id})}">
+	    Modifier la fiche
+    </a>
+    
+    <a class="btn btn-success mb-2 float-right" 
+	    sec:authorize="hasAuthority('CHEF')" 
+	    th:if="${!fiche.isCloture()} and ${fiche.isValid()}" 
+	    th:href="@{/entretien/cloturer/{id}(id=${fiche.id})}">
+	    Cloturer
+    </a>
     <div class="container">
         <fieldset class="form-group border p-3">
             <legend class="w-auto px-2">Fiche d'entretien n°<span th:text="${fiche.id}"></span></legend>

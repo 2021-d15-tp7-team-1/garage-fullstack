@@ -37,4 +37,9 @@ public class MiscellaneousController {
 		return "profil/profil-info";
 	}
 
+	@GetMapping("ventes")
+	public String toVente(){
+		return "non-disponible";
+	}
+
 }
