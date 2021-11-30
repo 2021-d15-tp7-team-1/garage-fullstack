@@ -63,10 +63,10 @@
         </dependency>
         <!-- Intégration MYSQL -->
         <dependency>
-			<groupId>org.mariadb.jdbc</groupId>
-			<artifactId>mariadb-java-client</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
         <!-- pour utiliser JUnit -->
         <dependency>
             <groupId>junit</groupId>
