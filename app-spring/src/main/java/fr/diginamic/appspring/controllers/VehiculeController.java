@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import javax.validation.Valid;
 
+/**
+ * Controller MVC pour gérer les véhicules
+ */
 @Controller
 @RequestMapping("/vehicules")
 public class VehiculeController {
@@ -23,6 +26,11 @@ public class VehiculeController {
     public VehiculeController() {
     }
 
+    /**
+     * Récupère et affiche la liste des véhicules
+     * @param model
+     * @return "vehicules/list
+     */
     @GetMapping("/list")
     public String vehiculeList(Model model) {
         model.addAttribute("vehicules", (List<Vehicule>) cs.findAll());
@@ -30,12 +38,23 @@ public class VehiculeController {
 
     }
 
+    /**
+     * Récupère et affiche le formulaire d'ajout d'une véhicules
+     * @param model
+     * @return "vehicules/add"
+     */
     @GetMapping("/add")
     public String addT(Model model) {
         model.addAttribute("vehiculeForm", new Vehicule() );
         return "vehicules/add";
     }
 
+    /**
+     * Traite les données du formulaire d'ajout d'une véhicules
+     * @param model
+     * @param pieceForm
+     * @return "redirect:/vehicules/list"
+     */
     @PostMapping("/add")
     public String add(Model model,
                       @Valid @ModelAttribute("vehiculeForm") Vehicule vehiculeForm)
@@ -44,6 +63,13 @@ public class VehiculeController {
         return "redirect:/vehicules/list";
     }
 
+    /**
+     * Récupère et affiche le formulaire de modification d'un véhicules
+     * en fonction de son id
+     * @param model
+     * @param id
+     * @return "/vehicules/update"
+     */
     @GetMapping("/edit/{id}")
     public String showUpdateForm(@PathVariable("id") long id, Model model) {
         Vehicule v = cs.findById(id)
@@ -53,6 +79,13 @@ public class VehiculeController {
         return "vehicules/update";
     }
 
+    /**
+     * Traite les données du formulaire de modification
+     * et enregistre les modification dans la liste des véhicules
+     * @param model
+     * @param id
+     * @return"redirect:/vehicules/list"
+     */
     @PostMapping("/update/{id}")
     public String updateUser(@PathVariable("id") long id, @Valid Vehicule v,
                              BindingResult result, Model model) {
@@ -65,6 +98,12 @@ public class VehiculeController {
         return "redirect:/vehicules/list";
     }
 
+    /**
+     * Augmente le nombre de vehicules en stock
+     * @param id
+     * @param model
+     * @return"redirect:/vehicules/list"
+     */
     @RequestMapping("/increase/{id}")
     public String increaseAmountOfVehicules(@PathVariable("id") long id,
                                          Model model) {
@@ -78,6 +117,12 @@ public class VehiculeController {
         return "redirect:/vehicules/list";
     }
 
+    /**
+     * Réduit le nombre de vehicules en stock
+     * @param id
+     * @param model
+     * @return"redirect:/vehicules/list"
+     */
     @RequestMapping("/decrease/{id}")
     public String decreaseAmountOfVehicules(@PathVariable("id") long id,
                                          Model model) {

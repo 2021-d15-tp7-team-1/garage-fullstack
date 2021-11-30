@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+
+/**
+ * Controller MVC pour gérer les pièces
+ */
 @Controller
 @RequestMapping("/pieces")
 public class PieceController {
@@ -22,6 +26,11 @@ public class PieceController {
     public PieceController() {
     }
 
+    /**
+     * Récupère et affiche la liste des pièces
+     * @param model
+     * @return "pieces/list
+     */
     @GetMapping("/list")
     public String pieceList(Model model) {
         model.addAttribute("pieces", (List<Piece>) cp.findAll());
@@ -29,12 +38,23 @@ public class PieceController {
 
     }
 
+    /**
+     * Récupère et affiche le formulaire d'ajout d'une pièce
+     * @param model
+     * @return "pieces/add"
+     */
     @GetMapping("/add")
     public String addT(Model model) {
         model.addAttribute("pieceForm", new Piece() );
         return "pieces/add";
     }
 
+    /**
+     * Traite les données du formulaire d'ajout d'une pièce
+     * @param model
+     * @param pieceForm
+     * @return "redirect:/pieces/list"
+     */
     @PostMapping("/add")
     public String add(Model model,
                       @Valid @ModelAttribute("pieceForm") Piece pieceForm)
@@ -43,6 +63,13 @@ public class PieceController {
         return "redirect:/pieces/list";
     }
 
+    /**
+     * Récupère et affiche le formulaire de modification d'une pièce
+     * en fonction de son id
+     * @param model
+     * @param id
+     * @return "/pieces/update"
+     */
     @GetMapping("/edit/{id}")
     public String showUpdateForm(@PathVariable("id") long id, Model model) {
         Piece p = cp.findById(id)
@@ -52,6 +79,13 @@ public class PieceController {
         return "pieces/update";
     }
 
+    /**
+     * Traite les données du formulaire de modification
+     * et enregistre les modification dans la liste des pièces
+     * @param model
+     * @param id
+     * @return"redirect:/pieces/list"
+     */
     @PostMapping("/update/{id}")
     public String updateUser(@PathVariable("id") long id, @Valid Piece piece,
                              BindingResult result, Model model) {
@@ -64,6 +98,12 @@ public class PieceController {
         return "redirect:/pieces/list";
     }
 
+    /**
+     * Augmente le nombre de pièces en stock
+     * @param id
+     * @param model
+     * @return"redirect:/pieces/list"
+     */
     @RequestMapping("/increase/{id}")
     public String increaseAmountOfPieces(@PathVariable("id") long id,
                                                    Model model) {
@@ -77,6 +117,12 @@ public class PieceController {
         return "redirect:/pieces/list";
     }
 
+    /**
+     * Réduit le nombre de pièces en stock
+     * @param id
+     * @param model
+     * @return"redirect:/pieces/list"
+     */
     @RequestMapping("/decrease/{id}")
     public String decreaseAmountOfPieces(@PathVariable("id") long id,
                                                    Model model) {
