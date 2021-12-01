@@ -5,6 +5,7 @@ import { Link,Route,Switch } from "react-router-dom";
 /** Importation du FrameWork Boostrap 4 */
 import 'bootstrap/dist/css/bootstrap.css';
 import TachesComp from './composants/TachesComp';
+import LoginComp from './composants/LoginComp';
 //import 'bootstrap/dist/js/bootstrap.bundle';
 
 function App() {
@@ -32,7 +33,7 @@ function App() {
     </nav>
 
     <Switch>
-      <Route path="/" exact component=""/>
+      <Route path="/" exact component={LoginComp}/>
       <Route path="/taches" component={TachesComp}/>
       <Route path="/pieces" component=""/>
       <Route path="/vehicules" component=""/>
