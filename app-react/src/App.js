@@ -6,6 +6,9 @@ import { Link,Route,Switch } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.css';
 import TachesComp from './composants/TachesComp';
 import LoginComp from './composants/LoginComp';
+import PiecesComp from './composants/PiecesComp';
+import VehiculesComp from './composants/VehiculesComp';
+import VentesComp from './composants/VentesComp';
 //import 'bootstrap/dist/js/bootstrap.bundle';
 
 function App() {
@@ -23,7 +26,7 @@ function App() {
                         <Link className="dropdown-item" to="/vehicules">Véhicules</Link>
                     </div>
                 </li>
-                <li class="nav-item"><Link className="nav-link" href="#">Ventes</Link></li>
+                <li class="nav-item"><Link className="nav-link" to="/ventes">Ventes</Link></li>
             </ul>
 
         </div>
@@ -35,9 +38,9 @@ function App() {
     <Switch>
       <Route path="/" exact component={LoginComp}/>
       <Route path="/taches" component={TachesComp}/>
-      <Route path="/pieces" component=""/>
-      <Route path="/vehicules" component=""/>
-      <Route path="/ventes" component=""/>
+      <Route path="/pieces" component={PiecesComp}/>
+      <Route path="/vehicules" component={VehiculesComp}/>
+      <Route path="/ventes" component={VentesComp}/>
     </Switch>
     </div>
     

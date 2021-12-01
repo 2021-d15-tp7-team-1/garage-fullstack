@@ -12,4 +12,10 @@ export default class TacheService {
     static getFiches(){
         return axios.get("http://localhost:3000/taches")
     }
+
+    static terminerTacheJson(id){
+        return axios.patch(`http://localhost:3000/taches/${id}`,{
+            isTerminee: true
+        })
+    }
 }

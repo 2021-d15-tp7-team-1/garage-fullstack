@@ -23,6 +23,16 @@ class TachesComp extends Component {
         console.log("taches : " + this.state.taches)
         
     }
+
+    onTerminerTache(id){
+        TacheService.terminerTache(id).then(
+            (res) => {
+                console.log("tache terminer")
+            }
+        ).catch(error => {
+            console.log(error);
+        });
+    }
     render() {
         if(this.state.taches.length<1) {
             return "Aucunes tache attribuée !"
@@ -60,7 +70,7 @@ class TachesComp extends Component {
                             }
 
                             {!data.isTerminee &&
-                                <td><button class="btn btn-success mb-2" onClick={TacheService.terminerTache(data.id)}>Terminer</button></td>
+                                <td><button class="btn btn-success mb-2" onClick={(e) => this.onTerminerTache(data.id, e)}>Terminer</button></td>
                             }
                             
                         </tr>)}
