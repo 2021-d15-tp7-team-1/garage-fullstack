@@ -8,11 +8,20 @@ class TachesComp extends Component {
     }
     componentDidMount() {
         console.log("comp mounted")
+        /*
         TacheService.findByIdMecanicien(4).then(
-            (data) => {
-                this.setState({taches : data})
+            (res) => {
+                this.setState({taches : res.data})
+            }
+        )*/
+
+        TacheService.getFiches().then(
+            (res) => {
+                this.setState({taches : res.data})
             }
         )
+        console.log("taches : " + this.state.taches)
+        
     }
     render() {
         if(this.state.taches.length<1) {
@@ -20,9 +29,8 @@ class TachesComp extends Component {
         }
         return (
             <div>
-                <ul>
-                {this.state.taches.map(data => <li>{data.intitule} {data.isTerminee}</li>)}
-                </ul>
+                <br/>
+                <h1>Liste de vos taches</h1>
                 <table className="table">
                     <thead className="thead-dark">
                         <tr>
@@ -32,6 +40,7 @@ class TachesComp extends Component {
                             <th>Pièces nécessaires</th>
                             <th>Priorité</th>
                             <th>Etat</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,11 +48,21 @@ class TachesComp extends Component {
                         <tr>
                             <td>{data.id}</td>
                             <td>{data.intitule}</td>
-                            <td>{data.type.name}</td>
-                            <td>{data.pieces.map(p => <span>{p.nomPiece}</span>)}</td>
-                            <td>{data.priorite.name}</td>
-                            <td>{data.isTerminee}</td>
-                            <td><button class="btn btn-primary mb-2" onClick={TacheService.terminerTache(data.id)}>Terminer</button></td>
+                            <td>{data.type}</td>
+                            <td>{data.pieces.map(p => <span className="mr-2">{p.nom}</span>)}</td>
+                            <td>{data.priorite}</td>
+                            
+                            {!data.isTerminee &&
+                                <td>A faire</td>
+                            }
+                            {data.isTerminee &&
+                                <td>Terminée</td>
+                            }
+
+                            {!data.isTerminee &&
+                                <td><button class="btn btn-success mb-2" onClick={TacheService.terminerTache(data.id)}>Terminer</button></td>
+                            }
+                            
                         </tr>)}
                     </tbody>
                 </table>

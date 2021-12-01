@@ -8,4 +8,8 @@ export default class TacheService {
     static terminerTache(idTache){
         return axios.get("http://localhost:8090/rest/taches/terminer-tache/{idTache}")
     }
+
+    static getFiches(){
+        return axios.get("http://localhost:3000/taches")
+    }
 }
