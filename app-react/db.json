@@ -47,5 +47,40 @@
         }
       ]
     }
+  ],
+  "pieces": [
+    {
+      "id": 1,
+      "nom": "Volant",
+      "type": "PIECE",
+      "prix": 100,
+      "prix_facture": 120,
+      "quantite_stock": 5
+    },
+    {
+      "id": 2,
+      "nom": "Carburateur",
+      "type": "PIECE",
+      "prix": 500,
+      "prix_facture": 675,
+      "quantite_stock": 10
+    },
+    {
+      "id": 3,
+      "nom": "Huile",
+      "type": "ARTICLE",
+      "prix": 30,
+      "prix_facture": 45,
+      "quantite_stock": 15
+    },
+    {
+      "id": 4,
+      "nom": "Peinture",
+      "type": "ARTICLE",
+      "prix": 25,
+      "prix_facture": 50,
+      "quantite_stock": 8
+    }
   ]
 }
+
