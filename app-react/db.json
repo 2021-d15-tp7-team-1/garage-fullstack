@@ -1,0 +1,51 @@
+{
+  "taches": [
+    {
+      "id": 1,
+      "intitule": "Vidange du véhicule",
+      "type": "Vidange",
+      "priorite": "Normal",
+      "isTerminee": true,
+      "pieces": [
+        {
+          "id": 1,
+          "nom": "Huile"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "intitule": "Changement carburateur",
+      "type": "Pannes",
+      "priorite": "Urgent",
+      "isTerminee": false,
+      "pieces": [
+        {
+          "id": 1,
+          "nom": "Huile"
+        },
+        {
+          "id": 2,
+          "nom": "Carburateur"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "intitule": "Retouche peinture portière",
+      "type": "Peinture",
+      "priorite": "Normal",
+      "isTerminee": false,
+      "pieces": [
+        {
+          "id": 3,
+          "nom": "Pinceau"
+        },
+        {
+          "id": 4,
+          "nom": "Peinture metallisée"
+        }
+      ]
+    }
+  ]
+}

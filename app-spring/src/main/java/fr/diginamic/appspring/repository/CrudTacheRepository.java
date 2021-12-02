@@ -12,5 +12,7 @@ public interface CrudTacheRepository extends CrudRepository<Tache, Long> {
 	
 	@Query("select t from Tache t where t.fiche = ?1")
     List<Tache> findByFicheEntretien(FicheEntretien fiche);
-	
+
+    @Query("select t from Tache t where t.mecanicienAttribue.id = ?1")
+    List<Tache> findByIdMecanicien(Long id);
 }
