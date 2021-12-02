@@ -38,7 +38,7 @@ class TachesComp extends Component {
             return "Aucunes tache attribuée !"
         }
         return (
-            <div>
+            <div className="container">
                 <br/>
                 <h1 align="center">Liste de vos taches</h1>
                 <table className="table">

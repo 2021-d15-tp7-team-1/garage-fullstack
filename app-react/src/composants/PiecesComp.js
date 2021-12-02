@@ -21,7 +21,7 @@ class PiecesComp extends Component {
             return "Aucunes pièces en stock !"
         }
         return (
-            <div>
+            <div className="container">
                 <br/>
                 <h1 align="center">Liste des pièces en stock</h1>
                 <table className="table">

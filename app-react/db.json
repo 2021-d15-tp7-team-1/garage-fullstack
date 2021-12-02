@@ -81,6 +81,35 @@
       "prix_facture": 50,
       "quantite_stock": 8
     }
+  ],
+  "vehicules": [
+    {
+      "id": 1,
+      "marque": "Audi",
+      "modele": "A1",
+      "etat": "NEUF",
+      "prix": 21840,
+      "prix_facture": 28400,
+      "quantite_stock": 3
+    },
+    {
+      "id": 2,
+      "marque": "Porsche",
+      "modele": "911",
+      "etat": "NEUF",
+      "prix": 100000,
+      "prix_facture": 120000,
+      "quantite_stock": 1
+    },
+    {
+      "id": 3,
+      "marque": "Peugeot",
+      "modele": "206",
+      "etat": "OCCASION",
+      "prix": 2700,
+      "prix_facture": 3200,
+      "quantite_stock": 1
+    }
   ]
 }
 
