@@ -40,7 +40,7 @@ class TachesComp extends Component {
         return (
             <div>
                 <br/>
-                <h1>Liste de vos taches</h1>
+                <h1 align="center">Liste de vos taches</h1>
                 <table className="table">
                     <thead className="thead-dark">
                         <tr>

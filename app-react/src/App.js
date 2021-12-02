@@ -9,13 +9,14 @@ import LoginComp from './composants/LoginComp';
 import PiecesComp from './composants/PiecesComp';
 import VehiculesComp from './composants/VehiculesComp';
 import VentesComp from './composants/VentesComp';
-//import 'bootstrap/dist/js/bootstrap.bundle';
+import HomeComp from './composants/HomeComp';
+import 'bootstrap/dist/js/bootstrap.bundle';
 
 function App() {
   return (
     <div>
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a className="navbar-brand" href="#"><strong>Super garage</strong></a>
+      <Link className="navbar-brand" to="/home"><strong>Super garage</strong></Link>
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav">
                 <li className="nav-item"><Link className="nav-link" to="/taches">Mes taches</Link></li>
@@ -37,6 +38,7 @@ function App() {
 
     <Switch>
       <Route path="/" exact component={LoginComp}/>
+      <Route path="/home" component={HomeComp}/>
       <Route path="/taches" component={TachesComp}/>
       <Route path="/pieces" component={PiecesComp}/>
       <Route path="/vehicules" component={VehiculesComp}/>
